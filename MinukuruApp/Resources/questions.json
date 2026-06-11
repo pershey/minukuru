@@ -1,0 +1,846 @@
+[
+  {
+    "id": "exp-1",
+    "mode": "explanationSnipe",
+    "title": "キリンの首のひみつ",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "キリンは世界でも首が長い動物です。"
+      },
+      {
+        "id": "s2",
+        "text": "でも、"
+      },
+      {
+        "id": "s3",
+        "text": "キリンの首の骨は30個以上あります。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s3"
+    ],
+    "explanation": "キリンも人間も、首の骨の数は基本的に7個です。長さがちがうだけで、数はとても多くありません。",
+    "verificationTip": "数字が出てきたら、図かんや信頼できる説明で数をたしかめよう。",
+    "hint": "長さと数がごちゃごちゃになっていないかな？",
+    "recommendedReasonTags": [
+      "suspiciousNumber",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "exp-2",
+    "mode": "explanationSnipe",
+    "title": "ペンギンのとび方",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "ペンギンは鳥のなかまです。"
+      },
+      {
+        "id": "s2",
+        "text": "そして、"
+      },
+      {
+        "id": "s3",
+        "text": "空を長い時間とび続けます。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s3"
+    ],
+    "explanation": "ペンギンは鳥ですが、空をとぶのではなく、水の中を泳ぐのが得意です。",
+    "verificationTip": "生き物の説明は、図かんや科学館の説明を見くらべると安心です。",
+    "hint": "鳥だからといって、みんな空をとぶとはかぎらないよ。",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "exp-3",
+    "mode": "explanationSnipe",
+    "title": "たまごの話",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "にわとりのたまごは、"
+      },
+      {
+        "id": "s2",
+        "text": "ゆでる前からいつも中が黄色だけです。"
+      },
+      {
+        "id": "s3",
+        "text": "白い部分はありません。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "たまごには黄身と白身があります。『いつも』『ありません』のような強い言い切りは、まちがいに気づく手がかりになります。",
+    "verificationTip": "写真つきの説明や料理の本を見ると、中身のようすがよくわかります。",
+    "hint": "『いつも』『ありません』という言い方に注目してみよう。",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "exp-4",
+    "mode": "explanationSnipe",
+    "title": "月の見え方",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "月は毎日かならず同じ形に見えます。"
+      },
+      {
+        "id": "s2",
+        "text": "だから、"
+      },
+      {
+        "id": "s3",
+        "text": "満月も三日月も見た目は変わりません。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s3"
+    ],
+    "explanation": "月は毎日同じ形ではなく、見える形が少しずつ変わります。『かならず同じ』『変わりません』は強すぎる言い方でした。",
+    "verificationTip": "空のようすは、観察記録や天文台のページでたしかめよう。",
+    "hint": "『かならず』と『変わりません』は本当に言い切れるかな？",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "exp-5",
+    "mode": "explanationSnipe",
+    "title": "氷の重さ",
+    "difficulty": "hard",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "水はこおると、"
+      },
+      {
+        "id": "s2",
+        "text": "中の水分が全部なくなるので、"
+      },
+      {
+        "id": "s3",
+        "text": "重さが半分になります。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "水がこおっても水分がなくなるわけではありません。形や体積が変わることはありますが、急に重さが半分になるとは言えません。",
+    "verificationTip": "理科の実験や信頼できる学習サイトで、こおる前後の変化を見てみよう。",
+    "hint": "『全部なくなる』『半分になる』は大きく変わりすぎていないかな？",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "suspiciousNumber",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "news-1",
+    "mode": "newsPoison",
+    "title": "しずか町の木の話",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "しずか町では新しい木を植えた次の日、"
+      },
+      {
+        "id": "s2",
+        "text": "町の人の元気が200%上がったと話題です。"
+      },
+      {
+        "id": "s3",
+        "text": "木を植えると、だれでもすぐ元気になると町のうわさ紙は書いています。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "『200%上がった』は数字の根拠が見えません。木を植えたことと元気になったことを、すぐ原因だと決めつけるのも危ない見方です。",
+    "verificationTip": "ニュース風の文章では、数字の出どころと比べ方をたしかめよう。",
+    "hint": "大きな数字と『だれでもすぐ』の言い方に注目してみよう。",
+    "recommendedReasonTags": [
+      "suspiciousNumber",
+      "noSource",
+      "tooStrongClaim"
+    ]
+  },
+  {
+    "id": "news-2",
+    "mode": "newsPoison",
+    "title": "まる空パン工房の新商品",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "まる空パン工房の新しいパンが発売されました。"
+      },
+      {
+        "id": "s2",
+        "text": "これを食べた子は、"
+      },
+      {
+        "id": "s3",
+        "text": "テストでかならず点が上がるそうです。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s3"
+    ],
+    "explanation": "食べ物とテストの点数を、かんたんに結びつけるのは危険です。『かならず上がる』という言い切りにも注意が必要です。",
+    "verificationTip": "広告や記事で結果を言い切っていたら、比べた人数や条件があるか見てみよう。",
+    "hint": "おいしいことと成績の話が、むりやりつながっていないかな？",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "forcedConnection",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "news-3",
+    "mode": "newsPoison",
+    "title": "きらり川の橋",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "きらり川の橋はぬり直しが終わりました。"
+      },
+      {
+        "id": "s2",
+        "text": "その週から雨がふえたため、"
+      },
+      {
+        "id": "s3",
+        "text": "橋をぬると天気が変わることがわかりました。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "同じ週に起きたことでも、原因と結果とは限りません。たまたま重なっただけかもしれません。",
+    "verificationTip": "『そのあと起きた』だけでなく、『本当に関係があるか』を確かめよう。",
+    "hint": "時間が近いだけで、原因だと決めていないかな？",
+    "recommendedReasonTags": [
+      "forcedConnection",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "news-4",
+    "mode": "newsPoison",
+    "title": "ひかり野公園の星祭り",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "ひかり野公園の星祭りには、"
+      },
+      {
+        "id": "s2",
+        "text": "町じゅうの全員が集まったと伝えられています。"
+      },
+      {
+        "id": "s3",
+        "text": "出典は書かれていません。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "『町じゅうの全員』は大げさな言い方です。しかも、どこで数えたのか、出典もありません。",
+    "verificationTip": "人数の話は、主催者発表か、会場の広さか、別の情報もあわせて見よう。",
+    "hint": "人数の言い方と、出典があるかを見てみよう。",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "noSource",
+      "suspiciousNumber"
+    ]
+  },
+  {
+    "id": "news-5",
+    "mode": "newsPoison",
+    "title": "青雲町の自習室",
+    "difficulty": "hard",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "青雲町で夜まで使える自習室ができました。"
+      },
+      {
+        "id": "s2",
+        "text": "このニュースを見た人は、"
+      },
+      {
+        "id": "s3",
+        "text": "集中力が3倍になったと関係者が断言しています。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "ニュースを見ただけで集中力が3倍になるとは考えにくく、数字の根拠も見えません。『関係者が断言』だけでは、たしかな説明になりません。",
+    "verificationTip": "数字と断言が出てきたら、『だれがどう測ったか』を探してみよう。",
+    "hint": "『3倍』『断言』は確認できるかな？",
+    "recommendedReasonTags": [
+      "suspiciousNumber",
+      "noSource",
+      "tooStrongClaim"
+    ]
+  },
+  {
+    "id": "ad-1",
+    "mode": "scamAdChecker",
+    "title": "くらし応援キャンペーン",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜4こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "先着50名さま"
+      },
+      {
+        "id": "s2",
+        "text": "スマホの通知を受け取るだけで毎月8万円が受け取れる新プログラム。"
+      },
+      {
+        "id": "s3",
+        "text": "利用者満足度No.1と書かれていますが、何と比べたのかは書かれていません。"
+      },
+      {
+        "id": "s4",
+        "text": "今すぐ無料で受け取る"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "explanation": "人数で急がせたり、ほとんど何もしなくてもお金が入るように見せたり、No.1の根拠を見せなかったりする広告は要注意です。最後にすぐ押させる流れも、落ち着いて考える時間をうばいます。",
+    "verificationTip": "人数限定やNo.1の表示には、条件や出典があるかを先に見よう。受け取れる理由がわからない話は、その場で押さないのが安全です。",
+    "hint": "限定、かんたんすぎる約束、根拠のない一番に注目してみよう。",
+    "recommendedReasonTags": [
+      "urgency",
+      "tooGoodToBeTrue",
+      "noSource",
+      "tooStrongClaim"
+    ]
+  },
+  {
+    "id": "ad-2",
+    "mode": "scamAdChecker",
+    "title": "おこづかいサポート講座",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜4こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "最短1分で毎日の不安が消える"
+      },
+      {
+        "id": "s2",
+        "text": "申し込んだ人にだけ特別ルートを公開"
+      },
+      {
+        "id": "s3",
+        "text": "内容の説明は登録後まで見られません。"
+      },
+      {
+        "id": "s4",
+        "text": "いますぐ案内を見る"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "explanation": "短すぎる時間で大きな変化を約束する表現や、特別ルートだけを強調して内容を見せない広告はあやしいサインです。説明が後回しのまま申し込みを急がせる形にも注意しましょう。",
+    "verificationTip": "何が学べるのか、いくらかかるのか、だれが運営しているのかが先に見えない広告にはすぐ登録しないようにしよう。",
+    "hint": "早すぎる変化、特別扱い、説明があとまわしの3つを探してみよう。",
+    "recommendedReasonTags": [
+      "tooGoodToBeTrue",
+      "secretInfo",
+      "hardToVerify",
+      "urgency"
+    ]
+  },
+  {
+    "id": "ad-3",
+    "mode": "scamAdChecker",
+    "title": "しごと発見ナビ",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜4こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "本日終了"
+      },
+      {
+        "id": "s2",
+        "text": "未経験でも失敗ゼロで月収アップ"
+      },
+      {
+        "id": "s3",
+        "text": "心配する人はチャンスを逃すだけです。"
+      },
+      {
+        "id": "s4",
+        "text": "30秒で参加する"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "explanation": "締め切りを強く出して急がせること、失敗ゼロと言い切ること、注意する人を悪者みたいに見せることは、冷静な判断をじゃましやすい表現です。",
+    "verificationTip": "急がされたときほど、一度画面を閉じて、条件や会社名、問い合わせ先が見えるかを確認しよう。",
+    "hint": "急がせる言葉、ゼロと言い切る言葉、反対する人への決めつけを見てみよう。",
+    "recommendedReasonTags": [
+      "urgency",
+      "tooStrongClaim",
+      "enemyFraming",
+      "tooGoodToBeTrue"
+    ]
+  },
+  {
+    "id": "ad-4",
+    "mode": "scamAdChecker",
+    "title": "ごほうび抽選デー",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜4こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "このページを開いた方は当選対象です"
+      },
+      {
+        "id": "s2",
+        "text": "受け取りには今すぐ入力が必要です。"
+      },
+      {
+        "id": "s3",
+        "text": "くわしい条件や運営名が見当たりません。"
+      },
+      {
+        "id": "s4",
+        "text": "あと3分で受け取る"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "explanation": "だれでも当選しそうに見せる話や、急いで入力させる流れは要注意です。しかも運営名や条件が見えないなら、安心できる材料が足りません。",
+    "verificationTip": "当選や無料プレゼントは、応募条件、運営者、連絡先、利用ルールがはっきり書かれているかを確かめよう。",
+    "hint": "当たりやすさの言い方と、急がせ方、説明不足を見てみよう。",
+    "recommendedReasonTags": [
+      "tooGoodToBeTrue",
+      "urgency",
+      "hardToVerify",
+      "noSource"
+    ]
+  },
+  {
+    "id": "ad-5",
+    "mode": "scamAdChecker",
+    "title": "ひみつの勉強メモ",
+    "difficulty": "hard",
+    "instruction": "あやしいところを1〜4こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "有名校出身の先生が監修"
+      },
+      {
+        "id": "s2",
+        "text": "公開できない特別教材だから中身は見せられません。"
+      },
+      {
+        "id": "s3",
+        "text": "使った人は一週間でみんなトップクラスになります。"
+      },
+      {
+        "id": "s4",
+        "text": "限定ページへ進む"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3",
+      "s4"
+    ],
+    "explanation": "肩書きだけで安心させようとすること、中身を見せないこと、短期間で全員が大成功すると約束することは危険な組み合わせです。最後に限定ページへ進ませる流れにも注意しましょう。",
+    "verificationTip": "先生の肩書きだけで決めず、教材の中身、実例の出どころ、利用条件が見えるかを確認しよう。",
+    "hint": "肩書き、ひみつ扱い、短期間で全員成功という言い方に注目しよう。",
+    "recommendedReasonTags": [
+      "fakeAuthority",
+      "secretInfo",
+      "tooGoodToBeTrue",
+      "urgency"
+    ]
+  },
+  {
+    "id": "profile-1",
+    "mode": "profileHunter",
+    "title": "投資っぽい先生",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "元大手研究所の特別アドバイザー。"
+      },
+      {
+        "id": "s2",
+        "text": "3ヶ月で資産10倍を達成。"
+      },
+      {
+        "id": "s3",
+        "text": "登録者だけに特別ルートを案内中。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3"
+    ],
+    "explanation": "肩書きの証拠がなく、実績も大きすぎます。さらに、登録者だけという閉じた場所へ誘う流れも注意が必要です。",
+    "verificationTip": "プロフィールは肩書きの証拠や、外から確かめられる活動歴があるか見よう。",
+    "hint": "すごい肩書きと、閉じた場所への案内に注目してみよう。",
+    "recommendedReasonTags": [
+      "fakeAuthority",
+      "tooGoodToBeTrue",
+      "secretInfo"
+    ]
+  },
+  {
+    "id": "profile-2",
+    "mode": "profileHunter",
+    "title": "やさしい相談役",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "だれにも負けない人助けの専門家。"
+      },
+      {
+        "id": "s2",
+        "text": "こまっている人だけ、こっそり近道を教えます。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2"
+    ],
+    "explanation": "『だれにも負けない』は強すぎる自己紹介ですし、『こっそり近道』は内容が見えない誘い文句です。",
+    "verificationTip": "自分のすごさを言うだけでなく、どんな活動をしている人か確認しよう。",
+    "hint": "強い言い切りと、ひみつの誘いに気をつけよう。",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "secretInfo",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "profile-3",
+    "mode": "profileHunter",
+    "title": "星読み案内人",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "フォロワー全員が成功した星読み案内人。"
+      },
+      {
+        "id": "s2",
+        "text": "反対する人は努力が足りないだけ。"
+      },
+      {
+        "id": "s3",
+        "text": "本当に知りたい人は別室へ。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3"
+    ],
+    "explanation": "『全員が成功』は大げさです。反対する人をまとめて悪く言うのも危険ですし、別室へ誘導するのも注意ポイントです。",
+    "verificationTip": "反対意見をどうあつかっているかを見ると、その人の伝え方のくせがわかります。",
+    "hint": "全員成功と、反対する人のあつかい方を見てみよう。",
+    "recommendedReasonTags": [
+      "tooStrongClaim",
+      "enemyFraming",
+      "secretInfo"
+    ]
+  },
+  {
+    "id": "profile-4",
+    "mode": "profileHunter",
+    "title": "学びの先回りコーチ",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜2こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "たった7日でだれでも記憶王。"
+      },
+      {
+        "id": "s2",
+        "text": "有名人もひそかに学ぶ方法です。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2"
+    ],
+    "explanation": "短期間で『だれでも』大成功できるという約束は、うますぎる話です。『有名人もひそかに』も、証拠のない権威づけに見えます。",
+    "verificationTip": "有名人や有名校の名前っぽい言葉だけで判断しないようにしよう。",
+    "hint": "『だれでも』『有名人も』が本当に確かめられるかな？",
+    "recommendedReasonTags": [
+      "tooGoodToBeTrue",
+      "fakeAuthority"
+    ]
+  },
+  {
+    "id": "profile-5",
+    "mode": "profileHunter",
+    "title": "目覚めの案内係",
+    "difficulty": "hard",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "本当のことに気づいた人だけが私を理解できます。"
+      },
+      {
+        "id": "s2",
+        "text": "質問する人はまだ目覚めていません。"
+      },
+      {
+        "id": "s3",
+        "text": "ひみつの部屋で真実を共有中。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s1",
+      "s2",
+      "s3"
+    ],
+    "explanation": "『わかる人だけ』と線を引いたり、質問する人を下に見たり、秘密の場所へ誘ったりする表現は、冷静な確認をしにくくします。",
+    "verificationTip": "質問しづらくなる言い方をしていないかを見ると、あやしさに気づきやすくなります。",
+    "hint": "質問する人のあつかい方に注目してみよう。",
+    "recommendedReasonTags": [
+      "enemyFraming",
+      "secretInfo",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "con-1",
+    "mode": "conspiracyTrap",
+    "title": "月光ひろばの鐘",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "月光ひろばの鐘が3回鳴った夜だけ、"
+      },
+      {
+        "id": "s2",
+        "text": "本当の地図が入れかわるらしい。"
+      },
+      {
+        "id": "s3",
+        "text": "みんな知らないのは、知らされていないからだ。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "『本当の地図が入れかわる』という大きな話なのに、確かめる方法が見えません。『みんな知らないのは隠されているから』と決めつけるのも危ない論法です。",
+    "verificationTip": "秘密の話は、まず外から確かめられる証拠があるかを考えよう。",
+    "hint": "『みんな知らない』と言っている理由を見てみよう。",
+    "recommendedReasonTags": [
+      "secretInfo",
+      "hardToVerify",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "con-2",
+    "mode": "conspiracyTrap",
+    "title": "ひすい村の風車",
+    "difficulty": "easy",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "風車が止まった日に猫が集まった。"
+      },
+      {
+        "id": "s2",
+        "text": "偶然が重なりすぎている。"
+      },
+      {
+        "id": "s3",
+        "text": "だから村の時計係が全部あやつっている。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "出来事が続いただけで、だれかが全部あやつっているとは言えません。偶然をむりやりつなげて説明している可能性があります。",
+    "verificationTip": "複数の出来事があっても、まずは別々に考えてみよう。",
+    "hint": "『だから全部つながっている』になっていないかな？",
+    "recommendedReasonTags": [
+      "forcedConnection",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "con-3",
+    "mode": "conspiracyTrap",
+    "title": "しろ葉図書館のうわさ",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "図書館の新しい本だなが増えた。"
+      },
+      {
+        "id": "s2",
+        "text": "でも町の放送が何も言わないのは、"
+      },
+      {
+        "id": "s3",
+        "text": "本当のことをかくしている証拠だ。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "放送で言わない理由はたくさんあります。『言わないことが証拠』と決めるのは、証拠がないことを逆に利用する危ない考え方です。",
+    "verificationTip": "『説明がない』と『隠している』は同じではない、と考えてみよう。",
+    "hint": "言っていないことを、そのまま証拠にしていないかな？",
+    "recommendedReasonTags": [
+      "hardToVerify",
+      "secretInfo",
+      "gutFeeling"
+    ]
+  },
+  {
+    "id": "con-4",
+    "mode": "conspiracyTrap",
+    "title": "星見台の音",
+    "difficulty": "normal",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "星見台で変な音を聞いた人がいます。"
+      },
+      {
+        "id": "s2",
+        "text": "反論する人は敵側です。"
+      },
+      {
+        "id": "s3",
+        "text": "目覚めた人にしか、この真実はわかりません。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "反論する人を最初から敵と決めたり、理解できる人を一部だけにしぼったりすると、落ち着いた話し合いができません。",
+    "verificationTip": "『質問したら敵』のような空気を作っていないか、注意して読もう。",
+    "hint": "反対する人をどう言っているか見てみよう。",
+    "recommendedReasonTags": [
+      "enemyFraming",
+      "secretInfo"
+    ]
+  },
+  {
+    "id": "con-5",
+    "mode": "conspiracyTrap",
+    "title": "木かげ市場のひみつ会議",
+    "difficulty": "hard",
+    "instruction": "あやしいところを1〜3こ選んでね",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "市場で同じ色のぼうしを見た人が何人もいました。"
+      },
+      {
+        "id": "s2",
+        "text": "専門家がちがうと言うのは買収されたからです。"
+      },
+      {
+        "id": "s3",
+        "text": "不安になるのは、もう危険が始まっている証拠です。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s3"
+    ],
+    "explanation": "専門家をまとめて買収されたと決めつけるのは危険です。また、不安な気持ちそのものを証拠にしてしまうと、冷静に確かめにくくなります。",
+    "verificationTip": "気持ちが強く動いたときほど、別の説明があるかを探してみよう。",
+    "hint": "専門家のあつかい方と、不安の使い方を見てみよう。",
+    "recommendedReasonTags": [
+      "enemyFraming",
+      "fearMongering",
+      "gutFeeling"
+    ]
+  }
+]

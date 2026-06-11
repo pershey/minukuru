@@ -1,0 +1,556 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04D7736DD451967858FBFF1E /* ReasonTagChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B5945B4091752C59EFF74E /* ReasonTagChip.swift */; };
+		0ACD38F49E68FA994F1CE5B8 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2595D70304E12C0EADCFCBEC /* StatsView.swift */; };
+		124CD9763280F196EF806BA3 /* UserDefaultsStatsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD7B01A2F4290DFE589F82 /* UserDefaultsStatsStoreTests.swift */; };
+		33C31D77F45C1383D1CF3C36 /* StatsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1D6FEFCB7508C11653C558 /* StatsModels.swift */; };
+		404F820FDDFE285A0169CC89 /* SegmentFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */; };
+		450C420AF60F7F7385D6AC44 /* SegmentChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF38C6895CA06D084D912751 /* SegmentChip.swift */; };
+		52961CEAC78A29B6F0EE3C58 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24562158D034B9B94EF4F0C /* Theme.swift */; };
+		6483D851A88163BB56EE92D6 /* QuizSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889DDAE205F465B39CB6E886 /* QuizSessionViewModel.swift */; };
+		65BEA3C98C7B7F7AF4C8BFB1 /* ModeSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4D7D5D7DE5557536324871 /* ModeSelectView.swift */; };
+		6697DB3CCDC17F9C6AF66D94 /* QuizRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5689E1D28FF31A2560D376FA /* QuizRepository.swift */; };
+		71F65DFBD891F40CE42B525F /* questions.json in Resources */ = {isa = PBXBuildFile; fileRef = B81089CAC527CDC4EBFAF25C /* questions.json */; };
+		72262A365CFA36D3F56CBB03 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9424EE491DB7C376F360C4C0 /* ResultView.swift */; };
+		837E81A7611167D45EF33236 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF95E4814430962E7859D4 /* HomeView.swift */; };
+		985EA1309C75418489C206D4 /* StatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B724D9B6074ABEF15083EBEF /* StatsStore.swift */; };
+		9C8C89EC106357A23AB110D6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18006C8B10F7B00E25A961D /* ContentView.swift */; };
+		A6AFC51FC5D5D72EA3DE4CB0 /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869FCB4636FEC676537E5BB1 /* GameModels.swift */; };
+		AA1B63AFD18AE6FC69592CF1 /* QuizScorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143B372F780AC15D90E1E90 /* QuizScorer.swift */; };
+		BBA427F931D106B4CBCCE904 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1B836013879594615DA21 /* AppViewModel.swift */; };
+		C843AB0AA476A385E58A7CF7 /* MinukuruApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC40C8AAF9F2805EED06B71 /* MinukuruApp.swift */; };
+		E70DAE4FE940593D71CA201B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 521054754F5EA8CBB1F893B3 /* Assets.xcassets */; };
+		F122B048033AB26403BC7C51 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1335EF66C8199A2E307ECD0F /* QuizView.swift */; };
+		FCB0243E1D243462E70AB28C /* QuizScorerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB76638D6349223ADFB94704 /* QuizScorerTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B5837A43E44758E213FA93F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 58AB4011463DCABC95B2FDDB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E64156F5A5CB0219491227F0;
+			remoteInfo = Minukuru;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentFlowLayout.swift; sourceTree = "<group>"; };
+		1335EF66C8199A2E307ECD0F /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		2143B372F780AC15D90E1E90 /* QuizScorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScorer.swift; sourceTree = "<group>"; };
+		2595D70304E12C0EADCFCBEC /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		46B5945B4091752C59EFF74E /* ReasonTagChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReasonTagChip.swift; sourceTree = "<group>"; };
+		521054754F5EA8CBB1F893B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5689E1D28FF31A2560D376FA /* QuizRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizRepository.swift; sourceTree = "<group>"; };
+		788957FF9ABE4AB835B8A6E0 /* Minukuru.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Minukuru.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		869FCB4636FEC676537E5BB1 /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
+		889DDAE205F465B39CB6E886 /* QuizSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizSessionViewModel.swift; sourceTree = "<group>"; };
+		9424EE491DB7C376F360C4C0 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		A0FD7B01A2F4290DFE589F82 /* UserDefaultsStatsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStatsStoreTests.swift; sourceTree = "<group>"; };
+		AF38C6895CA06D084D912751 /* SegmentChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentChip.swift; sourceTree = "<group>"; };
+		B24562158D034B9B94EF4F0C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B724D9B6074ABEF15083EBEF /* StatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsStore.swift; sourceTree = "<group>"; };
+		B81089CAC527CDC4EBFAF25C /* questions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = questions.json; sourceTree = "<group>"; };
+		C01DE3704AE72EDA4DD95C7D /* MinukuruTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MinukuruTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C18006C8B10F7B00E25A961D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CB1D6FEFCB7508C11653C558 /* StatsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsModels.swift; sourceTree = "<group>"; };
+		DAE1B836013879594615DA21 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		DB76638D6349223ADFB94704 /* QuizScorerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScorerTests.swift; sourceTree = "<group>"; };
+		DD4D7D5D7DE5557536324871 /* ModeSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelectView.swift; sourceTree = "<group>"; };
+		E4BF95E4814430962E7859D4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		FBC40C8AAF9F2805EED06B71 /* MinukuruApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinukuruApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0C9813F88E934278E90C81B4 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				B724D9B6074ABEF15083EBEF /* StatsStore.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		2AFB6FC7395F9D65E3B65567 /* SampleData */ = {
+			isa = PBXGroup;
+			children = (
+				5689E1D28FF31A2560D376FA /* QuizRepository.swift */,
+			);
+			path = SampleData;
+			sourceTree = "<group>";
+		};
+		34DCC4F89286EA10531C7FC1 /* MinukuruApp */ = {
+			isa = PBXGroup;
+			children = (
+				C18006C8B10F7B00E25A961D /* ContentView.swift */,
+				FBC40C8AAF9F2805EED06B71 /* MinukuruApp.swift */,
+				55EA52A7608339BAC1359761 /* Models */,
+				EE66E4EDDC4BEB52AA2BFCC7 /* Resources */,
+				2AFB6FC7395F9D65E3B65567 /* SampleData */,
+				0C9813F88E934278E90C81B4 /* Storage */,
+				43EEA6F6CD8AE486FA5F7618 /* ViewModels */,
+				8CD926989F19C609089CBA2B /* Views */,
+			);
+			path = MinukuruApp;
+			sourceTree = "<group>";
+		};
+		43EEA6F6CD8AE486FA5F7618 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				DAE1B836013879594615DA21 /* AppViewModel.swift */,
+				889DDAE205F465B39CB6E886 /* QuizSessionViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		45ACA13D3B097161AFC4907D = {
+			isa = PBXGroup;
+			children = (
+				34DCC4F89286EA10531C7FC1 /* MinukuruApp */,
+				E311042C842714C4DBBD5B73 /* MinukuruTests */,
+				DB077E8983C5AE11636DFB99 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		55EA52A7608339BAC1359761 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				869FCB4636FEC676537E5BB1 /* GameModels.swift */,
+				2143B372F780AC15D90E1E90 /* QuizScorer.swift */,
+				CB1D6FEFCB7508C11653C558 /* StatsModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8CD926989F19C609089CBA2B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E4BF95E4814430962E7859D4 /* HomeView.swift */,
+				DD4D7D5D7DE5557536324871 /* ModeSelectView.swift */,
+				1335EF66C8199A2E307ECD0F /* QuizView.swift */,
+				9424EE491DB7C376F360C4C0 /* ResultView.swift */,
+				2595D70304E12C0EADCFCBEC /* StatsView.swift */,
+				B24562158D034B9B94EF4F0C /* Theme.swift */,
+				C4C668F08677CC17A7FFD67B /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C4C668F08677CC17A7FFD67B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				46B5945B4091752C59EFF74E /* ReasonTagChip.swift */,
+				AF38C6895CA06D084D912751 /* SegmentChip.swift */,
+				080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DB077E8983C5AE11636DFB99 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				788957FF9ABE4AB835B8A6E0 /* Minukuru.app */,
+				C01DE3704AE72EDA4DD95C7D /* MinukuruTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E311042C842714C4DBBD5B73 /* MinukuruTests */ = {
+			isa = PBXGroup;
+			children = (
+				DB76638D6349223ADFB94704 /* QuizScorerTests.swift */,
+				A0FD7B01A2F4290DFE589F82 /* UserDefaultsStatsStoreTests.swift */,
+			);
+			path = MinukuruTests;
+			sourceTree = "<group>";
+		};
+		EE66E4EDDC4BEB52AA2BFCC7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				521054754F5EA8CBB1F893B3 /* Assets.xcassets */,
+				B81089CAC527CDC4EBFAF25C /* questions.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9677DD88EA40DB113800D8F4 /* MinukuruTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8054535665EED2BA6FB5C34C /* Build configuration list for PBXNativeTarget "MinukuruTests" */;
+			buildPhases = (
+				E2E621A89B680EB778C64860 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				21EA3A195F46C67462C508FB /* PBXTargetDependency */,
+			);
+			name = MinukuruTests;
+			packageProductDependencies = (
+			);
+			productName = MinukuruTests;
+			productReference = C01DE3704AE72EDA4DD95C7D /* MinukuruTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E64156F5A5CB0219491227F0 /* Minukuru */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC3594F860721E809C6C2FBE /* Build configuration list for PBXNativeTarget "Minukuru" */;
+			buildPhases = (
+				E6FDC97A99D4B8E16EAA234B /* Sources */,
+				EC91B4180C337FC8726E2638 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Minukuru;
+			packageProductDependencies = (
+			);
+			productName = Minukuru;
+			productReference = 788957FF9ABE4AB835B8A6E0 /* Minukuru.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		58AB4011463DCABC95B2FDDB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = C8D50878939457E8A408CCA8 /* Build configuration list for PBXProject "Minukuru" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 45ACA13D3B097161AFC4907D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E64156F5A5CB0219491227F0 /* Minukuru */,
+				9677DD88EA40DB113800D8F4 /* MinukuruTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EC91B4180C337FC8726E2638 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E70DAE4FE940593D71CA201B /* Assets.xcassets in Resources */,
+				71F65DFBD891F40CE42B525F /* questions.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E2E621A89B680EB778C64860 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCB0243E1D243462E70AB28C /* QuizScorerTests.swift in Sources */,
+				124CD9763280F196EF806BA3 /* UserDefaultsStatsStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6FDC97A99D4B8E16EAA234B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBA427F931D106B4CBCCE904 /* AppViewModel.swift in Sources */,
+				9C8C89EC106357A23AB110D6 /* ContentView.swift in Sources */,
+				A6AFC51FC5D5D72EA3DE4CB0 /* GameModels.swift in Sources */,
+				837E81A7611167D45EF33236 /* HomeView.swift in Sources */,
+				C843AB0AA476A385E58A7CF7 /* MinukuruApp.swift in Sources */,
+				65BEA3C98C7B7F7AF4C8BFB1 /* ModeSelectView.swift in Sources */,
+				6697DB3CCDC17F9C6AF66D94 /* QuizRepository.swift in Sources */,
+				AA1B63AFD18AE6FC69592CF1 /* QuizScorer.swift in Sources */,
+				6483D851A88163BB56EE92D6 /* QuizSessionViewModel.swift in Sources */,
+				F122B048033AB26403BC7C51 /* QuizView.swift in Sources */,
+				04D7736DD451967858FBFF1E /* ReasonTagChip.swift in Sources */,
+				72262A365CFA36D3F56CBB03 /* ResultView.swift in Sources */,
+				450C420AF60F7F7385D6AC44 /* SegmentChip.swift in Sources */,
+				404F820FDDFE285A0169CC89 /* SegmentFlowLayout.swift in Sources */,
+				33C31D77F45C1383D1CF3C36 /* StatsModels.swift in Sources */,
+				985EA1309C75418489C206D4 /* StatsStore.swift in Sources */,
+				0ACD38F49E68FA994F1CE5B8 /* StatsView.swift in Sources */,
+				52961CEAC78A29B6F0EE3C58 /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		21EA3A195F46C67462C508FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E64156F5A5CB0219491227F0 /* Minukuru */;
+			targetProxy = B5837A43E44758E213FA93F3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2527F580E96C0CC3C527C6A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Minukuru.app/Minukuru";
+			};
+			name = Release;
+		};
+		64E3A6AA6C35286C3E845B3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "ミヌクル";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
+					UIInterfaceOrientationPortrait,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7D2D7A840FEE2316A48C7469 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "ミヌクル";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = (
+					UIInterfaceOrientationPortrait,
+					UIInterfaceOrientationPortraitUpsideDown,
+					UIInterfaceOrientationLandscapeLeft,
+					UIInterfaceOrientationLandscapeRight,
+				);
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
+					UIInterfaceOrientationPortrait,
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		952062B591C01DC25CD0063B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naoyaochiai.minukuru;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		BFE2765B7005EC3476DDD2BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Minukuru.app/Minukuru";
+			};
+			name = Debug;
+		};
+		C452CFF0BB641425F5927B6E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naoyaochiai.minukuru;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8054535665EED2BA6FB5C34C /* Build configuration list for PBXNativeTarget "MinukuruTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFE2765B7005EC3476DDD2BF /* Debug */,
+				2527F580E96C0CC3C527C6A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C8D50878939457E8A408CCA8 /* Build configuration list for PBXProject "Minukuru" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				952062B591C01DC25CD0063B /* Debug */,
+				C452CFF0BB641425F5927B6E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CC3594F860721E809C6C2FBE /* Build configuration list for PBXNativeTarget "Minukuru" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D2D7A840FEE2316A48C7469 /* Debug */,
+				64E3A6AA6C35286C3E845B3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 58AB4011463DCABC95B2FDDB /* Project object */;
+}
