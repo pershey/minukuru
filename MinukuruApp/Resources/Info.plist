@@ -22,6 +22,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7844017135115297~6684600489</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
