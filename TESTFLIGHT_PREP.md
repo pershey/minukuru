@@ -8,14 +8,25 @@
 - `generic/platform=iOS` Release build 成功
 - `generic/platform=iOS` archive 成功
 - ローカル archive 出力先: `build/Minukuru.xcarchive`
+- App Store 向け export 成功
+- `.ipa` 出力先: `build/export-appstore/Minukuru.ipa`
+- Build Number: `4`
+- ロゴ差し替え・透過調整済み
+  - App Icon: `MinukuruApp/Resources/Assets.xcassets/AppIcon.appiconset`
+  - タイトルロゴ: `TitleLogoVertical` / `MinukuruLogoView.swift`
+  - 起動画面: `LaunchScreen.storyboard`
+- 問題配信の土台あり
+  - 起動時は bundled `questions.json`
+  - 将来は `content_config.json` の URL からリモート更新可能
+  - キャッシュ保存あり
 
 ## Xcode で最終確認すること
 
 1. `xcodegen generate` を実行して最新の `Minukuru.xcodeproj` を生成する
 2. Xcode で `Minukuru.xcodeproj` を開く
-3. Signing & Capabilities で Team を選ぶ
+3. Signing & Capabilities で Team が `NRJLLKV544` になっているか確認する
 4. Bundle Identifier を本番用に確定する
-5. Version と Build を必要に応じて更新する
+5. 現在の Version / Build は `1.0 (4)`。必要に応じて更新する
 6. `questions.json` が Copy Bundle Resources に入っていることを確認する
 7. App Icon が `Assets.xcassets/AppIcon` で設定されていることを確認する
 
@@ -32,7 +43,7 @@
 
 - アプリ名: ミヌクル
 - サブタイトル: 嘘・詐欺・フェイクを見抜く練習
-- キャッチコピー: あやしい情報をコンコン見抜こう
+- キャッチコピー: あやしい情報を見抜こう
 - 主な対象: 小学生高学年以上、ネット情報に不慣れな大人、高齢者
 - 注意点: 人をだます目的ではなく、うのみにしない練習アプリ
 
@@ -43,4 +54,5 @@
 3. Organizer で archive を選ぶ
 4. Validate App を実行する
 5. 問題なければ Distribute App > App Store Connect > Upload を進める
-6. TestFlight の内部テスターで実機確認する
+6. すぐにアップロードしたい場合は `build/export-appstore/Minukuru.ipa` を Transporter にドラッグしてもよい
+7. TestFlight の内部テスターで実機確認する

@@ -9,25 +9,40 @@
 /* Begin PBXBuildFile section */
 		04D7736DD451967858FBFF1E /* ReasonTagChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B5945B4091752C59EFF74E /* ReasonTagChip.swift */; };
 		0ACD38F49E68FA994F1CE5B8 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2595D70304E12C0EADCFCBEC /* StatsView.swift */; };
+		0F9A16E3DBE756C42BB8AE2C /* QuestionAccessPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4C23A7F63C7522435C64E8 /* QuestionAccessPolicyTests.swift */; };
 		124CD9763280F196EF806BA3 /* UserDefaultsStatsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD7B01A2F4290DFE589F82 /* UserDefaultsStatsStoreTests.swift */; };
+		124D0735C7F760EB79CC3AC8 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 0B8EC01F1E29615769DE8CF6 /* GoogleMobileAds */; };
+		19B4D388CE1D0E1B0C3F9E9D /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE32A6557011BEFB91309981 /* PurchaseManager.swift */; };
+		1F3A9E71B5FB1D232284E0A2 /* QuestionAccessPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48681FA9B6C33B63200F1E07 /* QuestionAccessPolicy.swift */; };
 		33C31D77F45C1383D1CF3C36 /* StatsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1D6FEFCB7508C11653C558 /* StatsModels.swift */; };
+		3697882AB6C2E8E3B5D1F9BB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239026356CD57DC3479174A8 /* SettingsView.swift */; };
 		404F820FDDFE285A0169CC89 /* SegmentFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */; };
+		42495E370F5D3F7713E6396D /* HybridQuizRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0016DC1C23A5BD27E56242 /* HybridQuizRepositoryTests.swift */; };
 		450C420AF60F7F7385D6AC44 /* SegmentChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF38C6895CA06D084D912751 /* SegmentChip.swift */; };
 		52961CEAC78A29B6F0EE3C58 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24562158D034B9B94EF4F0C /* Theme.swift */; };
+		5F80DDE88A7C6785BEE18A43 /* MonetizationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDF05D2058113C91C7963D6 /* MonetizationConfig.swift */; };
 		6483D851A88163BB56EE92D6 /* QuizSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889DDAE205F465B39CB6E886 /* QuizSessionViewModel.swift */; };
 		65BEA3C98C7B7F7AF4C8BFB1 /* ModeSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4D7D5D7DE5557536324871 /* ModeSelectView.swift */; };
 		6697DB3CCDC17F9C6AF66D94 /* QuizRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5689E1D28FF31A2560D376FA /* QuizRepository.swift */; };
 		71F65DFBD891F40CE42B525F /* questions.json in Resources */ = {isa = PBXBuildFile; fileRef = B81089CAC527CDC4EBFAF25C /* questions.json */; };
 		72262A365CFA36D3F56CBB03 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9424EE491DB7C376F360C4C0 /* ResultView.swift */; };
+		7E71090F23249288BF8A4BB7 /* content_config.json in Resources */ = {isa = PBXBuildFile; fileRef = BAE8255FE9765510E4349300 /* content_config.json */; };
 		837E81A7611167D45EF33236 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF95E4814430962E7859D4 /* HomeView.swift */; };
+		8A4B3E4002BB40E9952F8703 /* QuizContentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE5DF8840CBFCEC37AB1086 /* QuizContentModels.swift */; };
 		985EA1309C75418489C206D4 /* StatsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B724D9B6074ABEF15083EBEF /* StatsStore.swift */; };
 		9C8C89EC106357A23AB110D6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18006C8B10F7B00E25A961D /* ContentView.swift */; };
 		A6AFC51FC5D5D72EA3DE4CB0 /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869FCB4636FEC676537E5BB1 /* GameModels.swift */; };
 		AA1B63AFD18AE6FC69592CF1 /* QuizScorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2143B372F780AC15D90E1E90 /* QuizScorer.swift */; };
+		AAD9431F1EF319233D932A5D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A980C8565DDDD51B8872CF6 /* LaunchScreen.storyboard */; };
+		B43DE767358E4CB3EA3F4D55 /* MinukuruLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E2DD77312382F7D93EA1D4 /* MinukuruLogoView.swift */; };
 		BBA427F931D106B4CBCCE904 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1B836013879594615DA21 /* AppViewModel.swift */; };
 		C843AB0AA476A385E58A7CF7 /* MinukuruApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC40C8AAF9F2805EED06B71 /* MinukuruApp.swift */; };
+		DA6ECA0DA9E90A873898EC0E /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E943F1DFAF72D865BFB83B6 /* BannerAdView.swift */; };
+		E445F0EC2ADC81704FCB1997 /* AppSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D925F0E636B9611748F4408 /* AppSettingsStore.swift */; };
 		E70DAE4FE940593D71CA201B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 521054754F5EA8CBB1F893B3 /* Assets.xcassets */; };
+		E71BC94BC77C57AD49665078 /* QuizContentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C3CCB8BEBA2FCFEB0CC871 /* QuizContentStore.swift */; };
 		F122B048033AB26403BC7C51 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1335EF66C8199A2E307ECD0F /* QuizView.swift */; };
+		F18218EC18A057E7025ADEB5 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B267AF82D3318A7F2EA7A7F /* AppSettings.swift */; };
 		FCB0243E1D243462E70AB28C /* QuizScorerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB76638D6349223ADFB94704 /* QuizScorerTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,34 +59,62 @@
 /* Begin PBXFileReference section */
 		080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentFlowLayout.swift; sourceTree = "<group>"; };
 		1335EF66C8199A2E307ECD0F /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		1A0016DC1C23A5BD27E56242 /* HybridQuizRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridQuizRepositoryTests.swift; sourceTree = "<group>"; };
 		2143B372F780AC15D90E1E90 /* QuizScorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScorer.swift; sourceTree = "<group>"; };
+		239026356CD57DC3479174A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2595D70304E12C0EADCFCBEC /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		3A980C8565DDDD51B8872CF6 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		46B5945B4091752C59EFF74E /* ReasonTagChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReasonTagChip.swift; sourceTree = "<group>"; };
+		48681FA9B6C33B63200F1E07 /* QuestionAccessPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionAccessPolicy.swift; sourceTree = "<group>"; };
+		4D925F0E636B9611748F4408 /* AppSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsStore.swift; sourceTree = "<group>"; };
 		521054754F5EA8CBB1F893B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5689E1D28FF31A2560D376FA /* QuizRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizRepository.swift; sourceTree = "<group>"; };
+		5F4C23A7F63C7522435C64E8 /* QuestionAccessPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionAccessPolicyTests.swift; sourceTree = "<group>"; };
+		6E943F1DFAF72D865BFB83B6 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerAdView.swift; sourceTree = "<group>"; };
 		788957FF9ABE4AB835B8A6E0 /* Minukuru.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Minukuru.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B267AF82D3318A7F2EA7A7F /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		869FCB4636FEC676537E5BB1 /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
 		889DDAE205F465B39CB6E886 /* QuizSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizSessionViewModel.swift; sourceTree = "<group>"; };
 		9424EE491DB7C376F360C4C0 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		A0FD7B01A2F4290DFE589F82 /* UserDefaultsStatsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStatsStoreTests.swift; sourceTree = "<group>"; };
+		ABE5DF8840CBFCEC37AB1086 /* QuizContentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizContentModels.swift; sourceTree = "<group>"; };
 		AF38C6895CA06D084D912751 /* SegmentChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentChip.swift; sourceTree = "<group>"; };
 		B24562158D034B9B94EF4F0C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		B724D9B6074ABEF15083EBEF /* StatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsStore.swift; sourceTree = "<group>"; };
 		B81089CAC527CDC4EBFAF25C /* questions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = questions.json; sourceTree = "<group>"; };
+		BAE8255FE9765510E4349300 /* content_config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = content_config.json; sourceTree = "<group>"; };
 		C01DE3704AE72EDA4DD95C7D /* MinukuruTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MinukuruTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C18006C8B10F7B00E25A961D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C1C3CCB8BEBA2FCFEB0CC871 /* QuizContentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizContentStore.swift; sourceTree = "<group>"; };
 		CB1D6FEFCB7508C11653C558 /* StatsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsModels.swift; sourceTree = "<group>"; };
+		CBFF7081B23A5C18F587D967 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CE32A6557011BEFB91309981 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		CFDF05D2058113C91C7963D6 /* MonetizationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonetizationConfig.swift; sourceTree = "<group>"; };
 		DAE1B836013879594615DA21 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		DB76638D6349223ADFB94704 /* QuizScorerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScorerTests.swift; sourceTree = "<group>"; };
 		DD4D7D5D7DE5557536324871 /* ModeSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelectView.swift; sourceTree = "<group>"; };
+		E0E2DD77312382F7D93EA1D4 /* MinukuruLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinukuruLogoView.swift; sourceTree = "<group>"; };
 		E4BF95E4814430962E7859D4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		FBC40C8AAF9F2805EED06B71 /* MinukuruApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinukuruApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		43CB73E99A1A466E32D5D00F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				124D0735C7F760EB79CC3AC8 /* GoogleMobileAds in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0C9813F88E934278E90C81B4 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				4D925F0E636B9611748F4408 /* AppSettingsStore.swift */,
+				C1C3CCB8BEBA2FCFEB0CC871 /* QuizContentStore.swift */,
 				B724D9B6074ABEF15083EBEF /* StatsStore.swift */,
 			);
 			path = Storage;
@@ -104,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				DAE1B836013879594615DA21 /* AppViewModel.swift */,
+				CE32A6557011BEFB91309981 /* PurchaseManager.swift */,
 				889DDAE205F465B39CB6E886 /* QuizSessionViewModel.swift */,
 			);
 			path = ViewModels;
@@ -121,7 +165,11 @@
 		55EA52A7608339BAC1359761 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				7B267AF82D3318A7F2EA7A7F /* AppSettings.swift */,
 				869FCB4636FEC676537E5BB1 /* GameModels.swift */,
+				CFDF05D2058113C91C7963D6 /* MonetizationConfig.swift */,
+				48681FA9B6C33B63200F1E07 /* QuestionAccessPolicy.swift */,
+				ABE5DF8840CBFCEC37AB1086 /* QuizContentModels.swift */,
 				2143B372F780AC15D90E1E90 /* QuizScorer.swift */,
 				CB1D6FEFCB7508C11653C558 /* StatsModels.swift */,
 			);
@@ -131,10 +179,12 @@
 		8CD926989F19C609089CBA2B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6E943F1DFAF72D865BFB83B6 /* BannerAdView.swift */,
 				E4BF95E4814430962E7859D4 /* HomeView.swift */,
 				DD4D7D5D7DE5557536324871 /* ModeSelectView.swift */,
 				1335EF66C8199A2E307ECD0F /* QuizView.swift */,
 				9424EE491DB7C376F360C4C0 /* ResultView.swift */,
+				239026356CD57DC3479174A8 /* SettingsView.swift */,
 				2595D70304E12C0EADCFCBEC /* StatsView.swift */,
 				B24562158D034B9B94EF4F0C /* Theme.swift */,
 				C4C668F08677CC17A7FFD67B /* Components */,
@@ -145,6 +195,7 @@
 		C4C668F08677CC17A7FFD67B /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E0E2DD77312382F7D93EA1D4 /* MinukuruLogoView.swift */,
 				46B5945B4091752C59EFF74E /* ReasonTagChip.swift */,
 				AF38C6895CA06D084D912751 /* SegmentChip.swift */,
 				080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */,
@@ -164,6 +215,8 @@
 		E311042C842714C4DBBD5B73 /* MinukuruTests */ = {
 			isa = PBXGroup;
 			children = (
+				1A0016DC1C23A5BD27E56242 /* HybridQuizRepositoryTests.swift */,
+				5F4C23A7F63C7522435C64E8 /* QuestionAccessPolicyTests.swift */,
 				DB76638D6349223ADFB94704 /* QuizScorerTests.swift */,
 				A0FD7B01A2F4290DFE589F82 /* UserDefaultsStatsStoreTests.swift */,
 			);
@@ -174,6 +227,9 @@
 			isa = PBXGroup;
 			children = (
 				521054754F5EA8CBB1F893B3 /* Assets.xcassets */,
+				BAE8255FE9765510E4349300 /* content_config.json */,
+				CBFF7081B23A5C18F587D967 /* Info.plist */,
+				3A980C8565DDDD51B8872CF6 /* LaunchScreen.storyboard */,
 				B81089CAC527CDC4EBFAF25C /* questions.json */,
 			);
 			path = Resources;
@@ -206,6 +262,7 @@
 			buildPhases = (
 				E6FDC97A99D4B8E16EAA234B /* Sources */,
 				EC91B4180C337FC8726E2638 /* Resources */,
+				43CB73E99A1A466E32D5D00F /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -213,6 +270,7 @@
 			);
 			name = Minukuru;
 			packageProductDependencies = (
+				0B8EC01F1E29615769DE8CF6 /* GoogleMobileAds */,
 			);
 			productName = Minukuru;
 			productReference = 788957FF9ABE4AB835B8A6E0 /* Minukuru.app */;
@@ -226,6 +284,16 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					9677DD88EA40DB113800D8F4 = {
+						DevelopmentTeam = NRJLLKV544;
+						ProvisioningStyle = Automatic;
+					};
+					E64156F5A5CB0219491227F0 = {
+						DevelopmentTeam = NRJLLKV544;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = C8D50878939457E8A408CCA8 /* Build configuration list for PBXProject "Minukuru" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -237,6 +305,9 @@
 			);
 			mainGroup = 45ACA13D3B097161AFC4907D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9DB9905EB0B752EEB92BDD45 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
@@ -253,6 +324,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E70DAE4FE940593D71CA201B /* Assets.xcassets in Resources */,
+				AAD9431F1EF319233D932A5D /* LaunchScreen.storyboard in Resources */,
+				7E71090F23249288BF8A4BB7 /* content_config.json in Resources */,
 				71F65DFBD891F40CE42B525F /* questions.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,6 +337,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42495E370F5D3F7713E6396D /* HybridQuizRepositoryTests.swift in Sources */,
+				0F9A16E3DBE756C42BB8AE2C /* QuestionAccessPolicyTests.swift in Sources */,
 				FCB0243E1D243462E70AB28C /* QuizScorerTests.swift in Sources */,
 				124CD9763280F196EF806BA3 /* UserDefaultsStatsStoreTests.swift in Sources */,
 			);
@@ -273,12 +348,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F18218EC18A057E7025ADEB5 /* AppSettings.swift in Sources */,
+				E445F0EC2ADC81704FCB1997 /* AppSettingsStore.swift in Sources */,
 				BBA427F931D106B4CBCCE904 /* AppViewModel.swift in Sources */,
+				DA6ECA0DA9E90A873898EC0E /* BannerAdView.swift in Sources */,
 				9C8C89EC106357A23AB110D6 /* ContentView.swift in Sources */,
 				A6AFC51FC5D5D72EA3DE4CB0 /* GameModels.swift in Sources */,
 				837E81A7611167D45EF33236 /* HomeView.swift in Sources */,
 				C843AB0AA476A385E58A7CF7 /* MinukuruApp.swift in Sources */,
+				B43DE767358E4CB3EA3F4D55 /* MinukuruLogoView.swift in Sources */,
 				65BEA3C98C7B7F7AF4C8BFB1 /* ModeSelectView.swift in Sources */,
+				5F80DDE88A7C6785BEE18A43 /* MonetizationConfig.swift in Sources */,
+				19B4D388CE1D0E1B0C3F9E9D /* PurchaseManager.swift in Sources */,
+				1F3A9E71B5FB1D232284E0A2 /* QuestionAccessPolicy.swift in Sources */,
+				8A4B3E4002BB40E9952F8703 /* QuizContentModels.swift in Sources */,
+				E71BC94BC77C57AD49665078 /* QuizContentStore.swift in Sources */,
 				6697DB3CCDC17F9C6AF66D94 /* QuizRepository.swift in Sources */,
 				AA1B63AFD18AE6FC69592CF1 /* QuizScorer.swift in Sources */,
 				6483D851A88163BB56EE92D6 /* QuizSessionViewModel.swift in Sources */,
@@ -287,6 +371,7 @@
 				72262A365CFA36D3F56CBB03 /* ResultView.swift in Sources */,
 				450C420AF60F7F7385D6AC44 /* SegmentChip.swift in Sources */,
 				404F820FDDFE285A0169CC89 /* SegmentFlowLayout.swift in Sources */,
+				3697882AB6C2E8E3B5D1F9BB /* SettingsView.swift in Sources */,
 				33C31D77F45C1383D1CF3C36 /* StatsModels.swift in Sources */,
 				985EA1309C75418489C206D4 /* StatsStore.swift in Sources */,
 				0ACD38F49E68FA994F1CE5B8 /* StatsView.swift in Sources */,
@@ -326,23 +411,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MinukuruApp/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "ミヌクル";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = (
-					UIInterfaceOrientationPortrait,
-					UIInterfaceOrientationPortraitUpsideDown,
-					UIInterfaceOrientationLandscapeLeft,
-					UIInterfaceOrientationLandscapeRight,
-				);
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
-					UIInterfaceOrientationPortrait,
-				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
 				);
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
@@ -355,23 +433,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MinukuruApp/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "ミヌクル";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = (
-					UIInterfaceOrientationPortrait,
-					UIInterfaceOrientationPortraitUpsideDown,
-					UIInterfaceOrientationLandscapeLeft,
-					UIInterfaceOrientationLandscapeRight,
-				);
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
-					UIInterfaceOrientationPortrait,
-				);
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
 				);
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
@@ -412,9 +483,11 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NRJLLKV544;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -494,9 +567,11 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = NRJLLKV544;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -551,6 +626,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9DB9905EB0B752EEB92BDD45 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0B8EC01F1E29615769DE8CF6 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9DB9905EB0B752EEB92BDD45 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 58AB4011463DCABC95B2FDDB /* Project object */;
 }

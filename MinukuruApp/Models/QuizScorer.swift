@@ -10,6 +10,10 @@ struct QuizEvaluation: Identifiable {
     let missedSegments: [TextSegment]
     let wrongSegments: [TextSegment]
     let matchedAnyCorrect: Bool
+    let matchedReasonTags: [ReasonTag]
+    let missedRecommendedTags: [ReasonTag]
+    let offTargetReasonTags: [ReasonTag]
+    let reasoningMessage: String
 }
 
 enum QuizScorer {
@@ -20,9 +24,12 @@ enum QuizScorer {
         answeredAt: Date = Date()
     ) -> QuizEvaluation {
         let correctSet = Set(question.correctSegmentIds)
+        let recommendedSet = Set(question.recommendedReasonTags)
         let correctSelections = selectedSegmentIds.intersection(correctSet)
         let wrongSelections = selectedSegmentIds.subtracting(correctSet)
-        let matchedTags = selectedReasonTags.intersection(Set(question.recommendedReasonTags))
+        let matchedTags = selectedReasonTags.intersection(recommendedSet)
+        let missedRecommendedTags = recommendedSet.subtracting(selectedReasonTags)
+        let offTargetReasonTags = selectedReasonTags.subtracting(recommendedSet)
         let missedSegments = question.segments.filter { correctSet.contains($0.id) && !selectedSegmentIds.contains($0.id) }
         let wrongSegments = question.segments.filter { wrongSelections.contains($0.id) }
 
@@ -48,7 +55,7 @@ enum QuizScorer {
 
         let encouragement: String
         if isPerfect {
-            encouragement = "コンコン大成功！ よく見抜けたね。"
+            encouragement = "すばらしい！ よく見抜けたね。"
         } else if !correctSelections.isEmpty {
             encouragement = "おしい！でも、あやしいと思えたのはいいことです。"
         } else {
@@ -64,6 +71,17 @@ enum QuizScorer {
             scoreMessage = "ここは少し見抜きにくいワナでした。"
         }
 
+        let reasoningMessage: String
+        if selectedReasonTags.isEmpty {
+            reasoningMessage = "今回は理由タグなしでした。次は『どこが気になったか』も言葉にしてみよう。"
+        } else if !matchedTags.isEmpty && offTargetReasonTags.isEmpty {
+            reasoningMessage = "見方がかなり合っています。どこを怪しいと思ったか、うまく言葉にできています。"
+        } else if !matchedTags.isEmpty {
+            reasoningMessage = "見方は合っています。今回は別の見方も少し混ざっていたので、比べながら覚えていこう。"
+        } else {
+            reasoningMessage = "タグの見方は少しずれました。でも、違和感を持てたこと自体が大切な一歩です。"
+        }
+
         return QuizEvaluation(
             result: result,
             scoreMessage: scoreMessage,
@@ -72,7 +90,11 @@ enum QuizScorer {
             correctSegments: question.segments.filter { correctSet.contains($0.id) },
             missedSegments: missedSegments,
             wrongSegments: wrongSegments,
-            matchedAnyCorrect: !correctSelections.isEmpty
+            matchedAnyCorrect: !correctSelections.isEmpty,
+            matchedReasonTags: matchedTags.sorted(by: { $0.rawValue < $1.rawValue }),
+            missedRecommendedTags: missedRecommendedTags.sorted(by: { $0.rawValue < $1.rawValue }),
+            offTargetReasonTags: offTargetReasonTags.sorted(by: { $0.rawValue < $1.rawValue }),
+            reasoningMessage: reasoningMessage
         )
     }
 }

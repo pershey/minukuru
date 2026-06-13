@@ -8,11 +8,11 @@ struct InlineSegmentChip: View {
     var body: some View {
         Button(action: action) {
             Text(text)
-                .font(.title3)
+                .font(.body)
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.leading)
                 .padding(.horizontal, 12)
-                .padding(.vertical, 10)
+                .padding(.vertical, 9)
                 .background(isSelected ? MinukuruTheme.accentSoft : Color.white.opacity(0.92))
                 .overlay {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
@@ -63,11 +63,11 @@ struct ScamAdSegmentCard: View {
                 .foregroundStyle(MinukuruTheme.primary)
         case .headline:
             Text(text)
-                .font(.system(.title2, design: .rounded, weight: .bold))
+                .font(.system(.title3, design: .rounded, weight: .bold))
                 .foregroundStyle(.primary)
         case .body:
             Text(text)
-                .font(.title3)
+                .font(.body)
                 .foregroundStyle(.primary)
         case .cta:
             HStack(spacing: 10) {

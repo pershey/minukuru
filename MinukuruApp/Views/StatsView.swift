@@ -90,6 +90,60 @@ struct StatsView: View {
                 .background(Color.white.opacity(0.84))
                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
 
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("理由タグの見方")
+                        .font(.title2.weight(.bold))
+
+                    if let strongest = appViewModel.strongestReasoningSummary {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("得意な見方")
+                                .font(.headline)
+                                .foregroundStyle(MinukuruTheme.primary)
+                            Text("\(strongest.tag.label) ・ 当たりやすさ \(strongest.accuracyText)")
+                                .font(.title3.weight(.semibold))
+                            Text("\(strongest.matchedCount)/\(strongest.selectedCount)回で、この見方が問題のポイントと重なっていました。")
+                                .font(.body)
+                                .foregroundStyle(MinukuruTheme.muted)
+                        }
+                    }
+
+                    if let focus = appViewModel.recommendedFocusSummary {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("次に意識したい見方")
+                                .font(.headline)
+                                .foregroundStyle(MinukuruTheme.primary)
+                            Text("\(focus.tag.label) ・ 今は \(focus.accuracyText)")
+                                .font(.title3.weight(.semibold))
+                            Text("問題ごとの解説と見比べながら、このタグを使う場面を少しずつ増やしていこう。")
+                                .font(.body)
+                                .foregroundStyle(MinukuruTheme.muted)
+                        }
+                    }
+
+                    if appViewModel.reasonTagSummaries.isEmpty {
+                        Text("まだ理由タグの記録はありません。気になったタグを押すと、見方のくせが見えてきます。")
+                            .font(.title3)
+                    } else {
+                        ForEach(appViewModel.reasonTagSummaries.prefix(4)) { summary in
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(summary.tag.label)
+                                        .font(.title3.weight(.semibold))
+                                    Text("選んだ回数 \(summary.selectedCount)回 ・ 当たりやすさ \(summary.accuracyText)")
+                                        .font(.body)
+                                        .foregroundStyle(MinukuruTheme.muted)
+                                }
+                                Spacer()
+                            }
+                            .padding(.vertical, 6)
+                        }
+                    }
+                }
+                .padding(22)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.white.opacity(0.84))
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+
                 Button(role: .destructive) {
                     isShowingResetConfirmation = true
                 } label: {

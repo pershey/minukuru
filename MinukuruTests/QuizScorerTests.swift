@@ -9,14 +9,19 @@ final class QuizScorerTests: XCTestCase {
             title: "テスト",
             difficulty: .easy,
             instruction: "1こ選んでね",
+            phoneticInstruction: nil,
             segments: [
-                TextSegment(id: "s1", text: "あやしい"),
-                TextSegment(id: "s2", text: "ふつう")
+                TextSegment(id: "s1", text: "あやしい", phoneticText: nil),
+                TextSegment(id: "s2", text: "ふつう", phoneticText: nil)
             ],
             correctSegmentIds: ["s1"],
             explanation: "説明",
+            phoneticExplanation: nil,
             verificationTip: "確認",
+            phoneticVerificationTip: nil,
             hint: "ヒント",
+            phoneticHint: nil,
+            phoneticTitle: nil,
             recommendedReasonTags: [.gutFeeling, .tooStrongClaim],
             authorName: nil,
             authorId: nil,
@@ -38,6 +43,9 @@ final class QuizScorerTests: XCTestCase {
         XCTAssertEqual(evaluation.result.score, 65)
         XCTAssertTrue(evaluation.missedSegments.isEmpty)
         XCTAssertTrue(evaluation.wrongSegments.isEmpty)
+        XCTAssertEqual(evaluation.matchedReasonTags, [.gutFeeling])
+        XCTAssertEqual(evaluation.missedRecommendedTags, [.tooStrongClaim])
+        XCTAssertTrue(evaluation.offTargetReasonTags.isEmpty)
     }
 
     func testWrongSelectionStillKeepsMinimumLearningScore() {
@@ -47,14 +55,19 @@ final class QuizScorerTests: XCTestCase {
             title: "テスト2",
             difficulty: .normal,
             instruction: "選んでね",
+            phoneticInstruction: nil,
             segments: [
-                TextSegment(id: "s1", text: "ふつう"),
-                TextSegment(id: "s2", text: "あやしい")
+                TextSegment(id: "s1", text: "ふつう", phoneticText: nil),
+                TextSegment(id: "s2", text: "あやしい", phoneticText: nil)
             ],
             correctSegmentIds: ["s2"],
             explanation: "説明",
+            phoneticExplanation: nil,
             verificationTip: "確認",
+            phoneticVerificationTip: nil,
             hint: "ヒント",
+            phoneticHint: nil,
+            phoneticTitle: nil,
             recommendedReasonTags: [.noSource],
             authorName: nil,
             authorId: nil,
@@ -76,5 +89,7 @@ final class QuizScorerTests: XCTestCase {
         XCTAssertEqual(evaluation.result.score, 5)
         XCTAssertEqual(evaluation.missedSegments.map(\.id), ["s2"])
         XCTAssertEqual(evaluation.wrongSegments.map(\.id), ["s1"])
+        XCTAssertTrue(evaluation.matchedReasonTags.isEmpty)
+        XCTAssertEqual(evaluation.missedRecommendedTags, [.noSource])
     }
 }

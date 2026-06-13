@@ -1,0 +1,4 @@
+project_id = "minukuru"
+
+[functions.content-manifest]
+verify_jwt = false

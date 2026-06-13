@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Wordmark_only_transparent_light_2000x420.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

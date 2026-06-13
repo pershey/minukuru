@@ -11,11 +11,21 @@ xcuserdata/
 # Swift Package Manager
 .build/
 
+# Supabase
+supabase/.temp/
+.env
+.env.*
+
 # Fastlane
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Design source assets
+minukuru_logo_assets/
+minukuru_logo_assets_updated/
+minukuru_codex_handoff_assets/
 
 # Misc
 *.swp

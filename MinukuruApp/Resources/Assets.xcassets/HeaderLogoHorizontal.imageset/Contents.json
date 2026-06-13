@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "HeaderLogo_horizontal_transparent_light_1800x320.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

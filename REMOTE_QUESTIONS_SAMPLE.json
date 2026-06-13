@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "2026-06-13-sample",
+  "updatedAt": "2026-06-13T08:00:00Z",
+  "questions": [
+    {
+      "id": "exp-sample-001",
+      "mode": "explanationSnipe",
+      "title": "夜にひらく花",
+      "difficulty": "easy",
+      "instruction": "あやしいところを見つけよう",
+      "segments": [
+        { "id": "s1", "text": "月見草は夕方から花が開きます。" },
+        { "id": "s2", "text": "その花は朝までしぼまず、三日間ずっと同じ形のままです。" },
+        { "id": "s3", "text": "夜に咲く花として知られています。" }
+      ],
+      "correctSegmentIds": ["s2"],
+      "explanation": "夜に咲く花でも、三日間まったく同じ形のままという言い方は言いすぎです。",
+      "verificationTip": "植物図鑑や公的な学習サイトで、花が開く時間としぼむ流れを見てみよう。",
+      "hint": "時間の長さに注目してみよう。",
+      "recommendedReasonTags": ["tooStrongClaim", "hardToVerify"],
+      "accessTier": "free",
+      "contentFlavor": "standard",
+      "authorName": "editorial-team",
+      "authorId": "team-001",
+      "reviewStatus": "approved",
+      "reportCount": 0,
+      "educationalScore": 85,
+      "safetyLevel": 1,
+      "createdAt": "2026-06-13T08:00:00Z",
+      "updatedAt": "2026-06-13T08:00:00Z"
+    }
+  ]
+}

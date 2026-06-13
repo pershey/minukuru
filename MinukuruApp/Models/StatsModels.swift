@@ -20,3 +20,19 @@ struct RecentResultSummary: Identifiable {
     let answeredAt: Date
     let wasPerfect: Bool
 }
+
+struct ReasonTagSummary: Identifiable {
+    var id: ReasonTag { tag }
+    let tag: ReasonTag
+    let selectedCount: Int
+    let matchedCount: Int
+
+    var accuracyRatio: Double {
+        guard selectedCount > 0 else { return 0 }
+        return Double(matchedCount) / Double(selectedCount)
+    }
+
+    var accuracyText: String {
+        "\(Int((accuracyRatio * 100).rounded()))%"
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "TitleLogo_vertical_transparent_light_1600x1600.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "TitleLogo_vertical_transparent_dark_1600x1600.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -19,8 +19,13 @@ struct ContentView: View {
                 ResultView(viewModel: viewModel, result: result)
             case .stats:
                 StatsView()
+            case .settings:
+                SettingsView()
             }
         }
         .animation(.spring(duration: 0.28), value: appViewModel.screenID)
+        .task {
+            await appViewModel.refreshQuestionContentIfNeeded()
+        }
     }
 }

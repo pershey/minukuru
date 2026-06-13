@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 @MainActor
 final class AppViewModel: ObservableObject {
@@ -8,24 +9,49 @@ final class AppViewModel: ObservableObject {
         case quiz(QuizSessionViewModel)
         case result(QuizSessionViewModel, QuizEvaluation)
         case stats
+        case settings
     }
 
     @Published private(set) var screen: Screen = .home
     @Published private(set) var stats: UserStats
     @Published private(set) var results: [QuizResult]
+    @Published private(set) var questionBank: [QuizQuestion]
+    @Published var settings: AppSettings
 
     let repository: QuizProviding
+    let purchaseManager: PurchaseManager
     private let statsStore: StatsStoring
+    private let settingsStore: AppSettingsStoring
+    private let accessPolicy: QuestionAccessPolicy
     private var modeProgress: [GameMode: Int] = [:]
+    private var practiceProgress: Int = 0
+    private var hasAttemptedContentRefresh = false
+    private var cancellables: Set<AnyCancellable> = []
 
     init(
-        repository: QuizProviding = LocalQuizRepository(),
-        statsStore: StatsStoring = UserDefaultsStatsStore()
+        repository: QuizProviding = HybridQuizRepository(),
+        purchaseManager: PurchaseManager,
+        statsStore: StatsStoring = UserDefaultsStatsStore(),
+        settingsStore: AppSettingsStoring = UserDefaultsAppSettingsStore()
     ) {
         self.repository = repository
+        self.purchaseManager = purchaseManager
         self.statsStore = statsStore
+        self.settingsStore = settingsStore
+        self.accessPolicy = QuestionAccessPolicy(
+            freeQuestionLimit: (repository as? QuizAccessConfigProviding)?.freeQuestionLimit ?? 50
+        )
         self.stats = statsStore.loadStats()
         self.results = statsStore.loadResults()
+        self.questionBank = repository.allQuestions()
+        self.settings = settingsStore.loadSettings()
+
+        purchaseManager.objectWillChange
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
     }
 
     var screenID: String {
@@ -35,6 +61,7 @@ final class AppViewModel: ObservableObject {
         case .quiz(let viewModel): "quiz-\(viewModel.question.id)"
         case .result(let viewModel, _): "result-\(viewModel.question.id)"
         case .stats: "stats"
+        case .settings: "settings"
         }
     }
 
@@ -43,7 +70,7 @@ final class AppViewModel: ObservableObject {
         if stats.totalChallenges >= 3 { badges.append("見抜き見習い") }
         if stats.correctAnswers >= 5 { badges.append("あやしい発見隊") }
         if stats.perfectAnswers >= 3 { badges.append("フェイクハンター") }
-        if stats.bestStreak >= 5 { badges.append("コンコン名人") }
+        if stats.bestStreak >= 5 { badges.append("見抜き名人") }
         if stats.totalScore >= 300 { badges.append("ミヌクルマスター") }
         return badges.isEmpty ? ["はじめの一歩"] : badges
     }
@@ -53,7 +80,7 @@ final class AppViewModel: ObservableObject {
         case 0..<60: "見抜き見習い"
         case 60..<140: "あやしい発見隊"
         case 140..<240: "フェイクハンター"
-        case 240..<380: "コンコン名人"
+        case 240..<380: "見抜き名人"
         default: "ミヌクルマスター"
         }
     }
@@ -64,7 +91,11 @@ final class AppViewModel: ObservableObject {
     }
 
     var totalQuestionCount: Int {
-        repository.allQuestions().count
+        accessibleQuestionBank.count
+    }
+
+    var hasPremiumAccess: Bool {
+        purchaseManager.hasPremiumAccess
     }
 
     var accuracyText: String {
@@ -78,7 +109,7 @@ final class AppViewModel: ObservableObject {
             .sorted { $0.answeredAt > $1.answeredAt }
             .prefix(5)
             .compactMap { result in
-                guard let question = repository.question(id: result.questionId) else { return nil }
+                guard let question = question(id: result.questionId) else { return nil }
                 return RecentResultSummary(
                     title: question.title,
                     modeTitle: question.mode.title,
@@ -91,8 +122,8 @@ final class AppViewModel: ObservableObject {
 
     var modeProgressSummaries: [ModeProgressSummary] {
         GameMode.allCases.map { mode in
-            let questions = repository.questions(for: mode)
-            let modeResults = results.filter { repository.question(id: $0.questionId)?.mode == mode }
+            let questions = questions(for: mode)
+            let modeResults = results.filter { question(id: $0.questionId)?.mode == mode }
             return ModeProgressSummary(
                 mode: mode,
                 answeredCount: modeResults.count,
@@ -100,6 +131,49 @@ final class AppViewModel: ObservableObject {
                 perfectCount: modeResults.filter(\.isPerfect).count
             )
         }
+    }
+
+    var reasonTagSummaries: [ReasonTagSummary] {
+        ReasonTag.allCases.compactMap { tag in
+            let selectedCount = results.filter { $0.selectedReasonTags.contains(tag) }.count
+            guard selectedCount > 0 else { return nil }
+
+            let matchedCount = results.filter { result in
+                guard result.selectedReasonTags.contains(tag),
+                      let question = question(id: result.questionId) else {
+                    return false
+                }
+                return question.recommendedReasonTags.contains(tag)
+            }.count
+
+            return ReasonTagSummary(
+                tag: tag,
+                selectedCount: selectedCount,
+                matchedCount: matchedCount
+            )
+        }
+        .sorted {
+            if $0.matchedCount == $1.matchedCount {
+                return $0.selectedCount > $1.selectedCount
+            }
+            return $0.matchedCount > $1.matchedCount
+        }
+    }
+
+    var strongestReasoningSummary: ReasonTagSummary? {
+        reasonTagSummaries.first
+    }
+
+    var recommendedFocusSummary: ReasonTagSummary? {
+        reasonTagSummaries
+            .filter { $0.selectedCount >= 2 }
+            .sorted {
+                if $0.accuracyRatio == $1.accuracyRatio {
+                    return $0.selectedCount > $1.selectedCount
+                }
+                return $0.accuracyRatio < $1.accuracyRatio
+            }
+            .first
     }
 
     func goHome() {
@@ -114,31 +188,105 @@ final class AppViewModel: ObservableObject {
         screen = .stats
     }
 
+    func showSettings() {
+        screen = .settings
+    }
+
+    func updateHiraganaMode(_ isEnabled: Bool) {
+        settings.isHiraganaMode = isEnabled
+        settingsStore.save(settings: settings)
+    }
+
+    func updateSkipAnsweredMode(_ isEnabled: Bool) {
+        guard hasPremiumAccess else { return }
+        settings.isSkipAnsweredEnabled = isEnabled
+        settingsStore.save(settings: settings)
+    }
+
+    func updateRealityMode(_ isEnabled: Bool) {
+        guard hasPremiumAccess else { return }
+        settings.isRealityModeEnabled = isEnabled
+        settingsStore.save(settings: settings)
+    }
+
+    func startPractice() {
+        let questions = accessibleQuestionBank
+        let answeredIDs = Set(results.map(\.questionId))
+        guard let question = accessPolicy.nextQuestion(
+            from: questions,
+            progressIndex: practiceProgress,
+            answeredQuestionIDs: answeredIDs,
+            skipAnswered: hasPremiumAccess && settings.isSkipAnsweredEnabled
+        ) else {
+            return
+        }
+        let viewModel = QuizSessionViewModel(question: question, appViewModel: self)
+        screen = .quiz(viewModel)
+    }
+
     func startQuiz(for mode: GameMode) {
-        let questions = repository.questions(for: mode)
-        guard !questions.isEmpty else { return }
-        let currentIndex = modeProgress[mode, default: 0] % questions.count
-        let question = questions[currentIndex]
+        let questions = questions(for: mode)
+        let answeredIDs = Set(results.map(\.questionId))
+        guard let question = accessPolicy.nextQuestion(
+            from: questions,
+            progressIndex: modeProgress[mode, default: 0],
+            answeredQuestionIDs: answeredIDs,
+            skipAnswered: hasPremiumAccess && settings.isSkipAnsweredEnabled
+        ) else {
+            return
+        }
         let viewModel = QuizSessionViewModel(question: question, appViewModel: self)
         screen = .quiz(viewModel)
     }
 
     func showResult(for session: QuizSessionViewModel, evaluation: QuizEvaluation) {
         record(evaluation.result, matchedAnyCorrect: evaluation.matchedAnyCorrect)
-        if let index = repository.questions(for: session.question.mode).firstIndex(of: session.question) {
+        if let index = questions(for: session.question.mode).firstIndex(of: session.question) {
             modeProgress[session.question.mode] = index + 1
+        }
+        if let index = accessibleQuestionBank.firstIndex(of: session.question) {
+            practiceProgress = index + 1
         }
         screen = .result(session, evaluation)
     }
 
     func answeredCount(for mode: GameMode) -> Int {
-        results.filter { repository.question(id: $0.questionId)?.mode == mode }.count
+        results.filter { question(id: $0.questionId)?.mode == mode }.count
+    }
+
+    func questions(for mode: GameMode) -> [QuizQuestion] {
+        accessibleQuestionBank.filter { $0.mode == mode }
+    }
+
+    func premiumLockedQuestionCount(for mode: GameMode) -> Int {
+        accessPolicy.premiumLockedQuestionCount(
+            for: mode,
+            allQuestions: questionBank,
+            settings: settings,
+            hasPremiumAccess: true
+        )
+    }
+
+    func question(id: String) -> QuizQuestion? {
+        questionBank.first { $0.id == id }
+    }
+
+    func refreshQuestionContentIfNeeded() async {
+        guard !hasAttemptedContentRefresh else { return }
+        hasAttemptedContentRefresh = true
+
+        guard let refreshingRepository = repository as? QuizRefreshing else { return }
+        let didRefresh = await refreshingRepository.refreshIfNeeded()
+        guard didRefresh else { return }
+
+        questionBank = repository.allQuestions()
     }
 
     func resetStats() {
         results = []
         stats = UserStats()
         modeProgress = [:]
+        practiceProgress = 0
         statsStore.clearAll()
     }
 
@@ -161,5 +309,13 @@ final class AppViewModel: ObservableObject {
 
         statsStore.save(stats: stats)
         statsStore.save(results: results)
+    }
+
+    private var accessibleQuestionBank: [QuizQuestion] {
+        accessPolicy.visibleQuestions(
+            from: questionBank,
+            settings: settings,
+            hasPremiumAccess: hasPremiumAccess
+        )
     }
 }

@@ -14,10 +14,6 @@ final class QuizSessionViewModel: ObservableObject {
         self.appViewModel = appViewModel
     }
 
-    var selectionGuide: String {
-        "\(question.instruction) えらんだ数: \(selectedSegmentIds.count)こ"
-    }
-
     var canSubmit: Bool {
         !selectedSegmentIds.isEmpty
     }
@@ -26,10 +22,6 @@ final class QuizSessionViewModel: ObservableObject {
         let ordered = question.recommendedReasonTags + ReasonTag.allCases
         var seen = Set<String>()
         return ordered.filter { seen.insert($0.id).inserted }
-    }
-
-    var questionBodyText: String {
-        question.segments.map(\.text).joined(separator: "")
     }
 
     func toggleSegment(_ segmentID: String) {

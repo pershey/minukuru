@@ -15,7 +15,7 @@ struct ModeSelectView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 HStack {
-                    Button("ホームへ") {
+                    Button("タイトルへ") {
                         appViewModel.goHome()
                     }
                     .font(.headline.bold())
@@ -24,83 +24,76 @@ struct ModeSelectView: View {
                     Spacer()
                 }
 
-                Text("練習モードを選ぶ")
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
-
-                Text("1画面ずつ、ゆっくり見ていけば大丈夫。")
-                    .font(.title3)
-                    .foregroundStyle(MinukuruTheme.muted)
-
-                VStack(alignment: .leading, spacing: 14) {
-                    Text("5つの見方から練習")
-                        .font(.title2.weight(.bold))
-                    Text("説明文、ニュース風、広告風、プロフィール風、論法のワナを、少しずつ見分けていこう。")
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(appViewModel.settings.isHiraganaMode ? "モードを えらぶ" : "モードをえらぶ")
+                        .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    Text(appViewModel.settings.isHiraganaMode ? "きになる テーマから、みぬく れんしゅうを はじめよう。" : "気になるテーマから、見抜く練習をはじめよう。")
                         .font(.body)
                         .foregroundStyle(MinukuruTheme.muted)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(20)
-                .background(MinukuruTheme.panel)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 24, style: .continuous)
-                        .stroke(MinukuruTheme.stroke.opacity(0.8), lineWidth: 1)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
 
-                VStack(spacing: 16) {
+                VStack(spacing: 14) {
                     ForEach(cards) { card in
                         Button {
                             appViewModel.startQuiz(for: card.mode)
                         } label: {
                             HStack(spacing: 16) {
                                 Image(systemName: card.mode.icon)
-                                    .font(.system(size: 28, weight: .bold))
-                                    .frame(width: 56, height: 56)
-                                    .background(MinukuruTheme.panel)
+                                    .font(.system(size: 24, weight: .bold))
+                                    .frame(width: 52, height: 52)
+                                    .background(MinukuruTheme.modeSoft(card.mode))
                                     .overlay {
                                         RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                            .stroke(MinukuruTheme.stroke, lineWidth: 1)
+                                            .stroke(MinukuruTheme.modeAccent(card.mode).opacity(0.35), lineWidth: 1)
                                     }
                                     .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                                    .foregroundStyle(MinukuruTheme.modeAccent(card.mode))
 
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(card.mode.title)
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text(card.mode.displayTitle(isHiraganaMode: appViewModel.settings.isHiraganaMode))
                                         .font(.title3.weight(.bold))
                                         .multilineTextAlignment(.leading)
-                                    Text(card.mode.shortDescription)
+                                    Text(card.mode.displayShortDescription(isHiraganaMode: appViewModel.settings.isHiraganaMode))
                                         .font(.body)
                                         .foregroundStyle(MinukuruTheme.muted)
                                         .multilineTextAlignment(.leading)
                                     HStack(spacing: 8) {
-                                        Text("難易度 \(card.difficulty.label)")
-                                            .font(.subheadline.weight(.bold))
+                                        Text(appViewModel.settings.isHiraganaMode ? "なんいど \(card.difficulty.label)" : "難易度 \(card.difficulty.label)")
+                                            .font(.footnote.weight(.bold))
+                                            .foregroundStyle(MinukuruTheme.modeAccent(card.mode))
                                             .padding(.horizontal, 10)
                                             .padding(.vertical, 6)
-                                            .background(MinukuruTheme.accentSoft)
+                                            .background(MinukuruTheme.modeSoft(card.mode))
                                             .clipShape(Capsule())
-                                        Text("\(appViewModel.answeredCount(for: card.mode))/\(appViewModel.repository.questions(for: card.mode).count)問")
-                                            .font(.subheadline.weight(.semibold))
+
+                                        Text("\(appViewModel.answeredCount(for: card.mode))/\(appViewModel.questions(for: card.mode).count)問")
+                                            .font(.footnote.weight(.semibold))
+                                            .foregroundStyle(MinukuruTheme.muted)
+                                    }
+
+                                    if !appViewModel.hasPremiumAccess,
+                                       appViewModel.premiumLockedQuestionCount(for: card.mode) > 0 {
+                                        Text(appViewModel.settings.isHiraganaMode
+                                             ? "プレミアムで \(appViewModel.premiumLockedQuestionCount(for: card.mode))もん ついか"
+                                             : "プレミアムで \(appViewModel.premiumLockedQuestionCount(for: card.mode))問追加")
+                                            .font(.footnote.weight(.semibold))
                                             .foregroundStyle(MinukuruTheme.primary)
                                     }
                                 }
 
                                 Spacer()
-
-                                Image(systemName: "chevron.right.circle.fill")
-                                    .font(.title2)
-                                    .foregroundStyle(MinukuruTheme.primary)
                             }
-                            .padding(20)
+                            .padding(18)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(MinukuruTheme.card)
+                            .background(Color.white.opacity(0.93))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                                    .stroke(MinukuruTheme.stroke.opacity(0.8), lineWidth: 1)
+                                    .stroke(MinukuruTheme.modeAccent(card.mode).opacity(0.22), lineWidth: 1.2)
                             }
                             .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("\(card.mode.title)。\(card.mode.shortDescription)。難易度 \(card.difficulty.label)")
+                        .accessibilityLabel("\(card.mode.displayTitle(isHiraganaMode: appViewModel.settings.isHiraganaMode))。\(card.mode.displayShortDescription(isHiraganaMode: appViewModel.settings.isHiraganaMode))。\(appViewModel.settings.isHiraganaMode ? "なんいど" : "難易度") \(card.difficulty.label)")
                     }
                 }
             }
