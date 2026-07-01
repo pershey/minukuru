@@ -15,6 +15,7 @@ struct StatsView: View {
 
                 Text("成績を見る")
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .foregroundStyle(MinukuruTheme.primary)
 
                 VStack(alignment: .leading, spacing: 16) {
                     StatRow(title: "今日の挑戦数", value: "\(appViewModel.todayChallengeCount)回")
@@ -33,6 +34,7 @@ struct StatsView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("獲得バッジ")
                         .font(.title2.weight(.bold))
+                        .foregroundStyle(MinukuruTheme.primary)
                     ForEach(appViewModel.badgeTitles, id: \.self) { badge in
                         Label(badge, systemImage: "crown.fill")
                             .font(.title3.weight(.semibold))
@@ -47,6 +49,7 @@ struct StatsView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("モードごとの進みぐあい")
                         .font(.title2.weight(.bold))
+                        .foregroundStyle(MinukuruTheme.primary)
                     ForEach(appViewModel.modeProgressSummaries) { summary in
                         HStack(alignment: .top) {
                             VStack(alignment: .leading, spacing: 4) {
@@ -69,6 +72,7 @@ struct StatsView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("最近の挑戦")
                         .font(.title2.weight(.bold))
+                        .foregroundStyle(MinukuruTheme.primary)
                     if appViewModel.recentResults.isEmpty {
                         Text("まだ挑戦の記録はありません。")
                             .font(.title3)
@@ -93,6 +97,7 @@ struct StatsView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("理由タグの見方")
                         .font(.title2.weight(.bold))
+                        .foregroundStyle(MinukuruTheme.primary)
 
                     if let strongest = appViewModel.strongestReasoningSummary {
                         VStack(alignment: .leading, spacing: 4) {

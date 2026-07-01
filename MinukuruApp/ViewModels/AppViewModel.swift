@@ -16,6 +16,8 @@ final class AppViewModel: ObservableObject {
     @Published private(set) var stats: UserStats
     @Published private(set) var results: [QuizResult]
     @Published private(set) var questionBank: [QuizQuestion]
+    @Published private(set) var isRefreshingContent = false
+    @Published private(set) var contentRefreshMessage: String?
     @Published var settings: AppSettings
 
     let repository: QuizProviding
@@ -41,6 +43,7 @@ final class AppViewModel: ObservableObject {
         self.accessPolicy = QuestionAccessPolicy(
             freeQuestionLimit: (repository as? QuizAccessConfigProviding)?.freeQuestionLimit ?? 50
         )
+        (repository as? QuizEntitlementAware)?.setPremiumAccess(purchaseManager.hasPremiumAccess)
         self.stats = statsStore.loadStats()
         self.results = statsStore.loadResults()
         self.questionBank = repository.allQuestions()
@@ -50,6 +53,17 @@ final class AppViewModel: ObservableObject {
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
+            }
+            .store(in: &cancellables)
+
+        purchaseManager.$hasPremiumAccess
+            .removeDuplicates()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] hasPremiumAccess in
+                guard let self else { return }
+                Task { @MainActor in
+                    await self.handlePremiumAccessChanged(hasPremiumAccess)
+                }
             }
             .store(in: &cancellables)
     }
@@ -92,6 +106,22 @@ final class AppViewModel: ObservableObject {
 
     var totalQuestionCount: Int {
         accessibleQuestionBank.count
+    }
+
+    var loadedQuestionCount: Int {
+        questionBank.count
+    }
+
+    var loadedPremiumQuestionCount: Int {
+        questionBank.filter { $0.accessTier == .premium }.count
+    }
+
+    var loadedRealWorldQuestionCount: Int {
+        questionBank.filter { $0.contentFlavor == .realWorld }.count
+    }
+
+    var contentStatus: QuizContentStatus? {
+        (repository as? QuizContentStatusProviding)?.contentStatus()
     }
 
     var hasPremiumAccess: Bool {
@@ -271,15 +301,31 @@ final class AppViewModel: ObservableObject {
         questionBank.first { $0.id == id }
     }
 
-    func refreshQuestionContentIfNeeded() async {
-        guard !hasAttemptedContentRefresh else { return }
-        hasAttemptedContentRefresh = true
+    func refreshQuestionContentIfNeeded(force: Bool = false) async {
+        isRefreshingContent = true
+        defer { isRefreshingContent = false }
 
+        if !force {
+            guard !hasAttemptedContentRefresh else { return }
+            hasAttemptedContentRefresh = true
+        }
+
+        (repository as? QuizEntitlementAware)?.setPremiumAccess(hasPremiumAccess)
         guard let refreshingRepository = repository as? QuizRefreshing else { return }
-        let didRefresh = await refreshingRepository.refreshIfNeeded()
-        guard didRefresh else { return }
+        let didRefresh = await refreshingRepository.refreshIfNeeded(force: force)
+        guard didRefresh || force else { return }
 
         questionBank = repository.allQuestions()
+    }
+
+    func manuallyRefreshQuestionContent() async {
+        await refreshQuestionContentIfNeeded(force: true)
+
+        if hasPremiumAccess {
+            contentRefreshMessage = "問題を更新しました。いまは \(accessibleQuestionBank.count)問遊べます。"
+        } else {
+            contentRefreshMessage = "問題を更新しました。いまは \(accessibleQuestionBank.count)問遊べます。"
+        }
     }
 
     func resetStats() {
@@ -317,5 +363,14 @@ final class AppViewModel: ObservableObject {
             settings: settings,
             hasPremiumAccess: hasPremiumAccess
         )
+    }
+
+    private func handlePremiumAccessChanged(_ hasPremiumAccess: Bool) async {
+        (repository as? QuizEntitlementAware)?.setPremiumAccess(hasPremiumAccess)
+        questionBank = repository.allQuestions()
+
+        guard hasPremiumAccess else { return }
+        await refreshQuestionContentIfNeeded(force: true)
+        contentRefreshMessage = "プレミアム問題を読み込みました。いまは \(accessibleQuestionBank.count)問遊べます。"
     }
 }

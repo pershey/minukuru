@@ -42,14 +42,62 @@ final class HybridQuizRepositoryTests: XCTestCase {
 
         XCTAssertEqual(repository.allQuestions().map(\.id), ["bundle-1"])
 
-        let didRefresh = await repository.refreshIfNeeded()
+        let didRefresh = await repository.refreshIfNeeded(force: false)
 
         XCTAssertTrue(didRefresh)
         XCTAssertEqual(repository.allQuestions().map(\.id), ["remote-1"])
-        XCTAssertEqual(store.savedManifest?.contentVersion, "remote-v2")
+        XCTAssertEqual(store.savedManifests[.full]?.contentVersion, "remote-v2")
     }
 
-    private func makeQuestion(id: String, title: String) -> QuizQuestion {
+    func testSplitFeedRefreshMergesPremiumQuestionsAfterEntitlementUnlock() async throws {
+        let bundledManifest = QuizContentManifest(
+            contentVersion: "bundle-v1",
+            questions: [makeQuestion(id: "free-1", title: "無料問題", accessTier: .free)]
+        )
+        let freeManifest = QuizContentManifest(
+            contentVersion: "free-v2",
+            questions: [makeQuestion(id: "free-2", title: "無料の追加", accessTier: .free)]
+        )
+        let premiumManifest = QuizContentManifest(
+            contentVersion: "premium-v2",
+            questions: [makeQuestion(id: "premium-1", title: "プレミアム", accessTier: .premium)]
+        )
+
+        let store = InMemoryQuizContentStore(
+            bundledManifest: bundledManifest,
+            configuration: RemoteQuizConfiguration(
+                remoteQuestionsURL: URL(string: "https://example.com/full.json"),
+                remoteFreeQuestionsURL: URL(string: "https://example.com/free.json"),
+                remotePremiumQuestionsURL: URL(string: "https://example.com/premium.json"),
+                minimumFetchIntervalMinutes: 0,
+                minimumPremiumFetchIntervalMinutes: 0
+            )
+        )
+        let fetcher = URLMapQuizRemoteFetcher(responses: [
+            "https://example.com/free.json": try FileQuizContentStore.makeEncoder().encode(freeManifest),
+            "https://example.com/premium.json": try FileQuizContentStore.makeEncoder().encode(premiumManifest),
+        ])
+        let repository = HybridQuizRepository(
+            bundle: .main,
+            store: store,
+            remoteFetcher: fetcher
+        )
+
+        let freeOnlyRefresh = await repository.refreshIfNeeded(force: false)
+
+        XCTAssertTrue(freeOnlyRefresh)
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["free-2"])
+
+        repository.setPremiumAccess(true)
+        let premiumRefresh = await repository.refreshIfNeeded(force: true)
+
+        XCTAssertTrue(premiumRefresh)
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["free-2", "premium-1"])
+        XCTAssertEqual(store.savedManifests[.free]?.contentVersion, "free-v2")
+        XCTAssertEqual(store.savedManifests[.premium]?.contentVersion, "premium-v2")
+    }
+
+    private func makeQuestion(id: String, title: String, accessTier: AccessTier = .free) -> QuizQuestion {
         QuizQuestion(
             id: id,
             mode: .explanationSnipe,
@@ -69,6 +117,7 @@ final class HybridQuizRepositoryTests: XCTestCase {
             phoneticHint: nil,
             phoneticTitle: nil,
             recommendedReasonTags: [.gutFeeling],
+            accessTier: accessTier,
             authorName: nil,
             authorId: nil,
             reviewStatus: nil,
@@ -84,9 +133,9 @@ final class HybridQuizRepositoryTests: XCTestCase {
 private final class InMemoryQuizContentStore: QuizContentStoring {
     let bundledManifest: QuizContentManifest
     let configuration: RemoteQuizConfiguration
-    var cachedManifest: QuizContentManifest?
-    var savedManifest: QuizContentManifest?
-    var lastFetchAt: Date?
+    var cachedManifests: [QuizContentCacheKind: QuizContentManifest] = [:]
+    var savedManifests: [QuizContentCacheKind: QuizContentManifest] = [:]
+    var lastFetchDates: [QuizContentCacheKind: Date] = [:]
 
     init(
         bundledManifest: QuizContentManifest,
@@ -95,32 +144,34 @@ private final class InMemoryQuizContentStore: QuizContentStoring {
     ) {
         self.bundledManifest = bundledManifest
         self.configuration = configuration
-        self.cachedManifest = cachedManifest
+        if let cachedManifest {
+            self.cachedManifests[.full] = cachedManifest
+        }
     }
 
     func loadBundledManifest(from bundle: Bundle) -> QuizContentManifest {
         bundledManifest
     }
 
-    func loadCachedManifest() -> QuizContentManifest? {
-        cachedManifest
+    func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest? {
+        cachedManifests[kind]
     }
 
-    func saveCachedManifest(_ manifest: QuizContentManifest) {
-        savedManifest = manifest
-        cachedManifest = manifest
+    func saveCachedManifest(_ manifest: QuizContentManifest, kind: QuizContentCacheKind) {
+        savedManifests[kind] = manifest
+        cachedManifests[kind] = manifest
     }
 
     func loadConfiguration(from bundle: Bundle) -> RemoteQuizConfiguration {
         configuration
     }
 
-    func shouldAttemptFetch(minimumIntervalMinutes: Int, now: Date) -> Bool {
+    func shouldAttemptFetch(kind: QuizContentCacheKind, minimumIntervalMinutes: Int, now: Date, force: Bool) -> Bool {
         true
     }
 
-    func markFetchAttempt(at date: Date) {
-        lastFetchAt = date
+    func markFetchAttempt(kind: QuizContentCacheKind, at date: Date) {
+        lastFetchDates[kind] = date
     }
 }
 
@@ -129,5 +180,16 @@ private struct MockQuizRemoteFetcher: QuizRemoteFetching {
 
     func fetchData(from url: URL) async throws -> Data {
         try result.get()
+    }
+}
+
+private struct URLMapQuizRemoteFetcher: QuizRemoteFetching {
+    let responses: [String: Data]
+
+    func fetchData(from url: URL) async throws -> Data {
+        guard let data = responses[url.absoluteString] else {
+            throw URLError(.fileDoesNotExist)
+        }
+        return data
     }
 }

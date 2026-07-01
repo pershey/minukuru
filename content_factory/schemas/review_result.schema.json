@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minukuru Review Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "passed",
+    "action",
+    "realismScore",
+    "safetyScore",
+    "learningScore",
+    "uniquenessScore",
+    "segmentClarityScore",
+    "compositeScore",
+    "matchedSignals",
+    "concerns",
+    "duplicateSignals",
+    "revisionAdvice",
+    "summary"
+  ],
+  "properties": {
+    "passed": {
+      "type": "boolean"
+    },
+    "action": {
+      "type": "string",
+      "enum": ["accept", "revise", "reject", "needs_human"]
+    },
+    "realismScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "safetyScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "learningScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "uniquenessScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "segmentClarityScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "compositeScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "matchedSignals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "concerns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "duplicateSignals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "revisionAdvice": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 400
+    }
+  }
+}

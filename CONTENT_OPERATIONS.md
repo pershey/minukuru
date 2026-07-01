@@ -2,108 +2,135 @@
 
 ## いまの配信方式
 
-- アプリは起動時にまず bundled の `questions.json` を読みます
-- 端末にキャッシュ済みの問題セットがあれば、そちらを優先します
-- `content_config.json` に `remoteQuestionsURL` が入っている場合だけ、裏でリモート更新を取りにいきます
-- リモート取得に成功すると、次回以降はキャッシュ済みの新しい問題セットを使います
+- アプリはまず bundled の [questions.json](/Users/naoyaochiai/minukuru/MinukuruApp/Resources/questions.json) を読みます
+- 端末にキャッシュ済み manifest があれば、そちらを優先します
+- [content_config.json](/Users/naoyaochiai/minukuru/MinukuruApp/Resources/content_config.json) に配信先 URL が入っている場合だけ、裏でリモート更新を取りにいきます
+- 通常起動時は `free` feed を取得します
+- プレミアム購入後は `premium` feed を強制再取得して、端末内で `free + premium` をマージします
+- 旧互換 / 管理確認用として `full` feed も返せます
 
 実装の入口:
 
-- `/Users/naoyaochiai/minukuru/MinukuruApp/SampleData/QuizRepository.swift`
-- `/Users/naoyaochiai/minukuru/MinukuruApp/Storage/QuizContentStore.swift`
-- `/Users/naoyaochiai/minukuru/MinukuruApp/Resources/content_config.json`
+- [QuizRepository.swift](/Users/naoyaochiai/minukuru/MinukuruApp/SampleData/QuizRepository.swift)
+- [QuizContentStore.swift](/Users/naoyaochiai/minukuru/MinukuruApp/Storage/QuizContentStore.swift)
+- [AppViewModel.swift](/Users/naoyaochiai/minukuru/MinukuruApp/ViewModels/AppViewModel.swift)
+- [content_config.json](/Users/naoyaochiai/minukuru/MinukuruApp/Resources/content_config.json)
 
-## おすすめ構成
+## 3 つの feed
 
-### まずは簡単に始める案
+### `free`
 
-1. Supabase Storage か CDN に `questions.json` を置く
-2. アプリの `content_config.json` にその URL を入れる
-3. 運営は JSON を差し替えるだけで更新する
+- 無料版用の問題セット
+- 今は 50 問を想定
+- `remoteFreeQuestionsURL` から取得
 
-### もう少し安全にやる案
+### `premium`
 
-1. 公開用 URL は `quiz-manifest.json` など固定にする
-2. 更新前にステージング URL で確認する
-3. 運営レビュー後に本番 URL の JSON を入れ替える
+- `accessTier: premium` の追加問題だけ
+- 購入後にだけ取得
+- `remotePremiumQuestionsURL` から取得
 
-## リモート JSON の形
+### `full`
 
-アプリは次の 2 形式を読めます。
+- `free + premium` をまとめた feed
+- legacy クライアントや配信確認用
+- `remoteQuestionsURL` から取得
 
-### 1. 既存の配列形式
+## キャッシュの考え方
+
+アプリは feed ごとに別キャッシュを持ちます。
+
+- `cached-free-questions.json`
+- `cached-premium-questions.json`
+- `cached-questions.json`
+
+そのため:
+
+- 無料版は `free` だけで起動できる
+- 購入後に `premium` だけを差分追加できる
+- premium 解約前の再インストールや失効時にも、表示ロジック側で除外しやすい
+
+## `content_config.json` の形
 
 ```json
-[
-  {
-    "id": "exp-001",
-    "mode": "explanationSnipe",
-    "title": "サンプル",
-    "difficulty": "easy",
-    "instruction": "あやしいところを見つけよう",
-    "segments": [
-      { "id": "s1", "text": "本文です。" }
-    ],
-    "correctSegmentIds": ["s1"],
-    "explanation": "解説",
-    "verificationTip": "確認のしかた",
-    "hint": "ヒント",
-    "recommendedReasonTags": ["gutFeeling"]
-  }
-]
+{
+  "remoteQuestionsURL": "https://<PROJECT_REF>.supabase.co/functions/v1/content-manifest",
+  "remoteFreeQuestionsURL": "https://<PROJECT_REF>.supabase.co/functions/v1/content-manifest?channel=free",
+  "remotePremiumQuestionsURL": "https://<PROJECT_REF>.supabase.co/functions/v1/content-manifest?channel=premium",
+  "minimumFetchIntervalMinutes": 180,
+  "minimumPremiumFetchIntervalMinutes": 15,
+  "freeQuestionLimit": 50
+}
 ```
 
-### 2. バージョン付き manifest 形式
+## 配信 JSON の形
+
+manifest 形式を使います。
 
 ```json
 {
   "schemaVersion": 1,
-  "contentVersion": "2026-06-13-a",
-  "updatedAt": "2026-06-13T08:00:00Z",
+  "contentVersion": "2026-06-27-openai-premium",
+  "updatedAt": "2026-06-27T09:00:00Z",
   "questions": [
     {
-      "id": "exp-001",
-      "mode": "explanationSnipe",
-      "title": "サンプル",
-      "difficulty": "easy",
-      "instruction": "あやしいところを見つけよう",
+      "id": "premium-001",
+      "mode": "scamAdChecker",
+      "title": "個別案内の告知",
+      "difficulty": "hard",
+      "instruction": "怪しい表現を選んでください。",
       "segments": [
-        { "id": "s1", "text": "本文です。" }
+        { "id": "s1", "text": "限定で少人数に先行案内をしています。" }
       ],
       "correctSegmentIds": ["s1"],
-      "explanation": "解説",
-      "verificationTip": "確認のしかた",
-      "hint": "ヒント",
-      "recommendedReasonTags": ["gutFeeling"]
+      "explanation": "限定感で急がせています。",
+      "verificationTip": "公開情報と照らして確認しましょう。",
+      "hint": "限定や秘密の言い方に注目。",
+      "recommendedReasonTags": ["urgency"],
+      "accessTier": "premium",
+      "contentFlavor": "realWorld"
     }
   ]
 }
 ```
 
-manifest 形式のほうが、運営更新では扱いやすいです。
+## 更新運用の基本フロー
 
-- `contentVersion` で差し替え管理しやすい
-- `updatedAt` があると確認しやすい
-- 将来 `minimumAppVersion` などを足しやすい
+1. 生成・審査して `build-manifest-set` を作る
+2. `free_manifest.json` と `premium_manifest.json` と `full_manifest.json` を Storage に upload する
+3. `question_manifests` に `distribution_channel` 付きで `staged` 登録する
+4. `publish-now` か `pg_cron` で `published` に切り替える
+5. アプリは次回 fetch で更新を拾う
 
-## 運営更新の流れ
+## TestFlight で premium 体験を確認する流れ
 
-1. 問題案を作る
-2. 禁止テーマと危険表現を確認する
-3. JSON バリデーションを通す
-4. ステージング URL に置いてアプリで確認する
-5. 問題タイトル、解説、正答箇所を再確認する
-6. 本番 URL の manifest を更新する
+1. 無料状態で起動する
+2. `free` feed がキャッシュされる
+3. 課金する
+4. `PurchaseManager` の状態変化を `AppViewModel` が受ける
+5. `premium` feed を `force: true` で再取得する
+6. 端末内で `free + premium` をマージして表示する
+
+このため、製品版でも「ローカルの 50 問だけで終わる」構成ではなく、Supabase 上の manifest を読みにいく運用へ移行できます。
+
+## いま実際に公開している feed
+
+このプロジェクトの Supabase では、すでに次を publish 済みです。
+
+- `free`: `demo-20260627-openai-free`
+- `premium`: `demo-20260627-openai-premium`
+- `full`: `demo-20260627-openai-full`
 
 ## 実運用で追加したいもの
 
-- 運営用の CMS か Supabase テーブル
-- 下書き、審査中、公開済みの状態管理
+- 運営用 CMS
+- 下書き、審査中、公開済みの状態管理 UI
 - 危険語チェック
-- 問題ごとのレビュー履歴
-- 問題の無効化フラグ
+- 問題の停止フラグ
+- premium / realWorld の AB テスト
 
 ## 注意
 
-- `content_config.json` 自体はアプリに含まれるので、あとから変えたいものではなく「固定の配信先 URL」を持たせる用途です
-- 公開後に配信先を切り替える可能性があるなら、将来は Remote Config や自前の設定 endpoint を足すと安全です
+- `content_config.json` 自体はアプリに同梱されるので、URL の切り替え用ではなく「固定の公開入口」を持たせる用途です
+- 途中で配信先を切り替えたくなるなら、将来は別の設定 endpoint を 1 本かませると安全です
+- `premium` feed は必ず `accessTier: premium` だけにして、無料問題を重複させない方が運用しやすいです

@@ -17,6 +17,7 @@ struct MinukuruApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appViewModel)
+                .preferredColorScheme(.light)
                 .task {
                     await purchaseManager.prepare()
                 }

@@ -22,11 +22,18 @@ struct ModeSelectView: View {
                     .foregroundStyle(MinukuruTheme.primary)
 
                     Spacer()
+
+                    Button(appViewModel.settings.isHiraganaMode ? "せいせきを みる" : "成績を見る") {
+                        appViewModel.showStats()
+                    }
+                    .font(.headline.bold())
+                    .foregroundStyle(MinukuruTheme.primary)
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(appViewModel.settings.isHiraganaMode ? "モードを えらぶ" : "モードをえらぶ")
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                        .foregroundStyle(MinukuruTheme.primary)
                     Text(appViewModel.settings.isHiraganaMode ? "きになる テーマから、みぬく れんしゅうを はじめよう。" : "気になるテーマから、見抜く練習をはじめよう。")
                         .font(.body)
                         .foregroundStyle(MinukuruTheme.muted)

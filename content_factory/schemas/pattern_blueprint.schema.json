@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minukuru Pattern Blueprint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "slug",
+    "name",
+    "mode",
+    "accessTier",
+    "contentFlavor",
+    "sourceChannels",
+    "hookTypes",
+    "redFlagTags",
+    "targetDifficulty",
+    "audienceTone",
+    "generatorNotes"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 4,
+      "maxLength": 80
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["explanationSnipe", "newsPoison", "scamAdChecker", "profileHunter", "conspiracyTrap"]
+    },
+    "accessTier": {
+      "type": "string",
+      "enum": ["free", "premium"]
+    },
+    "contentFlavor": {
+      "type": "string",
+      "enum": ["standard", "realWorld"]
+    },
+    "sourceChannels": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["ad", "profile", "news", "forum", "messaging", "other"]
+      }
+    },
+    "hookTypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "redFlagTags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "suspiciousNumber",
+          "noSource",
+          "tooStrongClaim",
+          "fearMongering",
+          "urgency",
+          "tooGoodToBeTrue",
+          "fakeAuthority",
+          "secretInfo",
+          "enemyFraming",
+          "forcedConnection",
+          "hardToVerify",
+          "gutFeeling"
+        ]
+      }
+    },
+    "targetDifficulty": {
+      "type": "string",
+      "enum": ["easy", "normal", "hard"]
+    },
+    "audienceTone": {
+      "type": "string",
+      "enum": ["childFriendly", "general", "seniorFriendly"]
+    },
+    "generatorNotes": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 600
+    },
+    "realismConstraints": {
+      "type": "object"
+    }
+  }
+}

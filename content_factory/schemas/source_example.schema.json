@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minukuru Source Example",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "sourceKind",
+    "sourceChannel",
+    "title",
+    "rawExcerpt",
+    "redactedExcerpt",
+    "modeCandidates",
+    "signalTags",
+    "allowRealWorldFlavor"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "sourceKind": {
+      "type": "string",
+      "enum": ["manual", "internal_capture", "public_report", "future_submission"]
+    },
+    "sourceChannel": {
+      "type": "string",
+      "enum": ["ad", "profile", "news", "forum", "messaging", "other"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 4,
+      "maxLength": 80
+    },
+    "rawExcerpt": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 1000
+    },
+    "redactedExcerpt": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 1000
+    },
+    "referenceNotes": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "modeCandidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["explanationSnipe", "newsPoison", "scamAdChecker", "profileHunter", "conspiracyTrap"]
+      }
+    },
+    "signalTags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "realismNotes": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "allowRealWorldFlavor": {
+      "type": "boolean"
+    },
+    "collectedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minukuru Generation Task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "taskId",
+    "batchLabel",
+    "sourceExample",
+    "blueprint",
+    "mode",
+    "accessTier",
+    "contentFlavor",
+    "targetDifficulty",
+    "userPrompt"
+  ],
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "batchLabel": {
+      "type": "string"
+    },
+    "sourceExample": {
+      "type": "object"
+    },
+    "blueprint": {
+      "type": "object"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["explanationSnipe", "newsPoison", "scamAdChecker", "profileHunter", "conspiracyTrap"]
+    },
+    "accessTier": {
+      "type": "string",
+      "enum": ["free", "premium"]
+    },
+    "contentFlavor": {
+      "type": "string",
+      "enum": ["standard", "realWorld"]
+    },
+    "targetDifficulty": {
+      "type": "string",
+      "enum": ["easy", "normal", "hard"]
+    },
+    "userPrompt": {
+      "type": "string",
+      "minLength": 40
+    }
+  }
+}

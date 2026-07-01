@@ -1,20 +1,46 @@
 import Foundation
 
+enum QuizContentCacheKind: Hashable {
+    case full
+    case free
+    case premium
+
+    var cacheFilename: String {
+        switch self {
+        case .full:
+            "cached-questions.json"
+        case .free:
+            "cached-free-questions.json"
+        case .premium:
+            "cached-premium-questions.json"
+        }
+    }
+
+    var lastFetchKey: String {
+        switch self {
+        case .full:
+            "minukuru.quizContent.full.lastFetchAt"
+        case .free:
+            "minukuru.quizContent.free.lastFetchAt"
+        case .premium:
+            "minukuru.quizContent.premium.lastFetchAt"
+        }
+    }
+}
+
 protocol QuizContentStoring {
     func loadBundledManifest(from bundle: Bundle) -> QuizContentManifest
-    func loadCachedManifest() -> QuizContentManifest?
-    func saveCachedManifest(_ manifest: QuizContentManifest)
+    func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest?
+    func saveCachedManifest(_ manifest: QuizContentManifest, kind: QuizContentCacheKind)
     func loadConfiguration(from bundle: Bundle) -> RemoteQuizConfiguration
-    func shouldAttemptFetch(minimumIntervalMinutes: Int, now: Date) -> Bool
-    func markFetchAttempt(at date: Date)
+    func shouldAttemptFetch(kind: QuizContentCacheKind, minimumIntervalMinutes: Int, now: Date, force: Bool) -> Bool
+    func markFetchAttempt(kind: QuizContentCacheKind, at date: Date)
 }
 
 final class FileQuizContentStore: QuizContentStoring {
     private let fileManager: FileManager
     private let defaults: UserDefaults
     private let cacheDirectoryName = "MinukuruContent"
-    private let cacheFilename = "cached-questions.json"
-    private let lastFetchKey = "minukuru.quizContent.lastFetchAt"
 
     init(
         fileManager: FileManager = .default,
@@ -35,15 +61,15 @@ final class FileQuizContentStore: QuizContentStoring {
         return manifest
     }
 
-    func loadCachedManifest() -> QuizContentManifest? {
-        guard let data = try? Data(contentsOf: cacheFileURL()) else {
+    func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest? {
+        guard let data = try? Data(contentsOf: cacheFileURL(for: kind)) else {
             return nil
         }
 
         return try? Self.decodeManifest(from: data, defaultVersion: "cached-questions")
     }
 
-    func saveCachedManifest(_ manifest: QuizContentManifest) {
+    func saveCachedManifest(_ manifest: QuizContentManifest, kind: QuizContentCacheKind) {
         do {
             let directoryURL = try cacheDirectoryURL()
             if !fileManager.fileExists(atPath: directoryURL.path) {
@@ -51,7 +77,7 @@ final class FileQuizContentStore: QuizContentStoring {
             }
 
             let data = try Self.makeEncoder().encode(manifest)
-            try data.write(to: cacheFileURL(), options: .atomic)
+            try data.write(to: cacheFileURL(for: kind), options: .atomic)
         } catch {
             assertionFailure("Could not save cached question manifest: \(error)")
         }
@@ -67,14 +93,22 @@ final class FileQuizContentStore: QuizContentStoring {
         return configuration
     }
 
-    func shouldAttemptFetch(minimumIntervalMinutes: Int, now: Date = Date()) -> Bool {
+    func shouldAttemptFetch(
+        kind: QuizContentCacheKind,
+        minimumIntervalMinutes: Int,
+        now: Date = Date(),
+        force: Bool = false
+    ) -> Bool {
+        if force {
+            return true
+        }
         guard minimumIntervalMinutes > 0 else { return true }
-        guard let lastFetchAt = defaults.object(forKey: lastFetchKey) as? Date else { return true }
+        guard let lastFetchAt = defaults.object(forKey: kind.lastFetchKey) as? Date else { return true }
         return now.timeIntervalSince(lastFetchAt) >= TimeInterval(minimumIntervalMinutes * 60)
     }
 
-    func markFetchAttempt(at date: Date) {
-        defaults.set(date, forKey: lastFetchKey)
+    func markFetchAttempt(kind: QuizContentCacheKind, at date: Date) {
+        defaults.set(date, forKey: kind.lastFetchKey)
     }
 
     static func decodeManifest(from data: Data, defaultVersion: String) throws -> QuizContentManifest {
@@ -111,9 +145,9 @@ final class FileQuizContentStore: QuizContentStoring {
         return applicationSupport.appendingPathComponent(cacheDirectoryName, isDirectory: true)
     }
 
-    private func cacheFileURL() -> URL {
+    private func cacheFileURL(for kind: QuizContentCacheKind) -> URL {
         let baseURL = (try? cacheDirectoryURL())
             ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-        return baseURL.appendingPathComponent(cacheFilename)
+        return baseURL.appendingPathComponent(kind.cacheFilename)
     }
 }

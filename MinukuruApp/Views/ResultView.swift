@@ -14,10 +14,13 @@ struct ResultView: View {
                         .foregroundStyle(MinukuruTheme.primary)
                     Text(result.encouragement)
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                        .foregroundStyle(MinukuruTheme.primary)
                     Text(result.scoreMessage)
                         .font(.title3)
+                        .foregroundStyle(MinukuruTheme.muted)
                     Text(appViewModel.settings.isHiraganaMode ? "ポイント: \(result.result.score)" : "獲得ポイント: \(result.result.score)")
                         .font(.title2.weight(.bold))
+                        .foregroundStyle(MinukuruTheme.primary)
                         .padding(.top, 6)
                 }
                 .padding(24)
@@ -157,6 +160,7 @@ private struct ResultSection<Content: View>: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(.title2.weight(.bold))
+                .foregroundStyle(MinukuruTheme.primary)
             content
         }
         .padding(20)

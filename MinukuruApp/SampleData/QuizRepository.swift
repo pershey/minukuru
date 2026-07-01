@@ -7,11 +7,27 @@ protocol QuizProviding {
 }
 
 protocol QuizRefreshing {
-    func refreshIfNeeded() async -> Bool
+    func refreshIfNeeded(force: Bool) async -> Bool
 }
 
 protocol QuizAccessConfigProviding {
     var freeQuestionLimit: Int { get }
+}
+
+protocol QuizEntitlementAware {
+    func setPremiumAccess(_ hasPremiumAccess: Bool)
+}
+
+struct QuizContentStatus: Equatable {
+    let usesSplitFeeds: Bool
+    let baseContentVersion: String
+    let premiumContentVersion: String?
+    let visibleQuestionCount: Int
+    let premiumQuestionCount: Int
+}
+
+protocol QuizContentStatusProviding {
+    func contentStatus() -> QuizContentStatus
 }
 
 protocol QuizRemoteFetching {
@@ -66,11 +82,26 @@ struct LocalQuizRepository: QuizProviding, QuizAccessConfigProviding {
     }
 }
 
+extension LocalQuizRepository: QuizContentStatusProviding {
+    func contentStatus() -> QuizContentStatus {
+        let premiumCount = questions.filter { $0.accessTier == .premium }.count
+        return QuizContentStatus(
+            usesSplitFeeds: false,
+            baseContentVersion: "bundled-questions",
+            premiumContentVersion: nil,
+            visibleQuestionCount: questions.count,
+            premiumQuestionCount: premiumCount
+        )
+    }
+}
+
 final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfigProviding {
     private let bundle: Bundle
     private let store: QuizContentStoring
     private let remoteFetcher: QuizRemoteFetching
-    private var manifest: QuizContentManifest
+    private var baseManifest: QuizContentManifest
+    private var premiumManifest: QuizContentManifest
+    private var hasPremiumAccess = false
     let freeQuestionLimit: Int
 
     init(
@@ -83,39 +114,137 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
         self.remoteFetcher = remoteFetcher
 
         let bundledManifest = store.loadBundledManifest(from: bundle)
-        let cachedManifest = store.loadCachedManifest()
-        let initialManifest = cachedManifest ?? bundledManifest
         let configuration = store.loadConfiguration(from: bundle)
-        self.manifest = initialManifest.questions.isEmpty ? bundledManifest : initialManifest
         self.freeQuestionLimit = configuration.freeQuestionLimit
+
+        if configuration.usesSplitFeeds {
+            let cachedBaseManifest =
+                store.loadCachedManifest(kind: .free)
+                ?? store.loadCachedManifest(kind: .full)
+            self.baseManifest = cachedBaseManifest?.questions.isEmpty == false ? cachedBaseManifest! : bundledManifest
+            self.premiumManifest = store.loadCachedManifest(kind: .premium)
+                ?? QuizContentManifest(contentVersion: "empty-premium", questions: [])
+        } else {
+            let cachedManifest = store.loadCachedManifest(kind: .full)
+            let initialManifest = cachedManifest ?? bundledManifest
+            self.baseManifest = initialManifest.questions.isEmpty ? bundledManifest : initialManifest
+            self.premiumManifest = QuizContentManifest(contentVersion: "empty-premium", questions: [])
+        }
     }
 
     func allQuestions() -> [QuizQuestion] {
-        manifest.questions
+        currentManifest().questions
     }
 
     func questions(for mode: GameMode) -> [QuizQuestion] {
-        manifest.questions.filter { $0.mode == mode }
+        currentManifest().questions.filter { $0.mode == mode }
     }
 
     func question(id: String) -> QuizQuestion? {
-        manifest.questions.first { $0.id == id }
+        currentManifest().questions.first { $0.id == id }
     }
 
-    func refreshIfNeeded() async -> Bool {
+    func refreshIfNeeded(force: Bool = false) async -> Bool {
         let configuration = store.loadConfiguration(from: bundle)
-        guard let remoteURL = configuration.remoteQuestionsURL else { return false }
-
         let fetchDate = Date()
+        var didRefresh = false
+
+        if configuration.usesSplitFeeds {
+            if let freeURL = configuration.effectiveFreeQuestionsURL,
+               store.shouldAttemptFetch(
+                   kind: .free,
+                   minimumIntervalMinutes: configuration.minimumFetchIntervalMinutes,
+                   now: fetchDate,
+                   force: force
+               ) {
+                store.markFetchAttempt(kind: .free, at: fetchDate)
+                didRefresh = await refreshManifest(
+                    from: freeURL,
+                    cacheKind: .free,
+                    currentManifest: baseManifest,
+                    assign: { [weak self] refreshedManifest in
+                        self?.baseManifest = refreshedManifest
+                    }
+                ) || didRefresh
+            }
+
+            if hasPremiumAccess,
+               let premiumURL = configuration.remotePremiumQuestionsURL,
+               store.shouldAttemptFetch(
+                   kind: .premium,
+                   minimumIntervalMinutes: configuration.minimumPremiumFetchIntervalMinutes,
+                   now: fetchDate,
+                   force: force
+               ) {
+                store.markFetchAttempt(kind: .premium, at: fetchDate)
+                didRefresh = await refreshManifest(
+                    from: premiumURL,
+                    cacheKind: .premium,
+                    currentManifest: premiumManifest,
+                    assign: { [weak self] refreshedManifest in
+                        self?.premiumManifest = refreshedManifest
+                    }
+                ) || didRefresh
+            }
+
+            return didRefresh
+        }
+
+        guard let remoteURL = configuration.remoteQuestionsURL else { return false }
         guard store.shouldAttemptFetch(
+            kind: .full,
             minimumIntervalMinutes: configuration.minimumFetchIntervalMinutes,
-            now: fetchDate
+            now: fetchDate,
+            force: force
         ) else {
             return false
         }
 
-        store.markFetchAttempt(at: fetchDate)
+        store.markFetchAttempt(kind: .full, at: fetchDate)
+        return await refreshManifest(
+            from: remoteURL,
+            cacheKind: .full,
+            currentManifest: baseManifest,
+            assign: { [weak self] refreshedManifest in
+                self?.baseManifest = refreshedManifest
+            }
+        )
+    }
 
+    private func currentManifest() -> QuizContentManifest {
+        guard hasPremiumAccess, !premiumManifest.questions.isEmpty else {
+            return baseManifest
+        }
+
+        return QuizContentManifest(
+            contentVersion: "\(baseManifest.contentVersion)+\(premiumManifest.contentVersion)",
+            updatedAt: premiumManifest.updatedAt ?? baseManifest.updatedAt,
+            questions: mergeQuestions(baseManifest.questions, premiumManifest.questions)
+        )
+    }
+
+    private func mergeQuestions(_ baseQuestions: [QuizQuestion], _ overlayQuestions: [QuizQuestion]) -> [QuizQuestion] {
+        var merged = baseQuestions
+        var indexByID = Dictionary(uniqueKeysWithValues: merged.enumerated().map { ($1.id, $0) })
+
+        for question in overlayQuestions {
+            if let index = indexByID[question.id] {
+                merged[index] = question
+            } else {
+                indexByID[question.id] = merged.count
+                merged.append(question)
+            }
+        }
+
+        return merged
+    }
+
+    private func refreshManifest(
+        from remoteURL: URL,
+        cacheKind: QuizContentCacheKind,
+        currentManifest: QuizContentManifest,
+        assign: @escaping (QuizContentManifest) -> Void
+    ) async -> Bool {
         do {
             let data = try await remoteFetcher.fetchData(from: remoteURL)
             let refreshedManifest = try FileQuizContentStore.decodeManifest(
@@ -127,15 +256,34 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
                 return false
             }
 
-            guard refreshedManifest != manifest else {
+            guard refreshedManifest != currentManifest else {
                 return false
             }
 
-            manifest = refreshedManifest
-            store.saveCachedManifest(refreshedManifest)
+            assign(refreshedManifest)
+            store.saveCachedManifest(refreshedManifest, kind: cacheKind)
             return true
         } catch {
             return false
         }
+    }
+}
+
+extension HybridQuizRepository: QuizEntitlementAware {
+    func setPremiumAccess(_ hasPremiumAccess: Bool) {
+        self.hasPremiumAccess = hasPremiumAccess
+    }
+}
+
+extension HybridQuizRepository: QuizContentStatusProviding {
+    func contentStatus() -> QuizContentStatus {
+        let mergedQuestions = currentManifest().questions
+        return QuizContentStatus(
+            usesSplitFeeds: store.loadConfiguration(from: bundle).usesSplitFeeds,
+            baseContentVersion: baseManifest.contentVersion,
+            premiumContentVersion: premiumManifest.questions.isEmpty ? nil : premiumManifest.contentVersion,
+            visibleQuestionCount: mergedQuestions.count,
+            premiumQuestionCount: mergedQuestions.filter { $0.accessTier == .premium }.count
+        )
     }
 }

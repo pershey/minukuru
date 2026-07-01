@@ -11,6 +11,12 @@ Deno.serve(async (request) => {
   }
 
   try {
+    const url = new URL(request.url);
+    const requestedChannel = url.searchParams.get("channel");
+    const channel = requestedChannel === "free" || requestedChannel === "premium" || requestedChannel === "full"
+      ? requestedChannel
+      : "full";
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
@@ -18,8 +24,10 @@ Deno.serve(async (request) => {
       auth: { persistSession: false },
     });
 
-    const { data: metadata, error: metadataError } = await supabase
-      .rpc("get_published_manifest_metadata");
+    const metadataCall = channel === "full"
+      ? supabase.rpc("get_published_manifest_metadata")
+      : supabase.rpc("get_published_manifest_metadata", { target_channel: channel });
+    const { data: metadata, error: metadataError } = await metadataCall;
 
     if (metadataError) {
       throw metadataError;
@@ -28,7 +36,7 @@ Deno.serve(async (request) => {
     const published = metadata?.[0];
     if (!published) {
       return Response.json(
-        { error: "No published manifest found." },
+        { error: `No published manifest found for channel '${channel}'.` },
         { status: 404, headers: corsHeaders }
       );
     }
@@ -50,11 +58,13 @@ Deno.serve(async (request) => {
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "public, max-age=300",
         "X-Minukuru-Content-Version": published.content_version,
+        "X-Minukuru-Distribution-Channel": channel,
       },
     });
   } catch (error) {
+    console.error("content-manifest failed", error);
     return Response.json(
-      { error: "Failed to load manifest.", details: `${error}` },
+      { error: "Failed to load manifest." },
       { status: 500, headers: corsHeaders }
     );
   }

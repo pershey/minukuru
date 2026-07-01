@@ -10,6 +10,7 @@
 - Supabase Edge Function
 - deploy 手順書
 - GitHub Actions の iOS CI
+- GitHub Pages 用のサポート / プライバシーページ
 
 ## GitHub に載せないもの
 
@@ -75,6 +76,19 @@ GitHub Actions は [/.github/workflows/ios-ci.yml](/Users/naoyaochiai/minukuru/.
 
 署名不要の範囲で回るので、PR の基本確認に向いています。
 
+## GitHub Pages
+
+GitHub Pages 用の公開ページと workflow も追加済みです。
+
+- 公開ページ:
+  - [docs/index.html](/Users/naoyaochiai/minukuru/docs/index.html)
+  - [docs/support.html](/Users/naoyaochiai/minukuru/docs/support.html)
+  - [docs/privacy-policy.html](/Users/naoyaochiai/minukuru/docs/privacy-policy.html)
+- workflow:
+  - [/.github/workflows/deploy-pages.yml](/Users/naoyaochiai/minukuru/.github/workflows/deploy-pages.yml)
+
+詳しい手順は [GITHUB_PAGES_SETUP.md](/Users/naoyaochiai/minukuru/GITHUB_PAGES_SETUP.md) を見ればそのまま進められます。
+
 ## Supabase 側は変更できるか
 
 できます。今回の構成なら、次の変更は GitHub 管理に載せやすいです。
@@ -99,8 +113,11 @@ GitHub Actions は [/.github/workflows/ios-ci.yml](/Users/naoyaochiai/minukuru/.
 
 ```sql
 update admin.runtime_config
-set config_value = '0 9 * * 1'
-where config_key = 'content_publish_cron';
+set value = jsonb_build_object(
+  'cron', '0 9 * * 1',
+  'timezone', 'Asia/Tokyo'
+)
+where key = 'content_publish_schedule';
 
 select admin.reschedule_content_publish_job();
 ```

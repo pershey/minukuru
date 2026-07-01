@@ -1,0 +1,129 @@
+[
+  {
+    "id": "bp-scam-limited-authority-001",
+    "slug": "scam-limited-authority",
+    "name": "限定感と監修風の権威づけ",
+    "mode": "scamAdChecker",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["ad", "messaging"],
+    "hookTypes": ["limited_offer", "social_proof", "authority_claim"],
+    "redFlagTags": ["urgency", "fakeAuthority", "tooGoodToBeTrue"],
+    "targetDifficulty": "normal",
+    "audienceTone": "general",
+    "generatorNotes": "広告として自然なリズムで、安心感と限定感を混ぜる。露骨な詐欺文句にはしない。",
+    "realismConstraints": {
+      "maxCorrectSegments": 3,
+      "tone": "ad-like",
+      "avoid": ["実在ブランド名", "金額断言", "違法手順"]
+    }
+  },
+  {
+    "id": "bp-profile-soft-credential-001",
+    "slug": "profile-soft-credential",
+    "name": "ぼかした肩書きと個別誘導",
+    "mode": "profileHunter",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["profile", "messaging"],
+    "hookTypes": ["vague_credential", "private_invite"],
+    "redFlagTags": ["fakeAuthority", "secretInfo", "hardToVerify"],
+    "targetDifficulty": "normal",
+    "audienceTone": "general",
+    "generatorNotes": "SNS 自己紹介として短く自然に。すごそうだが証拠のない肩書きと閉じた導線を両立させる。",
+    "realismConstraints": {
+      "maxCorrectSegments": 2,
+      "tone": "social-profile"
+    }
+  },
+  {
+    "id": "bp-news-local-jump-001",
+    "slug": "news-local-jump",
+    "name": "地域ニュース風の数字飛躍",
+    "mode": "newsPoison",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["news"],
+    "hookTypes": ["local_news", "cause_jump"],
+    "redFlagTags": ["suspiciousNumber", "tooStrongClaim", "noSource"],
+    "targetDifficulty": "normal",
+    "audienceTone": "seniorFriendly",
+    "generatorNotes": "地域ニュースや広報記事のような落ち着いたトーンで、一部だけ論理を飛ばす。",
+    "realismConstraints": {
+      "maxCorrectSegments": 2,
+      "tone": "local-news"
+    }
+  },
+  {
+    "id": "bp-explanation-fact-slip-001",
+    "slug": "explanation-fact-slip",
+    "name": "図鑑風の自然な事実ずらし",
+    "mode": "explanationSnipe",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["other"],
+    "hookTypes": ["encyclopedia_style"],
+    "redFlagTags": ["tooStrongClaim", "hardToVerify"],
+    "targetDifficulty": "easy",
+    "audienceTone": "childFriendly",
+    "generatorNotes": "学習読み物の文体で、全体は正しそうに見せつつ一か所だけ事実をずらす。",
+    "realismConstraints": {
+      "maxCorrectSegments": 1,
+      "tone": "educational"
+    }
+  },
+  {
+    "id": "bp-rumor-secret-circle-001",
+    "slug": "conspiracy-secret-circle",
+    "name": "閉じた仲間意識と秘密の情報源",
+    "mode": "conspiracyTrap",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["forum", "messaging"],
+    "hookTypes": ["secret_source", "enemy_framing", "special_knowledge"],
+    "redFlagTags": ["secretInfo", "enemyFraming", "forcedConnection"],
+    "targetDifficulty": "hard",
+    "audienceTone": "general",
+    "generatorNotes": "実在の政治や災害を使わず、特別感と偶然の強引な接続を少しずつ積む。",
+    "realismConstraints": {
+      "maxCorrectSegments": 3,
+      "tone": "rumor-thread"
+    }
+  },
+  {
+    "id": "bp-real-ad-soft-fomo-001",
+    "slug": "realworld-ad-soft-fomo",
+    "name": "現実モードのやわらかい FOMO 訴求",
+    "mode": "scamAdChecker",
+    "accessTier": "premium",
+    "contentFlavor": "realWorld",
+    "sourceChannels": ["ad", "messaging"],
+    "hookTypes": ["fomo", "limited_offer", "social_proof"],
+    "redFlagTags": ["urgency", "tooGoodToBeTrue", "hardToVerify"],
+    "targetDifficulty": "hard",
+    "audienceTone": "general",
+    "generatorNotes": "本当にありそうな広告文体を優先する。ただし実在名や直接的な勧誘手順は避ける。",
+    "realismConstraints": {
+      "maxCorrectSegments": 3,
+      "tone": "realworld-ad"
+    }
+  },
+  {
+    "id": "bp-real-profile-mentor-001",
+    "slug": "realworld-profile-mentor",
+    "name": "現実モードのメンター風プロフィール",
+    "mode": "profileHunter",
+    "accessTier": "premium",
+    "contentFlavor": "realWorld",
+    "sourceChannels": ["profile", "messaging"],
+    "hookTypes": ["mentor", "exclusive_access", "vague_credential"],
+    "redFlagTags": ["fakeAuthority", "secretInfo", "hardToVerify"],
+    "targetDifficulty": "hard",
+    "audienceTone": "general",
+    "generatorNotes": "現実の自己紹介文に近い温度感で、ぼかした肩書きと個別導線を混ぜる。",
+    "realismConstraints": {
+      "maxCorrectSegments": 3,
+      "tone": "realworld-profile"
+    }
+  }
+]

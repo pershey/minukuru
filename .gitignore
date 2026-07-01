@@ -15,6 +15,7 @@ xcuserdata/
 supabase/.temp/
 .env
 .env.*
+content_factory/output/
 
 # Fastlane
 fastlane/report.xml
