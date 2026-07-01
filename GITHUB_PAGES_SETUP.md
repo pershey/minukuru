@@ -47,12 +47,12 @@ GitHub のリポジトリで:
 
 ## 3. 公開 URL
 
-リポジトリ名が `minukuru` の場合、通常は次になります。
+このリポジトリでは現在、次の URL で公開されています。
 
 ```text
-https://<github-username>.github.io/minukuru/
-https://<github-username>.github.io/minukuru/support.html
-https://<github-username>.github.io/minukuru/privacy-policy.html
+https://pershey.github.io/minukuru/
+https://pershey.github.io/minukuru/support.html
+https://pershey.github.io/minukuru/privacy-policy.html
 ```
 
 ## 4. App Store Connect に貼る URL
@@ -60,13 +60,13 @@ https://<github-username>.github.io/minukuru/privacy-policy.html
 ### Support URL
 
 ```text
-https://<github-username>.github.io/minukuru/support.html
+https://pershey.github.io/minukuru/support.html
 ```
 
 ### Privacy Policy URL
 
 ```text
-https://<github-username>.github.io/minukuru/privacy-policy.html
+https://pershey.github.io/minukuru/privacy-policy.html
 ```
 
 ### Marketing URL
@@ -74,7 +74,7 @@ https://<github-username>.github.io/minukuru/privacy-policy.html
 必要ならトップページを使えます。
 
 ```text
-https://<github-username>.github.io/minukuru/
+https://pershey.github.io/minukuru/
 ```
 
 ## 5. 確認方法

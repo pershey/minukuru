@@ -69,14 +69,14 @@
 
 ### サポート URL / プライバシーポリシー URL
 
-今のドラフトでは未設定です。
+現在は GitHub Pages で公開済みです。
 
 - Support URL
-  - 必須寄り。最低でも問い合わせ先のある簡易ページがほしい
+  - `https://pershey.github.io/minukuru/support.html`
 - Privacy Policy URL
-  - 実質必須
+  - `https://pershey.github.io/minukuru/privacy-policy.html`
 - Marketing URL
-  - 任意
+  - `https://pershey.github.io/minukuru/`
 
 ## 2. バージョンごとに毎回埋める項目
 

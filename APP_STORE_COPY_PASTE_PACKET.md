@@ -161,16 +161,17 @@ com.naoyaochiai.minukuru.premium
 
 ## 7. Support URL / Privacy Policy URL
 
-このリポジトリには公開ページ原稿を作成済みです。
+GitHub Pages 公開は完了しています。
 
 - [docs/support.html](/Users/naoyaochiai/minukuru/docs/support.html)
 - [docs/privacy-policy.html](/Users/naoyaochiai/minukuru/docs/privacy-policy.html)
 
-GitHub Pages で公開する場合の URL 例:
+現在の公開 URL:
 
 ```text
-https://<github-username>.github.io/minukuru/support.html
-https://<github-username>.github.io/minukuru/privacy-policy.html
+https://pershey.github.io/minukuru/support.html
+https://pershey.github.io/minukuru/privacy-policy.html
+https://pershey.github.io/minukuru/
 ```
 
 公開手順:
