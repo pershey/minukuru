@@ -6,6 +6,12 @@
 
 すべて `1284 x 2778` です。
 
+13インチiPad提出用フォルダ:
+
+- [review_assets/appstore_screenshots/ipad_13_2048x2732](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/ipad_13_2048x2732)
+
+すべて `2048 x 2732` です。
+
 ## 提出順
 
 1. [01-quiz.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_7/01-quiz.png)

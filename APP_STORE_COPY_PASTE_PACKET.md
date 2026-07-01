@@ -21,6 +21,12 @@
 - Primary Category: `教育`
 - Secondary Category: `ゲーム`
 
+### 著作権
+
+```text
+2026 NAOYA OCHIAI
+```
+
 ### キーワード
 
 ```text
