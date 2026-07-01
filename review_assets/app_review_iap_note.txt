@@ -1,8 +1,8 @@
 Recommended screenshot file:
-/Users/naoyaochiai/minukuru/review_assets/app_review_iap_screenshot_upload.png
+/Users/naoyaochiai/minukuru/review_assets/iap_submission_6_7/app_review_iap_screenshot_upload.png
 
 Backup screenshot file:
-/Users/naoyaochiai/minukuru/review_assets/app_review_iap_screenshot_simulator_v2.png
+/Users/naoyaochiai/minukuru/review_assets/iap_submission_6_7/app_review_iap_screenshot_simulator_v2.png
 
 App Review Note (English):
 This in-app purchase is a non-consumable product named "Minukuru Premium".

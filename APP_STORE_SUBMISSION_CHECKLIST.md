@@ -137,7 +137,7 @@
 
 IAP 用スクショの本命:
 
-- [app_review_iap_screenshot_upload.png](/Users/naoyaochiai/minukuru/review_assets/app_review_iap_screenshot_upload.png)
+- [app_review_iap_screenshot_upload.png](/Users/naoyaochiai/minukuru/review_assets/iap_submission_6_7/app_review_iap_screenshot_upload.png)
 
 IAP 審査メモ:
 
@@ -291,7 +291,7 @@ IAP 審査メモ:
 - 課金セットアップ:
   - [MONETIZATION_SETUP.md](/Users/naoyaochiai/minukuru/MONETIZATION_SETUP.md)
 - IAP 審査スクショ:
-  - [app_review_iap_screenshot_upload.png](/Users/naoyaochiai/minukuru/review_assets/app_review_iap_screenshot_upload.png)
+  - [app_review_iap_screenshot_upload.png](/Users/naoyaochiai/minukuru/review_assets/iap_submission_6_7/app_review_iap_screenshot_upload.png)
 - IAP 審査メモ:
   - [app_review_iap_note.txt](/Users/naoyaochiai/minukuru/review_assets/app_review_iap_note.txt)
 

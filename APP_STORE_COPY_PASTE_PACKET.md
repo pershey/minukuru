@@ -157,7 +157,7 @@ com.naoyaochiai.minukuru.premium
 
 使うファイル:
 
-- [app_review_iap_screenshot_upload.png](/Users/naoyaochiai/minukuru/review_assets/app_review_iap_screenshot_upload.png)
+- [app_review_iap_screenshot_upload.png](/Users/naoyaochiai/minukuru/review_assets/iap_submission_6_7/app_review_iap_screenshot_upload.png)
 
 ## 7. Support URL / Privacy Policy URL
 
@@ -182,13 +182,13 @@ https://pershey.github.io/minukuru/
 
 提出順の本命セット:
 
-1. [01-quiz.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_9/01-quiz.png)
-2. [02-result.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_9/02-result.png)
-3. [03-mode-select.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_9/03-mode-select.png)
-4. [04-settings-premium.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_9/04-settings-premium.png)
-5. [05-stats.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_9/05-stats.png)
+1. [01-quiz.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_7/01-quiz.png)
+2. [02-result.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_7/02-result.png)
+3. [03-mode-select.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_7/03-mode-select.png)
+4. [04-settings-premium.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_7/04-settings-premium.png)
+5. [05-stats.png](/Users/naoyaochiai/minukuru/review_assets/appstore_screenshots/submission_6_7/05-stats.png)
 
-すべて `1320 x 2868` に揃えています。
+すべて `1284 x 2778` に揃えています。
 
 ## 9. 年齢制限の入力方針
 
