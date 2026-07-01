@@ -29,4 +29,6 @@ minukuru_logo_assets_updated/
 minukuru_codex_handoff_assets/
 
 # Misc
+__pycache__/
+*.pyc
 *.swp
