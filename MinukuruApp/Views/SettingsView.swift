@@ -16,15 +16,15 @@ struct SettingsView: View {
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
                     .foregroundStyle(MinukuruTheme.primary)
 
+                premiumSection
                 readingSection
                 contentSection
-                premiumSection
                 noticeSection
             }
             .padding(20)
         }
         .task {
-            if appViewModel.purchaseManager.premiumProduct == nil {
+            if appViewModel.purchaseManager.productFetchState != .loaded {
                 await appViewModel.purchaseManager.reloadStoreState()
             }
         }
@@ -61,7 +61,7 @@ struct SettingsView: View {
     private var premiumSection: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .firstTextBaseline) {
-                Text(appViewModel.settings.isHiraganaMode ? "プレミアム" : "プレミアム")
+                Text(appViewModel.settings.isHiraganaMode ? "プレミアムプラン" : "プレミアムプラン")
                     .font(.title2.weight(.bold))
                     .foregroundStyle(MinukuruTheme.primary)
                 Spacer()
@@ -73,6 +73,12 @@ struct SettingsView: View {
                     .background((appViewModel.hasPremiumAccess ? Color.green : MinukuruTheme.accentSoft).opacity(0.18))
                     .clipShape(Capsule())
             }
+
+            Text(appViewModel.settings.isHiraganaMode
+                 ? "ついかもんだいと べんりな きのうを まとめて つかえる、かいきりタイプです。"
+                 : "追加問題と便利な機能をまとめて使える、買い切りタイプです。")
+                .font(.body)
+                .foregroundStyle(MinukuruTheme.muted)
 
             premiumFeatureRow(
                 title: appViewModel.settings.isHiraganaMode ? "ぜんもんだい かいほう" : "全問題解放",
@@ -122,66 +128,11 @@ struct SettingsView: View {
             .toggleStyle(.switch)
             .disabled(!appViewModel.hasPremiumAccess)
 
-            if let product = appViewModel.purchaseManager.premiumProduct {
-                Button {
-                    Task {
-                        await appViewModel.purchaseManager.purchasePremium()
-                    }
-                } label: {
-                    HStack(spacing: 10) {
-                        if appViewModel.purchaseManager.isLoading {
-                            ProgressView()
-                                .progressViewStyle(.circular)
-                                .tint(.white)
-                        }
-                        Text(appViewModel.hasPremiumAccess
-                             ? (appViewModel.settings.isHiraganaMode ? "プレミアム りようちゅう" : "プレミアム利用中")
-                             : "\(product.displayPrice)で解放")
-                            .font(.title3.weight(.bold))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                }
-                .buttonStyle(.plain)
-                .foregroundStyle(.white)
-                .background(appViewModel.hasPremiumAccess ? Color.green : MinukuruTheme.primary)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .disabled(appViewModel.hasPremiumAccess || appViewModel.purchaseManager.isLoading)
-
-                Button(appViewModel.settings.isHiraganaMode ? "こうにゅうを ふくげん" : "購入を復元") {
-                    Task {
-                        await appViewModel.purchaseManager.restorePurchases()
-                    }
-                }
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(MinukuruTheme.primary)
-            } else {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(appViewModel.settings.isHiraganaMode
-                         ? "しょうひんじょうほうを かくにんしています。"
-                         : "商品情報を確認しています。")
-                        .font(.headline.weight(.semibold))
-                        .foregroundStyle(MinukuruTheme.primary)
-
-                    Text(appViewModel.settings.isHiraganaMode
-                         ? "TestFlight では、App Store Connect の しょうひんが はんえいされるまで じかんが かかることが あります。"
-                         : "TestFlight では、App Store Connect の商品が反映されるまで時間がかかることがあります。")
-                        .font(.footnote)
-                        .foregroundStyle(MinukuruTheme.muted)
-
-                    Button(appViewModel.settings.isHiraganaMode ? "しょうひんを もういちど よみこむ" : "商品をもう一度読み込む") {
-                        Task {
-                            await appViewModel.purchaseManager.reloadStoreState()
-                        }
-                    }
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(MinukuruTheme.primary)
-                }
-            }
+            premiumCallToAction
 
             VStack(alignment: .leading, spacing: 8) {
                 statusLine(
-                    title: appViewModel.settings.isHiraganaMode ? "しょうひんの じょうたい" : "商品の状態",
+                    title: appViewModel.settings.isHiraganaMode ? "プレミアムの じょうたい" : "プレミアムの状態",
                     value: productFetchStateLabel
                 )
                 statusLine(
@@ -201,16 +152,17 @@ struct SettingsView: View {
 
             if let productFetchMessage = appViewModel.purchaseManager.productFetchMessage {
                 Text(productFetchMessage)
-                    .font(.footnote)
+                    .font(.body)
                     .foregroundStyle(MinukuruTheme.muted)
             }
 
             if let purchaseMessage = appViewModel.purchaseManager.purchaseMessage {
                 Text(purchaseMessage)
-                    .font(.footnote)
+                    .font(.body)
                     .foregroundStyle(MinukuruTheme.muted)
             }
 
+            #if DEBUG
             if let purchaseDebugDetail = appViewModel.purchaseManager.purchaseDebugDetail {
                 Text(purchaseDebugDetail)
                     .font(.footnote)
@@ -232,30 +184,7 @@ struct SettingsView: View {
                     }
                 }
             }
-
-            if appViewModel.purchaseManager.premiumProduct == nil {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(appViewModel.settings.isHiraganaMode ? "みる ところ" : "見るところ")
-                        .font(.headline.weight(.semibold))
-                        .foregroundStyle(MinukuruTheme.primary)
-                    Text(appViewModel.settings.isHiraganaMode
-                         ? "App Store Connect で しょうひんID、ねだん、りようできる くに、Paid Apps Agreement を かくにんしてください。"
-                         : "App Store Connect で商品 ID、価格、利用できる国、Paid Apps Agreement を確認してください。")
-                        .font(.footnote)
-                        .foregroundStyle(MinukuruTheme.muted)
-                    Text(appViewModel.settings.isHiraganaMode
-                         ? "はじめての かきんしょうひんは、アプリばんと いっしょに しんさへ だしていないと TestFlight で でないことが あります。"
-                         : "初回の課金商品は、アプリ版と一緒に審査へ出していないと TestFlight で出ないことがあります。")
-                        .font(.footnote)
-                        .foregroundStyle(MinukuruTheme.muted)
-                }
-            }
-
-            Text(appViewModel.settings.isHiraganaMode
-                 ? "テストでは StoreKit の しょうひんせってい、ほんばんでは App Store Connect の しょうひんが ひつようです。"
-                 : "テストではStoreKitの商品設定、本番では App Store Connect の商品登録が必要です。")
-                .font(.footnote)
-                .foregroundStyle(MinukuruTheme.muted)
+            #endif
         }
         .padding(22)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -362,6 +291,71 @@ struct SettingsView: View {
             Text(detail)
                 .font(.body)
                 .foregroundStyle(MinukuruTheme.muted)
+        }
+    }
+
+    private var premiumCallToAction: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if let product = appViewModel.purchaseManager.premiumProduct {
+                Button {
+                    Task {
+                        await appViewModel.purchaseManager.purchasePremium()
+                    }
+                } label: {
+                    HStack(spacing: 10) {
+                        if appViewModel.purchaseManager.isLoading {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                                .tint(.white)
+                        }
+                        Text(appViewModel.hasPremiumAccess
+                             ? (appViewModel.settings.isHiraganaMode ? "プレミアム りようちゅう" : "プレミアム利用中")
+                             : "\(product.displayPrice)で解放")
+                            .font(.title3.weight(.bold))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.white)
+                .background(appViewModel.hasPremiumAccess ? Color.green : MinukuruTheme.primary)
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .disabled(appViewModel.hasPremiumAccess || appViewModel.purchaseManager.isLoading)
+            } else if appViewModel.purchaseManager.productFetchState == .loading {
+                HStack(spacing: 12) {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(MinukuruTheme.primary)
+                    Text(appViewModel.settings.isHiraganaMode ? "プレミアムじょうほうを よみこんでいます。" : "プレミアム情報を読み込んでいます。")
+                        .font(.headline.weight(.semibold))
+                        .foregroundStyle(MinukuruTheme.primary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 16)
+                .padding(.horizontal, 16)
+                .background(MinukuruTheme.accentSoft.opacity(0.22))
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            } else {
+                Button(appViewModel.settings.isHiraganaMode ? "プレミアムじょうほうを よみこむ" : "プレミアム情報を読み込む") {
+                    Task {
+                        await appViewModel.purchaseManager.reloadStoreState()
+                    }
+                }
+                .font(.title3.weight(.bold))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .foregroundStyle(MinukuruTheme.primary)
+                .background(MinukuruTheme.accentSoft.opacity(0.22))
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            }
+
+            Button(appViewModel.settings.isHiraganaMode ? "こうにゅうを ふくげん" : "購入を復元") {
+                Task {
+                    await appViewModel.purchaseManager.restorePurchases()
+                }
+            }
+            .font(.headline.weight(.semibold))
+            .foregroundStyle(MinukuruTheme.primary)
         }
     }
 

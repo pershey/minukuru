@@ -220,6 +220,12 @@ final class AppViewModel: ObservableObject {
 
     func showSettings() {
         screen = .settings
+        if purchaseManager.productFetchState != .loading,
+           (purchaseManager.premiumProduct == nil || purchaseManager.productFetchState == .failed) {
+            Task {
+                await purchaseManager.reloadStoreState()
+            }
+        }
     }
 
     func updateHiraganaMode(_ isEnabled: Bool) {

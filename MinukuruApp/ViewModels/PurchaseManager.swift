@@ -3,6 +3,10 @@ import StoreKit
 
 @MainActor
 final class PurchaseManager: ObservableObject {
+    typealias ProductRequest = ([String]) async throws -> [Product]
+    typealias PaymentCapabilityProvider = () -> Bool
+    typealias PauseProvider = (UInt64) async -> Void
+
     enum ProductFetchState: Equatable {
         case idle
         case loading
@@ -19,13 +23,32 @@ final class PurchaseManager: ObservableObject {
     @Published private(set) var productFetchState: ProductFetchState = .idle
     @Published private(set) var productFetchMessage: String?
     @Published private(set) var storeDiagnostics: [String] = []
-    @Published private(set) var canMakePayments = SKPaymentQueue.canMakePayments()
+    @Published private(set) var canMakePayments: Bool
     @Published private(set) var lastStoreSyncAt: Date?
 
     private var updatesTask: Task<Void, Never>?
+    private let productRequest: ProductRequest
+    private let paymentCapabilityProvider: PaymentCapabilityProvider
+    private let pause: PauseProvider
+    private let productRetryDelays: [UInt64]
 
-    init() {
-        updatesTask = observeTransactionUpdates()
+    init(
+        productRequest: @escaping ProductRequest = { try await Product.products(for: $0) },
+        paymentCapabilityProvider: @escaping PaymentCapabilityProvider = { SKPaymentQueue.canMakePayments() },
+        pause: @escaping PauseProvider = { nanoseconds in
+            try? await Task.sleep(nanoseconds: nanoseconds)
+        },
+        productRetryDelays: [UInt64] = [0, 1_000_000_000, 2_000_000_000, 4_000_000_000],
+        shouldObserveTransactionUpdates: Bool = true
+    ) {
+        self.productRequest = productRequest
+        self.paymentCapabilityProvider = paymentCapabilityProvider
+        self.pause = pause
+        self.productRetryDelays = productRetryDelays
+        self.canMakePayments = paymentCapabilityProvider()
+        if shouldObserveTransactionUpdates {
+            updatesTask = observeTransactionUpdates()
+        }
     }
 
     deinit {
@@ -108,7 +131,7 @@ final class PurchaseManager: ObservableObject {
     }
 
     private func requestProducts() async {
-        canMakePayments = SKPaymentQueue.canMakePayments()
+        canMakePayments = paymentCapabilityProvider()
         lastStoreSyncAt = Date()
         purchaseDebugDetail = nil
         storeDiagnostics = [
@@ -125,27 +148,42 @@ final class PurchaseManager: ObservableObject {
 
         productFetchState = .loading
 
-        do {
-            let storeProducts = try await Product.products(for: [MonetizationConfig.premiumProductID])
-            premiumProduct = storeProducts.first
-            storeDiagnostics.append("取得件数: \(storeProducts.count)件")
+        var lastError: Error?
 
-            if let premiumProduct {
-                productFetchState = .loaded
-                productFetchMessage = "商品情報を読み込みました。"
-                storeDiagnostics.append("商品名: \(premiumProduct.displayName)")
-                storeDiagnostics.append("価格: \(premiumProduct.displayPrice)")
-            } else {
-                productFetchState = .unavailable
-                productFetchMessage = "商品情報がまだ取得できません。App Store Connect 側の設定反映待ちの可能性があります。"
-                storeDiagnostics.append("App Store Connect で商品が配信されていないか、反映待ちの可能性があります。")
+        for (index, delay) in productRetryDelays.enumerated() {
+            if delay > 0 {
+                await pause(delay)
             }
-        } catch {
-            premiumProduct = nil
+
+            do {
+                let storeProducts = try await productRequest([MonetizationConfig.premiumProductID])
+                premiumProduct = storeProducts.first
+                storeDiagnostics.append("取得試行 \(index + 1)回目: \(storeProducts.count)件")
+
+                if let premiumProduct {
+                    productFetchState = .loaded
+                    productFetchMessage = "プレミアム情報を読み込みました。"
+                    storeDiagnostics.append("商品名: \(premiumProduct.displayName)")
+                    storeDiagnostics.append("価格: \(premiumProduct.displayPrice)")
+                    return
+                }
+            } catch {
+                lastError = error
+                storeDiagnostics.append("取得試行 \(index + 1)回目でエラー")
+            }
+        }
+
+        premiumProduct = nil
+
+        if let lastError {
             productFetchState = .failed
-            productFetchMessage = "商品情報の取得に失敗しました。"
-            purchaseDebugDetail = describe(error)
-            storeDiagnostics.append("取得エラー: \(describe(error))")
+            productFetchMessage = "プレミアム情報の読み込みに失敗しました。時間をおいてもう一度お試しください。"
+            purchaseDebugDetail = describe(lastError)
+            storeDiagnostics.append("取得エラー: \(describe(lastError))")
+        } else {
+            productFetchState = .unavailable
+            productFetchMessage = "プレミアム情報の準備に少し時間がかかっています。もう一度読み込むと改善することがあります。"
+            storeDiagnostics.append("商品情報が見つからない状態です。")
         }
     }
 
