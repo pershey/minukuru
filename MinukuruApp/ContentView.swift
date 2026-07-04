@@ -21,6 +21,8 @@ struct ContentView: View {
                 StatsView()
             case .settings:
                 SettingsView()
+            case .premium(let origin):
+                PremiumView(origin: origin)
             }
         }
         .animation(.spring(duration: 0.28), value: appViewModel.screenID)

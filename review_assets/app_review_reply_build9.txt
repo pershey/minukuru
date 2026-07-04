@@ -1,0 +1,22 @@
+Hello,
+
+Thank you for the review.
+
+We addressed the premium loading issue in version 1.0 build 9.
+
+Changes made:
+- Added a dedicated Premium page that opens directly from the title screen.
+- Added automatic retry handling when loading the in-app purchase product information.
+- Continued checking product availability automatically while the Premium page is open.
+- Added clear loading and retry states for the premium purchase area.
+
+How to access it:
+1. Launch the app.
+2. Tap the "Premium" button on the title screen.
+3. The dedicated "プレミアム" page opens immediately.
+
+The Premium page now opens immediately even while product information is still loading, and the app continues retrying automatically in the background.
+
+We re-tested this flow on iPad Air 11-inch (M3) simulator and confirmed that the Premium page opens directly from the title screen without requiring login or account creation.
+
+Thank you.

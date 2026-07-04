@@ -23,6 +23,12 @@ struct ModeSelectView: View {
 
                     Spacer()
 
+                    Button(appViewModel.settings.isHiraganaMode ? "プレミアム" : "プレミアム") {
+                        appViewModel.showPremium(from: .modeSelect)
+                    }
+                    .font(.headline.bold())
+                    .foregroundStyle(MinukuruTheme.primary)
+
                     Button(appViewModel.settings.isHiraganaMode ? "せいせきを みる" : "成績を見る") {
                         appViewModel.showStats()
                     }

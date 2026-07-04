@@ -38,7 +38,7 @@ final class PurchaseManager: ObservableObject {
         pause: @escaping PauseProvider = { nanoseconds in
             try? await Task.sleep(nanoseconds: nanoseconds)
         },
-        productRetryDelays: [UInt64] = [0, 1_000_000_000, 2_000_000_000, 4_000_000_000],
+        productRetryDelays: [UInt64] = [0, 1_000_000_000, 2_000_000_000, 4_000_000_000, 8_000_000_000],
         shouldObserveTransactionUpdates: Bool = true
     ) {
         self.productRequest = productRequest
@@ -68,6 +68,32 @@ final class PurchaseManager: ObservableObject {
         await prepare()
         if premiumProduct == nil, purchaseMessage == nil {
             purchaseMessage = productFetchMessage
+        }
+    }
+
+    func ensurePremiumProductAvailable(
+        maxRefreshPasses: Int = 3,
+        delayBetweenRefreshes: UInt64 = 5_000_000_000
+    ) async {
+        guard !hasPremiumAccess else { return }
+
+        if premiumProduct == nil, productFetchState != .loading {
+            await reloadStoreState()
+        }
+
+        guard premiumProduct == nil else { return }
+
+        for pass in 0..<maxRefreshPasses {
+            await pause(delayBetweenRefreshes)
+            guard !hasPremiumAccess, premiumProduct == nil else { return }
+
+            if productFetchState != .loading {
+                await reloadStoreState()
+            }
+
+            if pass == maxRefreshPasses - 1, premiumProduct == nil {
+                purchaseMessage = productFetchMessage
+            }
         }
     }
 

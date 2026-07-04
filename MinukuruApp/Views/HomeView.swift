@@ -56,6 +56,24 @@ struct HomeView: View {
                     .background(MinukuruTheme.primary)
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                     .accessibilityLabel("はじめる")
+
+                    Button {
+                        appViewModel.showPremium(from: .home)
+                    } label: {
+                        Text(appViewModel.settings.isHiraganaMode ? "プレミアムを みる" : "プレミアムを見る")
+                            .font(.headline.weight(.bold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 15)
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(MinukuruTheme.primary)
+                    .background(Color.white.opacity(0.94))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(MinukuruTheme.stroke, lineWidth: 1.2)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .accessibilityLabel(appViewModel.settings.isHiraganaMode ? "プレミアムを みる" : "プレミアムを見る")
                 }
                 .padding(.horizontal, 28)
                 .padding(.bottom, 44)

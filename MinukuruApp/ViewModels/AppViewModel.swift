@@ -3,6 +3,12 @@ import Combine
 
 @MainActor
 final class AppViewModel: ObservableObject {
+    enum PremiumOrigin {
+        case home
+        case modeSelect
+        case settings
+    }
+
     enum Screen {
         case home
         case modeSelect
@@ -10,6 +16,7 @@ final class AppViewModel: ObservableObject {
         case result(QuizSessionViewModel, QuizEvaluation)
         case stats
         case settings
+        case premium(PremiumOrigin)
     }
 
     @Published private(set) var screen: Screen = .home
@@ -76,6 +83,7 @@ final class AppViewModel: ObservableObject {
         case .result(let viewModel, _): "result-\(viewModel.question.id)"
         case .stats: "stats"
         case .settings: "settings"
+        case .premium(let origin): "premium-\(String(describing: origin))"
         }
     }
 
@@ -225,6 +233,24 @@ final class AppViewModel: ObservableObject {
             Task {
                 await purchaseManager.reloadStoreState()
             }
+        }
+    }
+
+    func showPremium(from origin: PremiumOrigin) {
+        screen = .premium(origin)
+        Task {
+            await purchaseManager.ensurePremiumProductAvailable(maxRefreshPasses: 4)
+        }
+    }
+
+    func leavePremium(_ origin: PremiumOrigin) {
+        switch origin {
+        case .home:
+            goHome()
+        case .modeSelect:
+            showModes()
+        case .settings:
+            showSettings()
         }
     }
 

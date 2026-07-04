@@ -55,4 +55,24 @@ final class PurchaseManagerTests: XCTestCase {
         )
         XCTAssertNotNil(manager.purchaseDebugDetail)
     }
+
+    func testEnsurePremiumProductAvailableKeepsRetryingAcrossRefreshPasses() async {
+        var requestCount = 0
+        let manager = PurchaseManager(
+            productRequest: { _ in
+                requestCount += 1
+                return []
+            },
+            paymentCapabilityProvider: { true },
+            pause: { _ in },
+            productRetryDelays: [0],
+            shouldObserveTransactionUpdates: false
+        )
+
+        await manager.ensurePremiumProductAvailable(maxRefreshPasses: 2, delayBetweenRefreshes: 0)
+
+        XCTAssertEqual(requestCount, 3)
+        XCTAssertEqual(manager.productFetchState, .unavailable)
+        XCTAssertNil(manager.premiumProduct)
+    }
 }
