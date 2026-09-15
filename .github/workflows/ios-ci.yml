@@ -63,12 +63,41 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
+      - name: Create CI simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          runtime_id="$(xcrun simctl list runtimes -j | python3 -c '
+          import json, sys
+          runtimes = json.load(sys.stdin)["runtimes"]
+          available = [
+              item for item in runtimes
+              if item.get("isAvailable")
+              and item.get("identifier", "").startswith("com.apple.CoreSimulator.SimRuntime.iOS-")
+          ]
+          if not available:
+              raise SystemExit("No available iOS Simulator runtime")
+          print(available[-1]["identifier"])
+          ')"
+          device_type_id="$(xcrun simctl list devicetypes -j | python3 -c '
+          import json, sys
+          devices = [item for item in json.load(sys.stdin)["devicetypes"] if item["name"].startswith("iPhone")]
+          preferred = next((item for item in devices if item["name"] == "iPhone 16"), None)
+          if not preferred and not devices:
+              raise SystemExit("No iPhone Simulator device type")
+          print((preferred or devices[-1])["identifier"])
+          ')"
+          simulator_udid="$(xcrun simctl create "Minukuru CI" "$device_type_id" "$runtime_id")"
+          xcrun simctl boot "$simulator_udid"
+          xcrun simctl bootstatus "$simulator_udid" -b
+          echo "SIMULATOR_UDID=$simulator_udid" >> "$GITHUB_ENV"
+
       - name: Build
         run: >
           xcodebuild
           -project Minukuru.xcodeproj
           -scheme Minukuru
-          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -destination "platform=iOS Simulator,id=${SIMULATOR_UDID}"
           ONLY_ACTIVE_ARCH=YES
           build
 
@@ -77,7 +106,7 @@ jobs:
           xcodebuild
           -project Minukuru.xcodeproj
           -scheme Minukuru
-          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -destination "platform=iOS Simulator,id=${SIMULATOR_UDID}"
           ONLY_ACTIVE_ARCH=YES
           test
 
