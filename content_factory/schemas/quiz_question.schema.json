@@ -55,7 +55,7 @@
     },
     "segments": {
       "type": "array",
-      "minItems": 3,
+      "minItems": 2,
       "maxItems": 6,
       "items": {
         "type": "object",
@@ -82,7 +82,7 @@
     },
     "correctSegmentIds": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 0,
       "maxItems": 3,
       "items": {
         "type": "string",
@@ -121,7 +121,7 @@
     },
     "recommendedReasonTags": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 0,
       "maxItems": 4,
       "items": {
         "type": "string",
@@ -148,6 +148,78 @@
     "contentFlavor": {
       "type": "string",
       "enum": ["standard", "realWorld"]
+    },
+    "audience": {
+      "type": "string",
+      "enum": ["child", "adult", "general"]
+    },
+    "learningStage": {
+      "type": "string",
+      "enum": ["example", "practice", "action", "challenge"]
+    },
+    "learningFocus": {
+      "type": "string",
+      "enum": ["pause", "evidence", "verify", "consult"]
+    },
+    "responseType": {
+      "type": "string",
+      "enum": ["selectSegments", "singleChoice"]
+    },
+    "answerChoices": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "semantic"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^c[0-9]+$"},
+          "text": {"type": "string", "minLength": 4, "maxLength": 100},
+          "phoneticText": {"type": "string", "minLength": 4, "maxLength": 140},
+          "semantic": {
+            "type": "string",
+            "enum": ["suspicious", "noIssueFound", "insufficientInformation", "pause", "verifySource", "consultTrustedPerson", "other"]
+          }
+        }
+      }
+    },
+    "correctChoiceId": {
+      "type": ["string", "null"],
+      "pattern": "^c[0-9]+$"
+    },
+    "attentionPoint": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 220
+    },
+    "phoneticAttentionPoint": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 280
+    },
+    "contentRevision": {
+      "type": "integer",
+      "minimum": 1
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["responseType"],
+        "properties": {"responseType": {"const": "singleChoice"}}
+      },
+      "then": {
+        "required": ["answerChoices", "correctChoiceId"],
+        "properties": {
+          "answerChoices": {"minItems": 2},
+          "correctSegmentIds": {"maxItems": 0}
+        }
+      },
+      "else": {
+        "properties": {
+          "correctSegmentIds": {"minItems": 1}
+        }
+      }
+    }
+  ]
 }

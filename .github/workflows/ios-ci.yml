@@ -31,6 +31,17 @@ jobs:
       - name: Validate content fixtures
         run: python3 tools/content_factory/pipeline.py validate-fixtures
 
+      - name: Check Supabase Edge Functions
+        run: >
+          npx --yes deno@2.9.6 check
+          supabase/functions/content-manifest/index.ts
+          supabase/functions/content-manifest-v2/index.ts
+
+      - name: Test premium entitlement validation
+        run: >
+          npx --yes deno@2.9.6 test
+          supabase/functions/content-manifest-v2/entitlement_test.ts
+
       - name: Check hosted review page JavaScript
         run: |
           node -e 'const fs=require("fs");const h=fs.readFileSync("docs/content-review-admin.html","utf8");const s=[...h.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]);s.forEach(x=>new Function(x));console.log(`checked ${s.length} script(s)`);'

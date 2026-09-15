@@ -31,7 +31,9 @@ final class AppViewModel: ObservableObject {
     let purchaseManager: PurchaseManager
     private let statsStore: StatsStoring
     private let settingsStore: AppSettingsStoring
+    private let sessionStore: QuizSessionStoring
     private let accessPolicy: QuestionAccessPolicy
+    private var resumeSnapshot: QuizSessionSnapshot?
     private var modeProgress: [GameMode: Int] = [:]
     private var practiceProgress: Int = 0
     private var hasAttemptedContentRefresh = false
@@ -41,20 +43,26 @@ final class AppViewModel: ObservableObject {
         repository: QuizProviding = HybridQuizRepository(),
         purchaseManager: PurchaseManager,
         statsStore: StatsStoring = UserDefaultsStatsStore(),
-        settingsStore: AppSettingsStoring = UserDefaultsAppSettingsStore()
+        settingsStore: AppSettingsStoring = UserDefaultsAppSettingsStore(),
+        sessionStore: QuizSessionStoring = UserDefaultsQuizSessionStore()
     ) {
         self.repository = repository
         self.purchaseManager = purchaseManager
         self.statsStore = statsStore
         self.settingsStore = settingsStore
+        self.sessionStore = sessionStore
         self.accessPolicy = QuestionAccessPolicy(
             freeQuestionLimit: (repository as? QuizAccessConfigProviding)?.freeQuestionLimit ?? 50
         )
         (repository as? QuizEntitlementAware)?.setPremiumAccess(purchaseManager.hasPremiumAccess)
-        self.stats = statsStore.loadStats()
-        self.results = statsStore.loadResults()
+        (repository as? QuizEntitlementAware)?.setPremiumTransactionJWS(purchaseManager.premiumEntitlementJWS)
+        let storedResults = statsStore.loadResults()
+        self.results = storedResults
+        self.stats = Self.rebuildStats(from: storedResults)
         self.questionBank = repository.allQuestions()
         self.settings = settingsStore.loadSettings()
+        self.resumeSnapshot = sessionStore.loadSnapshot()
+        statsStore.save(stats: self.stats)
 
         purchaseManager.objectWillChange
             .receive(on: RunLoop.main)
@@ -109,7 +117,7 @@ final class AppViewModel: ObservableObject {
 
     var todayChallengeCount: Int {
         let calendar = Calendar.current
-        return results.filter { calendar.isDateInToday($0.answeredAt) }.count
+        return results.filter { $0.learningStage != .example && calendar.isDateInToday($0.answeredAt) }.count
     }
 
     var totalQuestionCount: Int {
@@ -140,6 +148,14 @@ final class AppViewModel: ObservableObject {
         guard stats.totalChallenges > 0 else { return "まだこれから" }
         let ratio = Double(stats.correctAnswers) / Double(stats.totalChallenges)
         return "\(Int((ratio * 100).rounded()))%"
+    }
+
+    var hasResumableSession: Bool {
+        resumableQuestion != nil
+    }
+
+    var resumableQuestionTitle: String? {
+        resumableQuestion?.displayTitle(isHiraganaMode: settings.isHiraganaMode)
     }
 
     var recentResults: [RecentResultSummary] {
@@ -282,8 +298,7 @@ final class AppViewModel: ObservableObject {
         ) else {
             return
         }
-        let viewModel = QuizSessionViewModel(question: question, appViewModel: self)
-        screen = .quiz(viewModel)
+        beginSession(for: question)
     }
 
     func startQuiz(for mode: GameMode) {
@@ -297,12 +312,13 @@ final class AppViewModel: ObservableObject {
         ) else {
             return
         }
-        let viewModel = QuizSessionViewModel(question: question, appViewModel: self)
-        screen = .quiz(viewModel)
+        beginSession(for: question)
     }
 
     func showResult(for session: QuizSessionViewModel, evaluation: QuizEvaluation) {
-        record(evaluation.result, matchedAnyCorrect: evaluation.matchedAnyCorrect)
+        sessionStore.clearSnapshot()
+        resumeSnapshot = nil
+        record(evaluation.result)
         if let index = questions(for: session.question.mode).firstIndex(of: session.question) {
             modeProgress[session.question.mode] = index + 1
         }
@@ -312,8 +328,42 @@ final class AppViewModel: ObservableObject {
         screen = .result(session, evaluation)
     }
 
+    func persist(session: QuizSessionViewModel) {
+        let snapshot = session.makeSnapshot()
+        resumeSnapshot = snapshot
+        sessionStore.save(snapshot: snapshot)
+    }
+
+    func resumePractice() {
+        guard let snapshot = resumeSnapshot,
+              let question = accessibleQuestionBank.first(where: { $0.id == snapshot.questionID }) else {
+            resumeSnapshot = nil
+            sessionStore.clearSnapshot()
+            return
+        }
+
+        screen = .quiz(
+            QuizSessionViewModel(
+                question: question,
+                appViewModel: self,
+                snapshot: snapshot
+            )
+        )
+    }
+
+    func retry(_ question: QuizQuestion) {
+        let attemptNumber = results.filter { $0.questionId == question.id }.count + 1
+        beginSession(for: question, attemptNumber: attemptNumber)
+    }
+
+    func startNextQuestion(after question: QuizQuestion) {
+        startQuiz(for: question.mode)
+    }
+
     func answeredCount(for mode: GameMode) -> Int {
-        results.filter { question(id: $0.questionId)?.mode == mode }.count
+        Set(results.compactMap { result in
+            question(id: result.questionId)?.mode == mode ? result.questionId : nil
+        }).count
     }
 
     func questions(for mode: GameMode) -> [QuizQuestion] {
@@ -343,6 +393,7 @@ final class AppViewModel: ObservableObject {
         }
 
         (repository as? QuizEntitlementAware)?.setPremiumAccess(hasPremiumAccess)
+        (repository as? QuizEntitlementAware)?.setPremiumTransactionJWS(purchaseManager.premiumEntitlementJWS)
         guard let refreshingRepository = repository as? QuizRefreshing else { return }
         let didRefresh = await refreshingRepository.refreshIfNeeded(force: force)
         guard didRefresh || force else { return }
@@ -366,14 +417,22 @@ final class AppViewModel: ObservableObject {
         modeProgress = [:]
         practiceProgress = 0
         statsStore.clearAll()
+        sessionStore.clearSnapshot()
+        resumeSnapshot = nil
     }
 
-    private func record(_ result: QuizResult, matchedAnyCorrect: Bool) {
+    private func record(_ result: QuizResult) {
         results.append(result)
+
+        if result.learningStage == .example {
+            statsStore.save(results: results)
+            return
+        }
+
         stats.totalChallenges += 1
         stats.totalScore += max(result.score, 5)
 
-        if matchedAnyCorrect {
+        if result.isPerfect {
             stats.correctAnswers += 1
             stats.currentStreak += 1
             stats.bestStreak = max(stats.bestStreak, stats.currentStreak)
@@ -383,6 +442,10 @@ final class AppViewModel: ObservableObject {
 
         if result.isPerfect {
             stats.perfectAnswers += 1
+        }
+
+        if result.isFirstTryIndependent {
+            stats.independentCorrectAnswers += 1
         }
 
         statsStore.save(stats: stats)
@@ -397,11 +460,60 @@ final class AppViewModel: ObservableObject {
         )
     }
 
+    private var resumableQuestion: QuizQuestion? {
+        guard let resumeSnapshot else { return nil }
+        return accessibleQuestionBank.first { $0.id == resumeSnapshot.questionID }
+    }
+
+    private func beginSession(for question: QuizQuestion, attemptNumber: Int? = nil) {
+        let resolvedAttemptNumber = attemptNumber
+            ?? results.filter { $0.questionId == question.id }.count + 1
+        let viewModel = QuizSessionViewModel(
+            question: question,
+            appViewModel: self,
+            attemptNumber: resolvedAttemptNumber
+        )
+        persist(session: viewModel)
+        screen = .quiz(viewModel)
+    }
+
+    private static func rebuildStats(from results: [QuizResult]) -> UserStats {
+        let attempts = results
+            .filter { $0.learningStage != .example }
+            .sorted { $0.answeredAt < $1.answeredAt }
+        var stats = UserStats()
+
+        for result in attempts {
+            stats.totalChallenges += 1
+            stats.totalScore += max(result.score, 5)
+            if result.isPerfect {
+                stats.correctAnswers += 1
+                stats.perfectAnswers += 1
+                stats.currentStreak += 1
+                stats.bestStreak = max(stats.bestStreak, stats.currentStreak)
+            } else {
+                stats.currentStreak = 0
+            }
+            if result.isFirstTryIndependent {
+                stats.independentCorrectAnswers += 1
+            }
+        }
+
+        return stats
+    }
+
     private func handlePremiumAccessChanged(_ hasPremiumAccess: Bool) async {
         (repository as? QuizEntitlementAware)?.setPremiumAccess(hasPremiumAccess)
+        (repository as? QuizEntitlementAware)?.setPremiumTransactionJWS(purchaseManager.premiumEntitlementJWS)
         questionBank = repository.allQuestions()
 
-        guard hasPremiumAccess else { return }
+        guard hasPremiumAccess else {
+            if resumableQuestion == nil {
+                resumeSnapshot = nil
+                sessionStore.clearSnapshot()
+            }
+            return
+        }
         await refreshQuestionContentIfNeeded(force: true)
         contentRefreshMessage = "プレミアム問題を読み込みました。いまは \(accessibleQuestionBank.count)問遊べます。"
     }

@@ -8,6 +8,12 @@ struct MinukuruApp: App {
     @StateObject private var appViewModel: AppViewModel
 
     init() {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestingResetState"),
+           let bundleIdentifier = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
+        }
+#endif
         let purchaseManager = PurchaseManager()
         _purchaseManager = StateObject(wrappedValue: purchaseManager)
         _appViewModel = StateObject(wrappedValue: AppViewModel(purchaseManager: purchaseManager))

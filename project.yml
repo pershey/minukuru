@@ -42,12 +42,23 @@ targets:
     scheme:
       testTargets:
         - MinukuruTests
+        - MinukuruUITests
       storeKitConfiguration: MinukuruLocal.storekit
   MinukuruTests:
     type: bundle.unit-test
     platform: iOS
     sources:
       - path: MinukuruTests
+    dependencies:
+      - target: Minukuru
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
+  MinukuruUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: MinukuruUITests
     dependencies:
       - target: Minukuru
     settings:

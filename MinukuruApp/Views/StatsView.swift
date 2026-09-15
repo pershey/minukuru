@@ -13,26 +13,26 @@ struct StatsView: View {
                 .font(.headline.bold())
                 .foregroundStyle(MinukuruTheme.primary)
 
-                Text("成績を見る")
+                Text("学びの記録")
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
                     .foregroundStyle(MinukuruTheme.primary)
 
                 VStack(alignment: .leading, spacing: 16) {
                     StatRow(title: "今日の挑戦数", value: "\(appViewModel.todayChallengeCount)回")
-                    StatRow(title: "正解数", value: "\(appViewModel.stats.correctAnswers)回")
+                    StatRow(title: "答えが合った回数", value: "\(appViewModel.stats.correctAnswers)回")
                     StatRow(title: "正答率", value: appViewModel.accuracyText)
                     StatRow(title: "連続正解数", value: "\(appViewModel.stats.currentStreak)回")
                     StatRow(title: "ベスト連続", value: "\(appViewModel.stats.bestStreak)回")
-                    StatRow(title: "完全正解数", value: "\(appViewModel.stats.perfectAnswers)回")
-                    StatRow(title: "見抜きレベル", value: appViewModel.levelTitle)
-                    StatRow(title: "合計ポイント", value: "\(appViewModel.stats.totalScore)pt")
+                    StatRow(title: "初回・ヒントなし正解", value: "\(appViewModel.stats.independentCorrectAnswers)回")
+                    StatRow(title: "学びの称号", value: appViewModel.levelTitle)
+                    StatRow(title: "学習ポイント", value: "\(appViewModel.stats.totalScore)pt")
                 }
                 .padding(22)
                 .background(MinukuruTheme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("獲得バッジ")
+                    Text("学びのバッジ")
                         .font(.title2.weight(.bold))
                         .foregroundStyle(MinukuruTheme.primary)
                     ForEach(appViewModel.badgeTitles, id: \.self) { badge in
@@ -55,7 +55,7 @@ struct StatsView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(summary.mode.title)
                                     .font(.title3.weight(.semibold))
-                                Text("\(summary.progressText) ・ 完全正解 \(summary.perfectCount)回")
+                                Text("\(summary.progressText) ・ 答えが合った回数 \(summary.perfectCount)回")
                                     .font(.body)
                                     .foregroundStyle(MinukuruTheme.muted)
                             }
@@ -81,7 +81,7 @@ struct StatsView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(result.title)
                                     .font(.title3.weight(.semibold))
-                                Text("\(result.modeTitle) ・ \(result.score)pt\(result.wasPerfect ? " ・ 完全正解" : "")")
+                                Text("\(result.modeTitle) ・ \(result.score)pt\(result.wasPerfect ? " ・ 答えが一致" : "")")
                                     .font(.body)
                                     .foregroundStyle(MinukuruTheme.muted)
                             }

@@ -19,6 +19,11 @@
 - どこが怪しいか学べるか
 - explanation と verificationTip が教育的か
 - 子どもや高齢者でも読めるか
+- 怪しい言葉だけで嘘と断定していないか
+- 「問題なし」を「絶対安全」と説明していないか
+- 情報不足を根拠ある判断として扱えているか
+- attentionPoint、explanation、verificationTip が「どこ・なぜ・次の行動」になっているか
+- 行動問題の正解が、場面に合う具体的な確認・相談先になっているか
 
 4. uniqueness
 - 既存問題や他 draft と似すぎていないか
@@ -33,6 +38,7 @@
 - safety に大きな問題があるときは reject
 - 少し直せば良くなるときは revise
 - 実例にかなり近い realWorld 問題で判断が難しいときは needs_human
+- 正解や解説の内容妥当性を機械的な schema 合格だけで判断できないときは needs_human
 - そのまま配信候補にできるなら accept
 
 ## スコアの意味

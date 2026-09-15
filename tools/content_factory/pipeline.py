@@ -392,7 +392,12 @@ def build_generation_user_prompt(
 - 実在の人名、企業名、政党名、宗教名、商品名、投資商品名は避ける
 - 実在の詐欺広告をそのままコピーしない
 - セグメントは短く、タップしやすい文の長さにする
-- correctSegmentIds は 1 から 3 個
+- responseType が selectSegments の場合、correctSegmentIds は 1 から 3 個
+- responseType が singleChoice の場合、answerChoices は 2 から 4 個、correctChoiceId はその中の1つ、correctSegmentIds は空にする
+- learningStage は example / practice / action / challenge、learningFocus は pause / evidence / verify / consult から選ぶ
+- audience は child / adult / general から選び、大人向けを幼児的な文体にしない
+- 腕試しでは noIssueFound や insufficientInformation も正解になり得る
+- attentionPoint、explanation、verificationTip で「どこ・なぜ・次の行動」を説明する
 - explanation は説教にしない
 - verificationTip は「何で確かめるか」を具体的に書く
 - recommendedReasonTags は本文の怪しさと一致させる
@@ -523,6 +528,17 @@ def ensure_question_invariants(question: dict[str, Any]) -> None:
     unknown_ids = [segment_id for segment_id in question["correctSegmentIds"] if segment_id not in segment_ids]
     if unknown_ids:
         raise PipelineError(f"correctSegmentIds に存在しない segment id があります: {unknown_ids}")
+    response_type = question.get("responseType", "selectSegments")
+    if response_type == "singleChoice":
+        choice_ids = [choice["id"] for choice in question.get("answerChoices", [])]
+        if len(choice_ids) != len(set(choice_ids)):
+            raise PipelineError("answerChoices の id が重複しています。")
+        if question.get("correctChoiceId") not in choice_ids:
+            raise PipelineError("correctChoiceId が answerChoices にありません。")
+        if question["correctSegmentIds"]:
+            raise PipelineError("singleChoice の correctSegmentIds は空にしてください。")
+    elif not question["correctSegmentIds"]:
+        raise PipelineError("selectSegments には correctSegmentIds が必要です。")
 
 
 def local_review(question: dict[str, Any], existing_questions: list[ExistingQuestion]) -> dict[str, Any]:
@@ -543,10 +559,10 @@ def local_review(question: dict[str, Any], existing_questions: list[ExistingQues
     uniqueness_score = 85
     segment_clarity_score = 82
 
-    if len(segments) < 3 or len(segments) > 6:
+    if len(segments) < 2 or len(segments) > 6:
         segment_clarity_score -= 25
         concerns.append("セグメント数が多すぎるか少なすぎます。")
-        revision_advice.append("3 から 6 セグメントに収めてください。")
+        revision_advice.append("2 から 6 セグメントに収めてください。")
 
     if any(length > 110 for length in segment_lengths):
         segment_clarity_score -= 12
