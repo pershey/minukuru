@@ -176,13 +176,10 @@ final class AppViewModel: ObservableObject {
 
     var modeProgressSummaries: [ModeProgressSummary] {
         GameMode.allCases.map { mode in
-            let questions = questions(for: mode)
-            let modeResults = results.filter { question(id: $0.questionId)?.mode == mode }
-            return ModeProgressSummary(
+            ModeProgressSummary.make(
                 mode: mode,
-                answeredCount: modeResults.count,
-                totalCount: questions.count,
-                perfectCount: modeResults.filter(\.isPerfect).count
+                questions: questions(for: mode),
+                results: results
             )
         }
     }

@@ -55,7 +55,7 @@ struct StatsView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(summary.mode.title)
                                     .font(.title3.weight(.semibold))
-                                Text("\(summary.progressText) ・ 答えが合った回数 \(summary.perfectCount)回")
+                                Text("\(summary.progressText) ・ 一度でも答えが合った問題 \(summary.perfectCount)問")
                                     .font(.body)
                                     .foregroundStyle(MinukuruTheme.muted)
                             }

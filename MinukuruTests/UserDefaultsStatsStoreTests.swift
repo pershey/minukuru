@@ -65,4 +65,47 @@ final class UserDefaultsStatsStoreTests: XCTestCase {
         XCTAssertEqual(loaded.learningStage, .challenge)
         XCTAssertEqual(loaded.contentRevision, 1)
     }
+
+    func testModeProgressCountsRetriedQuestionsOnlyOnce() {
+        let question = QuizQuestion(
+            id: "repeat-question",
+            mode: .newsPoison,
+            title: "同じ問題",
+            difficulty: .normal,
+            instruction: "考えてください。",
+            segments: [TextSegment(id: "s1", text: "本文", phoneticText: nil)],
+            correctSegmentIds: ["s1"],
+            explanation: "理由",
+            verificationTip: "確認方法",
+            hint: "ヒント",
+            recommendedReasonTags: [.noSource]
+        )
+        let firstAttempt = QuizResult(
+            questionId: question.id,
+            selectedSegmentIds: [],
+            selectedReasonTags: [],
+            score: 5,
+            isPerfect: false,
+            answeredAt: Date(timeIntervalSince1970: 1)
+        )
+        let retry = QuizResult(
+            questionId: question.id,
+            selectedSegmentIds: ["s1"],
+            selectedReasonTags: [.noSource],
+            score: 65,
+            isPerfect: true,
+            attemptNumber: 2,
+            answeredAt: Date(timeIntervalSince1970: 2)
+        )
+
+        let summary = ModeProgressSummary.make(
+            mode: .newsPoison,
+            questions: [question],
+            results: [firstAttempt, retry]
+        )
+
+        XCTAssertEqual(summary.answeredCount, 1)
+        XCTAssertEqual(summary.totalCount, 1)
+        XCTAssertEqual(summary.perfectCount, 1)
+    }
 }
