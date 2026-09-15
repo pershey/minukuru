@@ -13,6 +13,7 @@ xcuserdata/
 
 # Supabase
 supabase/.temp/
+supabase/.branches/
 .env
 .env.*
 content_factory/output/

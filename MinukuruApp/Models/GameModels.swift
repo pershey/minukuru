@@ -82,6 +82,15 @@ struct QuizQuestion: Identifiable, Codable, Hashable {
     let recommendedReasonTags: [ReasonTag]
     let accessTier: AccessTier
     let contentFlavor: ContentFlavor
+    let audience: LearnerAudience
+    let learningStage: LearningStage
+    let learningFocus: LearningFocus
+    let responseType: QuestionResponseType
+    let answerChoices: [AnswerChoice]
+    let correctChoiceId: String?
+    let attentionPoint: String?
+    let phoneticAttentionPoint: String?
+    let contentRevision: Int
 
     // Reserved for future online contribution features.
     let authorName: String?
@@ -112,6 +121,15 @@ struct QuizQuestion: Identifiable, Codable, Hashable {
         case recommendedReasonTags
         case accessTier
         case contentFlavor
+        case audience
+        case learningStage
+        case learningFocus
+        case responseType
+        case answerChoices
+        case correctChoiceId
+        case attentionPoint
+        case phoneticAttentionPoint
+        case contentRevision
         case authorName
         case authorId
         case reviewStatus
@@ -141,6 +159,15 @@ struct QuizQuestion: Identifiable, Codable, Hashable {
         recommendedReasonTags: [ReasonTag],
         accessTier: AccessTier = .free,
         contentFlavor: ContentFlavor = .standard,
+        audience: LearnerAudience = .general,
+        learningStage: LearningStage = .challenge,
+        learningFocus: LearningFocus = .evidence,
+        responseType: QuestionResponseType = .selectSegments,
+        answerChoices: [AnswerChoice] = [],
+        correctChoiceId: String? = nil,
+        attentionPoint: String? = nil,
+        phoneticAttentionPoint: String? = nil,
+        contentRevision: Int = 1,
         authorName: String? = nil,
         authorId: String? = nil,
         reviewStatus: String? = nil,
@@ -168,6 +195,15 @@ struct QuizQuestion: Identifiable, Codable, Hashable {
         self.recommendedReasonTags = recommendedReasonTags
         self.accessTier = accessTier
         self.contentFlavor = contentFlavor
+        self.audience = audience
+        self.learningStage = learningStage
+        self.learningFocus = learningFocus
+        self.responseType = responseType
+        self.answerChoices = answerChoices
+        self.correctChoiceId = correctChoiceId
+        self.attentionPoint = attentionPoint
+        self.phoneticAttentionPoint = phoneticAttentionPoint
+        self.contentRevision = max(contentRevision, 1)
         self.authorName = authorName
         self.authorId = authorId
         self.reviewStatus = reviewStatus
@@ -198,6 +234,15 @@ struct QuizQuestion: Identifiable, Codable, Hashable {
         recommendedReasonTags = try container.decode([ReasonTag].self, forKey: .recommendedReasonTags)
         accessTier = try container.decodeIfPresent(AccessTier.self, forKey: .accessTier) ?? .free
         contentFlavor = try container.decodeIfPresent(ContentFlavor.self, forKey: .contentFlavor) ?? .standard
+        audience = try container.decodeIfPresent(LearnerAudience.self, forKey: .audience) ?? .general
+        learningStage = try container.decodeIfPresent(LearningStage.self, forKey: .learningStage) ?? .challenge
+        learningFocus = try container.decodeIfPresent(LearningFocus.self, forKey: .learningFocus) ?? .evidence
+        responseType = try container.decodeIfPresent(QuestionResponseType.self, forKey: .responseType) ?? .selectSegments
+        answerChoices = try container.decodeIfPresent([AnswerChoice].self, forKey: .answerChoices) ?? []
+        correctChoiceId = try container.decodeIfPresent(String.self, forKey: .correctChoiceId)
+        attentionPoint = try container.decodeIfPresent(String.self, forKey: .attentionPoint)
+        phoneticAttentionPoint = try container.decodeIfPresent(String.self, forKey: .phoneticAttentionPoint)
+        contentRevision = max(try container.decodeIfPresent(Int.self, forKey: .contentRevision) ?? 1, 1)
         authorName = try container.decodeIfPresent(String.self, forKey: .authorName)
         authorId = try container.decodeIfPresent(String.self, forKey: .authorId)
         reviewStatus = try container.decodeIfPresent(String.self, forKey: .reviewStatus)
@@ -242,6 +287,27 @@ struct QuizQuestion: Identifiable, Codable, Hashable {
         }
         return hint
     }
+
+    func displayAttentionPoint(isHiraganaMode: Bool) -> String {
+        if isHiraganaMode, let phoneticAttentionPoint {
+            return phoneticAttentionPoint
+        }
+        if let attentionPoint {
+            return attentionPoint
+        }
+        if let firstCorrectSegment = segments.first(where: { correctSegmentIds.contains($0.id) }) {
+            return "「\(firstCorrectSegment.displayText(isHiraganaMode: isHiraganaMode))」に注目します。"
+        }
+        return isHiraganaMode ? "ぶんしょうと えらんだ こたえを くらべます。" : "文章と選んだ答えを比べます。"
+    }
+
+    var fullText: String {
+        segments.map(\.text).joined(separator: "")
+    }
+
+    func displayFullText(isHiraganaMode: Bool) -> String {
+        segments.map { $0.displayText(isHiraganaMode: isHiraganaMode) }.joined(separator: "")
+    }
 }
 
 enum AccessTier: String, Codable, CaseIterable {
@@ -252,6 +318,85 @@ enum AccessTier: String, Codable, CaseIterable {
 enum ContentFlavor: String, Codable, CaseIterable {
     case standard
     case realWorld
+}
+
+enum LearnerAudience: String, Codable, CaseIterable {
+    case child
+    case adult
+    case general
+}
+
+enum LearningStage: String, Codable, CaseIterable {
+    case example
+    case practice
+    case action
+    case challenge
+
+    func displayLabel(isHiraganaMode: Bool) -> String {
+        switch self {
+        case .example: isHiraganaMode ? "おてほん" : "お手本"
+        case .practice: isHiraganaMode ? "れんしゅう" : "練習"
+        case .action: isHiraganaMode ? "つぎの こうどう" : "次の行動"
+        case .challenge: isHiraganaMode ? "うでだめし" : "腕試し"
+        }
+    }
+}
+
+enum LearningFocus: String, Codable, CaseIterable {
+    case pause
+    case evidence
+    case verify
+    case consult
+
+    func prompt(isHiraganaMode: Bool) -> String {
+        switch self {
+        case .pause: isHiraganaMode ? "いそがされて いないかな？" : "急がされていないかな？"
+        case .evidence: isHiraganaMode ? "そう いえる りゆうは あるかな？" : "そう言える理由はあるかな？"
+        case .verify: isHiraganaMode ? "どうやって たしかめよう？" : "どうやって確かめよう？"
+        case .consult: isHiraganaMode ? "だれに そうだん できるかな？" : "だれに相談できるかな？"
+        }
+    }
+}
+
+enum QuestionResponseType: String, Codable, CaseIterable {
+    case selectSegments
+    case singleChoice
+}
+
+enum AnswerChoiceSemantic: String, Codable, CaseIterable {
+    case suspicious
+    case noIssueFound
+    case insufficientInformation
+    case pause
+    case verifySource
+    case consultTrustedPerson
+    case other
+}
+
+struct AnswerChoice: Identifiable, Codable, Hashable {
+    let id: String
+    let text: String
+    let phoneticText: String?
+    let semantic: AnswerChoiceSemantic
+
+    init(
+        id: String,
+        text: String,
+        phoneticText: String? = nil,
+        semantic: AnswerChoiceSemantic = .other
+    ) {
+        self.id = id
+        self.text = text
+        self.phoneticText = phoneticText
+        self.semantic = semantic
+    }
+
+    func displayText(isHiraganaMode: Bool) -> String {
+        if isHiraganaMode, let phoneticText {
+            return phoneticText
+        }
+        return text
+    }
 }
 
 struct TextSegment: Identifiable, Codable, Hashable {
@@ -325,9 +470,78 @@ struct QuizResult: Codable, Hashable {
     let questionId: String
     let selectedSegmentIds: [String]
     let selectedReasonTags: [ReasonTag]
+    let selectedChoiceId: String?
+    let responseType: QuestionResponseType
     let score: Int
     let isPerfect: Bool
+    let hintUsed: Bool
+    let attemptNumber: Int
+    let learningStage: LearningStage
+    let contentRevision: Int
     let answeredAt: Date
+
+    var isFirstTryIndependent: Bool {
+        isPerfect && attemptNumber == 1 && !hintUsed && learningStage != .example
+    }
+
+    init(
+        questionId: String,
+        selectedSegmentIds: [String],
+        selectedReasonTags: [ReasonTag],
+        selectedChoiceId: String? = nil,
+        responseType: QuestionResponseType = .selectSegments,
+        score: Int,
+        isPerfect: Bool,
+        hintUsed: Bool = false,
+        attemptNumber: Int = 1,
+        learningStage: LearningStage = .challenge,
+        contentRevision: Int = 1,
+        answeredAt: Date
+    ) {
+        self.questionId = questionId
+        self.selectedSegmentIds = selectedSegmentIds
+        self.selectedReasonTags = selectedReasonTags
+        self.selectedChoiceId = selectedChoiceId
+        self.responseType = responseType
+        self.score = score
+        self.isPerfect = isPerfect
+        self.hintUsed = hintUsed
+        self.attemptNumber = max(attemptNumber, 1)
+        self.learningStage = learningStage
+        self.contentRevision = max(contentRevision, 1)
+        self.answeredAt = answeredAt
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case questionId
+        case selectedSegmentIds
+        case selectedReasonTags
+        case selectedChoiceId
+        case responseType
+        case score
+        case isPerfect
+        case hintUsed
+        case attemptNumber
+        case learningStage
+        case contentRevision
+        case answeredAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        questionId = try container.decode(String.self, forKey: .questionId)
+        selectedSegmentIds = try container.decodeIfPresent([String].self, forKey: .selectedSegmentIds) ?? []
+        selectedReasonTags = try container.decodeIfPresent([ReasonTag].self, forKey: .selectedReasonTags) ?? []
+        selectedChoiceId = try container.decodeIfPresent(String.self, forKey: .selectedChoiceId)
+        responseType = try container.decodeIfPresent(QuestionResponseType.self, forKey: .responseType) ?? .selectSegments
+        score = try container.decode(Int.self, forKey: .score)
+        isPerfect = try container.decode(Bool.self, forKey: .isPerfect)
+        hintUsed = try container.decodeIfPresent(Bool.self, forKey: .hintUsed) ?? false
+        attemptNumber = max(try container.decodeIfPresent(Int.self, forKey: .attemptNumber) ?? 1, 1)
+        learningStage = try container.decodeIfPresent(LearningStage.self, forKey: .learningStage) ?? .challenge
+        contentRevision = max(try container.decodeIfPresent(Int.self, forKey: .contentRevision) ?? 1, 1)
+        answeredAt = try container.decode(Date.self, forKey: .answeredAt)
+    }
 }
 
 struct UserStats: Codable, Hashable {
@@ -337,6 +551,46 @@ struct UserStats: Codable, Hashable {
     var currentStreak: Int = 0
     var bestStreak: Int = 0
     var totalScore: Int = 0
+    var independentCorrectAnswers: Int = 0
+
+    init(
+        totalChallenges: Int = 0,
+        correctAnswers: Int = 0,
+        perfectAnswers: Int = 0,
+        currentStreak: Int = 0,
+        bestStreak: Int = 0,
+        totalScore: Int = 0,
+        independentCorrectAnswers: Int = 0
+    ) {
+        self.totalChallenges = totalChallenges
+        self.correctAnswers = correctAnswers
+        self.perfectAnswers = perfectAnswers
+        self.currentStreak = currentStreak
+        self.bestStreak = bestStreak
+        self.totalScore = totalScore
+        self.independentCorrectAnswers = independentCorrectAnswers
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case totalChallenges
+        case correctAnswers
+        case perfectAnswers
+        case currentStreak
+        case bestStreak
+        case totalScore
+        case independentCorrectAnswers
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        totalChallenges = try container.decodeIfPresent(Int.self, forKey: .totalChallenges) ?? 0
+        correctAnswers = try container.decodeIfPresent(Int.self, forKey: .correctAnswers) ?? 0
+        perfectAnswers = try container.decodeIfPresent(Int.self, forKey: .perfectAnswers) ?? 0
+        currentStreak = try container.decodeIfPresent(Int.self, forKey: .currentStreak) ?? 0
+        bestStreak = try container.decodeIfPresent(Int.self, forKey: .bestStreak) ?? 0
+        totalScore = try container.decodeIfPresent(Int.self, forKey: .totalScore) ?? 0
+        independentCorrectAnswers = try container.decodeIfPresent(Int.self, forKey: .independentCorrectAnswers) ?? 0
+    }
 }
 
 struct ModeCard: Identifiable {

@@ -32,6 +32,7 @@ protocol QuizContentStoring {
     func loadBundledManifest(from bundle: Bundle) -> QuizContentManifest
     func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest?
     func saveCachedManifest(_ manifest: QuizContentManifest, kind: QuizContentCacheKind)
+    func removeCachedManifest(kind: QuizContentCacheKind)
     func loadConfiguration(from bundle: Bundle) -> RemoteQuizConfiguration
     func shouldAttemptFetch(kind: QuizContentCacheKind, minimumIntervalMinutes: Int, now: Date, force: Bool) -> Bool
     func markFetchAttempt(kind: QuizContentCacheKind, at date: Date)
@@ -58,7 +59,21 @@ final class FileQuizContentStore: QuizContentStoring {
             return QuizContentManifest(contentVersion: "empty-bundle", questions: [])
         }
 
-        return manifest
+        guard let curriculumURL = bundle.url(forResource: "learning_questions", withExtension: "json"),
+              let curriculumData = try? Data(contentsOf: curriculumURL),
+              let curriculum = try? Self.decodeManifest(from: curriculumData, defaultVersion: "bundled-curriculum") else {
+            return manifest
+        }
+
+        var merged = curriculum.questions
+        let curriculumIDs = Set(merged.map(\.id))
+        merged.append(contentsOf: manifest.questions.filter { !curriculumIDs.contains($0.id) })
+        return QuizContentManifest(
+            schemaVersion: max(manifest.schemaVersion, curriculum.schemaVersion),
+            contentVersion: "bundled-learning-v1+\(manifest.contentVersion)",
+            updatedAt: manifest.updatedAt,
+            questions: merged
+        )
     }
 
     func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest? {
@@ -81,6 +96,11 @@ final class FileQuizContentStore: QuizContentStoring {
         } catch {
             assertionFailure("Could not save cached question manifest: \(error)")
         }
+    }
+
+    func removeCachedManifest(kind: QuizContentCacheKind) {
+        try? fileManager.removeItem(at: cacheFileURL(for: kind))
+        defaults.removeObject(forKey: kind.lastFetchKey)
     }
 
     func loadConfiguration(from bundle: Bundle) -> RemoteQuizConfiguration {

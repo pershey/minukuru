@@ -227,7 +227,7 @@ struct PremiumPlanCard: View {
                 .foregroundStyle(MinukuruTheme.primary)
 
             Text(product.displayPrice)
-                .font(.system(size: 28, weight: .heavy, design: .rounded))
+                .font(.title.weight(.heavy))
                 .foregroundStyle(MinukuruTheme.primary)
                 .accessibilityLabel(appViewModel.settings.isHiraganaMode
                                     ? "いまの App Store かかくは \(product.displayPrice) です"
@@ -349,16 +349,30 @@ struct PremiumPlanCard: View {
     }
 
     private func statusLine(title: String, value: String) -> some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(title)
-                .font(.body.weight(.semibold))
-                .foregroundStyle(MinukuruTheme.primary)
-            Spacer()
-            Text(value)
-                .font(.body)
-                .foregroundStyle(MinukuruTheme.muted)
-                .multilineTextAlignment(.trailing)
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline) {
+                statusTitle(title)
+                Spacer()
+                statusValue(value, alignment: .trailing)
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                statusTitle(title)
+                statusValue(value, alignment: .leading)
+            }
         }
+    }
+
+    private func statusTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.body.weight(.semibold))
+            .foregroundStyle(MinukuruTheme.primary)
+    }
+
+    private func statusValue(_ value: String, alignment: TextAlignment) -> some View {
+        Text(value)
+            .font(.body)
+            .foregroundStyle(MinukuruTheme.muted)
+            .multilineTextAlignment(alignment)
     }
 
     private var productFetchStateLabel: String {

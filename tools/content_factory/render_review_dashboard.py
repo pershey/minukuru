@@ -46,6 +46,25 @@ def render_segments(question: dict[str, Any]) -> str:
     return "".join(items)
 
 
+def render_answer_area(question: dict[str, Any]) -> str:
+    if question.get("responseType", "selectSegments") != "singleChoice":
+        return f'<ol class="segments">{render_segments(question)}</ol>'
+
+    correct_choice_id = question.get("correctChoiceId")
+    items = []
+    for choice in question.get("answerChoices", []):
+        is_correct = choice.get("id") == correct_choice_id
+        cls = "segment segment-correct" if is_correct else "segment"
+        marker = "正解" if is_correct else "選択肢"
+        semantic = choice.get("semantic", "other")
+        items.append(
+            f'<li class="{cls}"><span class="segment-marker">{marker}</span>'
+            f"<span>{html.escape(choice.get('text', ''))}</span>"
+            f"<span class='muted'> {html.escape(semantic)}</span></li>"
+        )
+    return f'<ol class="segments">{"".join(items)}</ol>'
+
+
 def render_reason_tags(question: dict[str, Any]) -> str:
     tags = question.get("recommendedReasonTags", [])
     if not tags:
@@ -101,6 +120,9 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
         <div class="badges">
           {badge("モード", mode)}
           {badge("flavor", flavor)}
+          {badge("対象", question.get("audience", "general"))}
+          {badge("段階", question.get("learningStage", "challenge"))}
+          {badge("観点", question.get("learningFocus", "evidence"))}
           {badge("判定", metrics["action"], tone)}
           {badge("総合", str(metrics["composite"]), tone)}
         </div>
@@ -110,13 +132,15 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
         <section>
           <h3>問題文</h3>
           <p class="instruction">{html.escape(question['instruction'])}</p>
-          <ol class="segments">{render_segments(question)}</ol>
+          {render_answer_area(question)}
         </section>
 
         <section>
-          <h3>解説</h3>
+          <h3>どこに注目するか</h3>
+          <p>{html.escape(question.get('attentionPoint', '未入力'))}</p>
+          <h3>なぜ気をつけるか</h3>
           <p>{html.escape(question['explanation'])}</p>
-          <h3>確認のしかた</h3>
+          <h3>次にどうするか</h3>
           <p>{html.escape(question['verificationTip'])}</p>
           <h3>ヒント</h3>
           <p>{html.escape(question['hint'])}</p>

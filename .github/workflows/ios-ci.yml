@@ -31,6 +31,17 @@ jobs:
       - name: Validate content fixtures
         run: python3 tools/content_factory/pipeline.py validate-fixtures
 
+      - name: Check Supabase Edge Functions
+        run: >
+          npx --yes deno@2.9.6 check
+          supabase/functions/content-manifest/index.ts
+          supabase/functions/content-manifest-v2/index.ts
+
+      - name: Test premium entitlement validation
+        run: >
+          npx --yes deno@2.9.6 test
+          supabase/functions/content-manifest-v2/entitlement_test.ts
+
       - name: Check hosted review page JavaScript
         run: |
           node -e 'const fs=require("fs");const h=fs.readFileSync("docs/content-review-admin.html","utf8");const s=[...h.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]);s.forEach(x=>new Function(x));console.log(`checked ${s.length} script(s)`);'
@@ -52,12 +63,41 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
+      - name: Create CI simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          runtime_id="$(xcrun simctl list runtimes -j | python3 -c '
+          import json, sys
+          runtimes = json.load(sys.stdin)["runtimes"]
+          available = [
+              item for item in runtimes
+              if item.get("isAvailable")
+              and item.get("identifier", "").startswith("com.apple.CoreSimulator.SimRuntime.iOS-")
+          ]
+          if not available:
+              raise SystemExit("No available iOS Simulator runtime")
+          print(available[-1]["identifier"])
+          ')"
+          device_type_id="$(xcrun simctl list devicetypes -j | python3 -c '
+          import json, sys
+          devices = [item for item in json.load(sys.stdin)["devicetypes"] if item["name"].startswith("iPhone")]
+          preferred = next((item for item in devices if item["name"] == "iPhone 16"), None)
+          if not preferred and not devices:
+              raise SystemExit("No iPhone Simulator device type")
+          print((preferred or devices[-1])["identifier"])
+          ')"
+          simulator_udid="$(xcrun simctl create "Minukuru CI" "$device_type_id" "$runtime_id")"
+          xcrun simctl boot "$simulator_udid"
+          xcrun simctl bootstatus "$simulator_udid" -b
+          echo "SIMULATOR_UDID=$simulator_udid" >> "$GITHUB_ENV"
+
       - name: Build
         run: >
           xcodebuild
           -project Minukuru.xcodeproj
           -scheme Minukuru
-          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -destination "platform=iOS Simulator,id=${SIMULATOR_UDID}"
           ONLY_ACTIVE_ARCH=YES
           build
 
@@ -66,7 +106,7 @@ jobs:
           xcodebuild
           -project Minukuru.xcodeproj
           -scheme Minukuru
-          -destination 'platform=iOS Simulator,name=iPhone 16'
+          -destination "platform=iOS Simulator,id=${SIMULATOR_UDID}"
           ONLY_ACTIVE_ARCH=YES
           test
 

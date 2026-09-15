@@ -16,6 +16,11 @@ protocol QuizAccessConfigProviding {
 
 protocol QuizEntitlementAware {
     func setPremiumAccess(_ hasPremiumAccess: Bool)
+    func setPremiumTransactionJWS(_ transactionJWS: String?)
+}
+
+extension QuizEntitlementAware {
+    func setPremiumTransactionJWS(_ transactionJWS: String?) { }
 }
 
 struct QuizContentStatus: Equatable {
@@ -31,7 +36,7 @@ protocol QuizContentStatusProviding {
 }
 
 protocol QuizRemoteFetching {
-    func fetchData(from url: URL) async throws -> Data
+    func fetchData(from url: URL, premiumTransactionJWS: String?) async throws -> Data
 }
 
 struct URLSessionQuizRemoteFetcher: QuizRemoteFetching {
@@ -41,8 +46,13 @@ struct URLSessionQuizRemoteFetcher: QuizRemoteFetching {
         self.session = session
     }
 
-    func fetchData(from url: URL) async throws -> Data {
-        let (data, response) = try await session.data(from: url)
+    func fetchData(from url: URL, premiumTransactionJWS: String?) async throws -> Data {
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 20
+        if let premiumTransactionJWS, !premiumTransactionJWS.isEmpty {
+            request.setValue(premiumTransactionJWS, forHTTPHeaderField: "X-Minukuru-StoreKit-JWS")
+        }
+        let (data, response) = try await session.data(for: request)
 
         if let httpResponse = response as? HTTPURLResponse,
            !(200..<300).contains(httpResponse.statusCode) {
@@ -101,7 +111,9 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
     private let remoteFetcher: QuizRemoteFetching
     private var baseManifest: QuizContentManifest
     private var premiumManifest: QuizContentManifest
+    private let bundledCoreQuestions: [QuizQuestion]
     private var hasPremiumAccess = false
+    private var premiumTransactionJWS: String?
     let freeQuestionLimit: Int
 
     init(
@@ -114,6 +126,8 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
         self.remoteFetcher = remoteFetcher
 
         let bundledManifest = store.loadBundledManifest(from: bundle)
+        let coreQuestions = bundledManifest.questions.filter { $0.id.hasPrefix("core-") }
+        self.bundledCoreQuestions = coreQuestions
         let configuration = store.loadConfiguration(from: bundle)
         self.freeQuestionLimit = configuration.freeQuestionLimit
 
@@ -121,13 +135,15 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
             let cachedBaseManifest =
                 store.loadCachedManifest(kind: .free)
                 ?? store.loadCachedManifest(kind: .full)
-            self.baseManifest = cachedBaseManifest?.questions.isEmpty == false ? cachedBaseManifest! : bundledManifest
+            let selectedBase = cachedBaseManifest?.questions.isEmpty == false ? cachedBaseManifest! : bundledManifest
+            self.baseManifest = Self.withBundledCore(selectedBase, coreQuestions: coreQuestions)
             self.premiumManifest = store.loadCachedManifest(kind: .premium)
                 ?? QuizContentManifest(contentVersion: "empty-premium", questions: [])
         } else {
             let cachedManifest = store.loadCachedManifest(kind: .full)
             let initialManifest = cachedManifest ?? bundledManifest
-            self.baseManifest = initialManifest.questions.isEmpty ? bundledManifest : initialManifest
+            let selectedBase = initialManifest.questions.isEmpty ? bundledManifest : initialManifest
+            self.baseManifest = Self.withBundledCore(selectedBase, coreQuestions: coreQuestions)
             self.premiumManifest = QuizContentManifest(contentVersion: "empty-premium", questions: [])
         }
     }
@@ -162,6 +178,7 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
                     from: freeURL,
                     cacheKind: .free,
                     currentManifest: baseManifest,
+                    premiumTransactionJWS: nil,
                     assign: { [weak self] refreshedManifest in
                         self?.baseManifest = refreshedManifest
                     }
@@ -181,6 +198,7 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
                     from: premiumURL,
                     cacheKind: .premium,
                     currentManifest: premiumManifest,
+                    premiumTransactionJWS: premiumTransactionJWS,
                     assign: { [weak self] refreshedManifest in
                         self?.premiumManifest = refreshedManifest
                     }
@@ -205,6 +223,7 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
             from: remoteURL,
             cacheKind: .full,
             currentManifest: baseManifest,
+            premiumTransactionJWS: hasPremiumAccess ? premiumTransactionJWS : nil,
             assign: { [weak self] refreshedManifest in
                 self?.baseManifest = refreshedManifest
             }
@@ -219,11 +238,11 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
         return QuizContentManifest(
             contentVersion: "\(baseManifest.contentVersion)+\(premiumManifest.contentVersion)",
             updatedAt: premiumManifest.updatedAt ?? baseManifest.updatedAt,
-            questions: mergeQuestions(baseManifest.questions, premiumManifest.questions)
+            questions: Self.mergeQuestions(baseManifest.questions, premiumManifest.questions)
         )
     }
 
-    private func mergeQuestions(_ baseQuestions: [QuizQuestion], _ overlayQuestions: [QuizQuestion]) -> [QuizQuestion] {
+    private static func mergeQuestions(_ baseQuestions: [QuizQuestion], _ overlayQuestions: [QuizQuestion]) -> [QuizQuestion] {
         var merged = baseQuestions
         var indexByID = Dictionary(uniqueKeysWithValues: merged.enumerated().map { ($1.id, $0) })
 
@@ -239,18 +258,38 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
         return merged
     }
 
+    private static func withBundledCore(
+        _ manifest: QuizContentManifest,
+        coreQuestions: [QuizQuestion]
+    ) -> QuizContentManifest {
+        guard !coreQuestions.isEmpty else { return manifest }
+        return QuizContentManifest(
+            schemaVersion: manifest.schemaVersion,
+            contentVersion: manifest.contentVersion,
+            updatedAt: manifest.updatedAt,
+            questions: mergeQuestions(coreQuestions, manifest.questions)
+        )
+    }
+
     private func refreshManifest(
         from remoteURL: URL,
         cacheKind: QuizContentCacheKind,
         currentManifest: QuizContentManifest,
+        premiumTransactionJWS: String?,
         assign: @escaping (QuizContentManifest) -> Void
     ) async -> Bool {
         do {
-            let data = try await remoteFetcher.fetchData(from: remoteURL)
-            let refreshedManifest = try FileQuizContentStore.decodeManifest(
+            let data = try await remoteFetcher.fetchData(
+                from: remoteURL,
+                premiumTransactionJWS: premiumTransactionJWS
+            )
+            let decodedManifest = try FileQuizContentStore.decodeManifest(
                 from: data,
                 defaultVersion: remoteURL.absoluteString
             )
+            let refreshedManifest = cacheKind == .premium
+                ? decodedManifest
+                : Self.withBundledCore(decodedManifest, coreQuestions: bundledCoreQuestions)
 
             guard !refreshedManifest.questions.isEmpty else {
                 return false
@@ -272,6 +311,13 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
 extension HybridQuizRepository: QuizEntitlementAware {
     func setPremiumAccess(_ hasPremiumAccess: Bool) {
         self.hasPremiumAccess = hasPremiumAccess
+        if !hasPremiumAccess {
+            premiumTransactionJWS = nil
+        }
+    }
+
+    func setPremiumTransactionJWS(_ transactionJWS: String?) {
+        premiumTransactionJWS = transactionJWS
     }
 }
 

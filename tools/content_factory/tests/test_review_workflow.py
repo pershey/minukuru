@@ -162,6 +162,30 @@ class ReviewWorkflowTests(unittest.TestCase):
         self.assertIn('id="export-decisions"', output)
         self.assertIn(batch_fingerprint([draft()]), output)
 
+    def test_dashboard_renders_single_choice_learning_metadata(self) -> None:
+        choice_draft = draft()
+        choice_draft["question"] = {
+            **question(),
+            "audience": "child",
+            "learningStage": "action",
+            "learningFocus": "verify",
+            "responseType": "singleChoice",
+            "correctSegmentIds": [],
+            "answerChoices": [
+                {"id": "a1", "text": "送ってきた人に聞く", "semantic": "other"},
+                {"id": "a2", "text": "公式の案内を調べる", "semantic": "verifySource"},
+            ],
+            "correctChoiceId": "a2",
+            "attentionPoint": "確認先を選びます。",
+        }
+
+        output = build_dashboard([choice_draft], [ai_review()], "レビュー")
+
+        self.assertIn("公式の案内を調べる", output)
+        self.assertIn("verifySource", output)
+        self.assertIn("確認先を選びます。", output)
+        self.assertIn("action", output)
+
     def test_prepare_command_writes_manifest_inputs(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
