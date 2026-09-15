@@ -50,14 +50,23 @@
 - 購入後に全問題、スキップ、現実モードが使えるか
 - `購入を復元` が動くか
 
+補足:
+
+- Xcode の `.storekit` ファイルはローカル実行確認用
+- TestFlight の課金確認は、App Store Connect に登録した商品を sandbox で読む
+- TestFlight テスターは実課金されない
+- そのため、App Review と同じ系統の確認をしたいときは TestFlight 実機確認がいちばん確実
+
 ## 3.5 TestFlight で購入ボタンが出ない / 動かないときの確認
 
 - Paid Apps Agreement が `Active` になっているか
 - 銀行口座と税務情報が完了しているか
+- Apple Developer の App ID / Xcode の `Signing & Capabilities` で `In-App Purchase` が有効か
 - 課金商品の status が `Missing Metadata` ではなく、最低でも `Ready to Submit` になっているか
 - 価格、スクリーンショット、説明文、販売国が設定済みか
 - 初回の課金商品なら、アプリの新しいバージョンに紐づけて一緒に審査へ出しているか
-- TestFlight では sandbox で動くため、必要なら Sandbox Apple Account で検証する
+- TestFlight では sandbox で動く
+- 通常は TestFlight テスターの Apple Account のままで検証できる
 
 Apple 公式:
 

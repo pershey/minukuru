@@ -102,6 +102,7 @@
 		E0E2DD77312382F7D93EA1D4 /* MinukuruLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinukuruLogoView.swift; sourceTree = "<group>"; };
 		E4BF95E4814430962E7859D4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		FBC40C8AAF9F2805EED06B71 /* MinukuruApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinukuruApp.swift; sourceTree = "<group>"; };
+		FBFDB942462E88278AB54E5E /* MinukuruLocal.storekit */ = {isa = PBXFileReference; path = MinukuruLocal.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +163,7 @@
 		45ACA13D3B097161AFC4907D = {
 			isa = PBXGroup;
 			children = (
+				FBFDB942462E88278AB54E5E /* MinukuruLocal.storekit */,
 				34DCC4F89286EA10531C7FC1 /* MinukuruApp */,
 				E311042C842714C4DBBD5B73 /* MinukuruTests */,
 				DB077E8983C5AE11636DFB99 /* Products */,
@@ -301,6 +303,11 @@
 					E64156F5A5CB0219491227F0 = {
 						DevelopmentTeam = NRJLLKV544;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -497,7 +504,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = NRJLLKV544;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -581,7 +588,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NRJLLKV544;
 				ENABLE_NS_ASSERTIONS = NO;

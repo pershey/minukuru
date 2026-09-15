@@ -15,7 +15,7 @@
 ## 3. App Store Connect 側でやること
 
 - `ミヌクル` の 1.0 の差し戻し中バージョンを開く
-- build 8 を選択する
+- 最新 build を選択する
 - `ミヌクル プレミアム` がアプリ内課金として紐づいていることを確認する
 - 審査返信に `review-resubmission-2026-07-02.md` の文面を貼る
 - 再提出する
@@ -23,12 +23,20 @@
 ## 4. 審査担当がたどる導線
 
 - タイトル画面
-- 右上の設定ボタン
-- 設定画面の最上部 `プレミアムプラン`
+- `プレミアムを見る`
+- 専用 `プレミアム` 画面
 
-## 5. 詰まった時の確認ポイント
+## 5. 13インチ iPad スクリーンショット
+
+- 13インチ iPad 用の寸法が必要な時は以下を使う
+  - `/Users/naoyaochiai/minukuru/review_assets/iap_submission_build9_13inch/title-with-premium-button-ipad-air-13-m3.png`
+  - `/Users/naoyaochiai/minukuru/review_assets/iap_submission_build9_13inch/premium-page-ipad-air-13-m3.png`
+- どちらも `2048x2732`
+
+## 6. 詰まった時の確認ポイント
 
 - Paid Apps Agreement が有効か
 - App Store Connect 上で IAP が `提出準備完了` 以上になっているか
-- build 8 に IAP が関連付けられているか
+- 最新 build に IAP が関連付けられているか
+- `In-App Purchase` capability を含む build か
 - 返信コメントで導線を明記しているか
