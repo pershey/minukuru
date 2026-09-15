@@ -1,0 +1,23 @@
+Hello,
+
+Thank you for the review.
+
+We addressed the in-app purchase issue in version 1.0 build 11.
+
+Changes made:
+- Added a dedicated Premium page that opens directly from the title screen.
+- Added automatic retry handling when loading the in-app purchase product information.
+- Added timeout handling for premium product loading, entitlement refresh, purchase requests, and restore requests so the app does not remain in an indefinite loading state if the App Store sandbox is slow to respond.
+- Added clear retry and status messages in the premium purchase area.
+
+How to access it:
+1. Launch the app.
+2. Tap the "Premium" button on the title screen.
+3. The dedicated "プレミアム" page opens immediately.
+4. Tap the purchase button for "ミヌクル プレミアム".
+
+No login or account creation is required.
+
+If the App Store response is delayed, the app now exits the loading state and shows a retry message instead of continuing to spin indefinitely.
+
+Thank you.

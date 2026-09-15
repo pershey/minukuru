@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03EF888330F71BB0504BFDA5 /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B771A5CBC79431ADA364B3AB /* PremiumView.swift */; };
 		04D7736DD451967858FBFF1E /* ReasonTagChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B5945B4091752C59EFF74E /* ReasonTagChip.swift */; };
 		0ACD38F49E68FA994F1CE5B8 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2595D70304E12C0EADCFCBEC /* StatsView.swift */; };
 		0F9A16E3DBE756C42BB8AE2C /* QuestionAccessPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4C23A7F63C7522435C64E8 /* QuestionAccessPolicyTests.swift */; };
@@ -27,6 +28,7 @@
 		6697DB3CCDC17F9C6AF66D94 /* QuizRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5689E1D28FF31A2560D376FA /* QuizRepository.swift */; };
 		71F65DFBD891F40CE42B525F /* questions.json in Resources */ = {isa = PBXBuildFile; fileRef = B81089CAC527CDC4EBFAF25C /* questions.json */; };
 		72262A365CFA36D3F56CBB03 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9424EE491DB7C376F360C4C0 /* ResultView.swift */; };
+		74899B3B781FF995BD2ACAD9 /* PremiumPlanCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE96E609DAD234FC6C38BFF /* PremiumPlanCard.swift */; };
 		7E71090F23249288BF8A4BB7 /* content_config.json in Resources */ = {isa = PBXBuildFile; fileRef = BAE8255FE9765510E4349300 /* content_config.json */; };
 		837E81A7611167D45EF33236 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF95E4814430962E7859D4 /* HomeView.swift */; };
 		8A4B3E4002BB40E9952F8703 /* QuizContentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE5DF8840CBFCEC37AB1086 /* QuizContentModels.swift */; };
@@ -59,6 +61,7 @@
 
 /* Begin PBXFileReference section */
 		080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentFlowLayout.swift; sourceTree = "<group>"; };
+		0CE96E609DAD234FC6C38BFF /* PremiumPlanCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumPlanCard.swift; sourceTree = "<group>"; };
 		1335EF66C8199A2E307ECD0F /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
 		1A0016DC1C23A5BD27E56242 /* HybridQuizRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridQuizRepositoryTests.swift; sourceTree = "<group>"; };
 		2143B372F780AC15D90E1E90 /* QuizScorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizScorer.swift; sourceTree = "<group>"; };
@@ -82,6 +85,7 @@
 		AF38C6895CA06D084D912751 /* SegmentChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentChip.swift; sourceTree = "<group>"; };
 		B24562158D034B9B94EF4F0C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		B724D9B6074ABEF15083EBEF /* StatsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsStore.swift; sourceTree = "<group>"; };
+		B771A5CBC79431ADA364B3AB /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		B81089CAC527CDC4EBFAF25C /* questions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = questions.json; sourceTree = "<group>"; };
 		BAE8255FE9765510E4349300 /* content_config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = content_config.json; sourceTree = "<group>"; };
 		C01DE3704AE72EDA4DD95C7D /* MinukuruTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MinukuruTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +102,7 @@
 		E0E2DD77312382F7D93EA1D4 /* MinukuruLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinukuruLogoView.swift; sourceTree = "<group>"; };
 		E4BF95E4814430962E7859D4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		FBC40C8AAF9F2805EED06B71 /* MinukuruApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinukuruApp.swift; sourceTree = "<group>"; };
+		FBFDB942462E88278AB54E5E /* MinukuruLocal.storekit */ = {isa = PBXFileReference; path = MinukuruLocal.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +163,7 @@
 		45ACA13D3B097161AFC4907D = {
 			isa = PBXGroup;
 			children = (
+				FBFDB942462E88278AB54E5E /* MinukuruLocal.storekit */,
 				34DCC4F89286EA10531C7FC1 /* MinukuruApp */,
 				E311042C842714C4DBBD5B73 /* MinukuruTests */,
 				DB077E8983C5AE11636DFB99 /* Products */,
@@ -184,6 +190,7 @@
 				6E943F1DFAF72D865BFB83B6 /* BannerAdView.swift */,
 				E4BF95E4814430962E7859D4 /* HomeView.swift */,
 				DD4D7D5D7DE5557536324871 /* ModeSelectView.swift */,
+				B771A5CBC79431ADA364B3AB /* PremiumView.swift */,
 				1335EF66C8199A2E307ECD0F /* QuizView.swift */,
 				9424EE491DB7C376F360C4C0 /* ResultView.swift */,
 				239026356CD57DC3479174A8 /* SettingsView.swift */,
@@ -198,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				E0E2DD77312382F7D93EA1D4 /* MinukuruLogoView.swift */,
+				0CE96E609DAD234FC6C38BFF /* PremiumPlanCard.swift */,
 				46B5945B4091752C59EFF74E /* ReasonTagChip.swift */,
 				AF38C6895CA06D084D912751 /* SegmentChip.swift */,
 				080AF2F57EC9722E8284F40C /* SegmentFlowLayout.swift */,
@@ -295,6 +303,11 @@
 					E64156F5A5CB0219491227F0 = {
 						DevelopmentTeam = NRJLLKV544;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -363,6 +376,8 @@
 				B43DE767358E4CB3EA3F4D55 /* MinukuruLogoView.swift in Sources */,
 				65BEA3C98C7B7F7AF4C8BFB1 /* ModeSelectView.swift in Sources */,
 				5F80DDE88A7C6785BEE18A43 /* MonetizationConfig.swift in Sources */,
+				74899B3B781FF995BD2ACAD9 /* PremiumPlanCard.swift in Sources */,
+				03EF888330F71BB0504BFDA5 /* PremiumView.swift in Sources */,
 				19B4D388CE1D0E1B0C3F9E9D /* PurchaseManager.swift in Sources */,
 				1F3A9E71B5FB1D232284E0A2 /* QuestionAccessPolicy.swift in Sources */,
 				8A4B3E4002BB40E9952F8703 /* QuizContentModels.swift in Sources */,
@@ -489,7 +504,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = NRJLLKV544;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -573,7 +588,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NRJLLKV544;
 				ENABLE_NS_ASSERTIONS = NO;

@@ -1,8 +1,8 @@
 Recommended screenshot file:
-/Users/naoyaochiai/minukuru/review_assets/iap_submission_6_7/app_review_iap_screenshot_upload.png
+/Users/naoyaochiai/minukuru/review_assets/iap_submission_build9_13inch/title-with-premium-button-ipad-air-13-m3.png
 
 Backup screenshot file:
-/Users/naoyaochiai/minukuru/review_assets/iap_submission_6_7/app_review_iap_screenshot_simulator_v2.png
+/Users/naoyaochiai/minukuru/review_assets/iap_submission_build9_13inch/premium-page-ipad-air-13-m3.png
 
 App Review Note (English):
 This in-app purchase is a non-consumable product named "Minukuru Premium".
@@ -12,16 +12,19 @@ It unlocks premium features in the app:
 - skip answered questions mode
 - reality mode for advanced training content
 
+In version 1.0 build 11, timeout handling was added for product loading, entitlement refresh, purchase requests, and restore requests so the app does not remain in an indefinite loading state if the App Store sandbox is slow to respond.
+
 How to access it:
 1. Launch the app "Minukuru".
-2. Tap the settings button in the top-right corner of the title screen.
-3. Scroll to the "Premium" section.
+2. Tap the "Premium" button on the title screen.
+3. The dedicated premium page opens immediately.
 4. The purchase option for "Minukuru Premium" is shown there.
 
 No login or account creation is required.
-The attached screenshot shows the Premium section used for this purchase.
+The attached screenshot shows the title screen entry point for the Premium purchase flow on iPad.
 
 Japanese reference:
 このアプリ内課金は、買い切り型の「ミヌクル プレミアム」です。
-設定画面の「プレミアム」セクションから購入できます。
+タイトル画面の「プレミアム」ボタンから専用画面を開いて購入できます。
 解放内容は、追加問題、広告非表示、実施済み問題スキップ、現実モードです。
+build 11 では、商品取得・権利確認・購入・復元の各処理にタイムアウトと再試行表示を追加し、読み込みが終わらず回り続ける状態を避けるようにしています。

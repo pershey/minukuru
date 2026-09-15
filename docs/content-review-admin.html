@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ミヌクル 問題レビュー</title>
+  <style>
+    :root {
+      --ink: #18345c;
+      --muted: #64758d;
+      --paper: #fffdf9;
+      --cream: #f7f1e7;
+      --line: #e6d9c5;
+      --coral: #ff6a57;
+      --mint: #dff4eb;
+      --green: #187958;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: linear-gradient(145deg, #fffdf9 0%, var(--cream) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    }
+    button, input, textarea { font: inherit; }
+    .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 80px; }
+    .hero, .panel, .card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 18px 44px rgba(24, 52, 92, 0.07);
+    }
+    .hero, .panel { padding: 24px; margin-bottom: 18px; }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 42px); }
+    h2, h3 { margin-top: 0; }
+    p { line-height: 1.7; }
+    .muted { color: var(--muted); }
+    .form-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
+    label { display: grid; gap: 7px; color: var(--muted); font-size: 13px; font-weight: 700; }
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 13px;
+      color: var(--ink);
+      background: white;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    button {
+      min-height: 44px;
+      border: 1px solid var(--ink);
+      border-radius: 12px;
+      padding: 9px 15px;
+      color: white;
+      background: var(--ink);
+      font-weight: 750;
+      cursor: pointer;
+    }
+    button.secondary { color: var(--ink); background: white; border-color: var(--line); }
+    button:disabled { cursor: wait; opacity: 0.55; }
+    .status { min-height: 24px; margin: 12px 0 0; color: var(--muted); }
+    .toolbar {
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      color: white;
+      background: rgba(24, 52, 92, 0.96);
+      box-shadow: 0 12px 28px rgba(24, 52, 92, 0.18);
+      margin: 18px 0;
+    }
+    .counts { display: flex; flex-wrap: wrap; gap: 12px; font-weight: 700; font-size: 14px; }
+    .toolbar button { background: white; color: var(--ink); border-color: white; }
+    .card { padding: 22px; margin-top: 16px; }
+    .card[data-decision="accept"] { border-color: var(--green); }
+    .card[data-decision="revise"] { border-color: var(--coral); }
+    .card[data-decision="reject"] { opacity: 0.75; }
+    .card-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .badges { display: flex; flex-wrap: wrap; gap: 7px; }
+    .badge { padding: 6px 9px; border-radius: 999px; background: #eef3f8; font-size: 12px; font-weight: 700; }
+    .segments { display: grid; gap: 9px; margin: 16px 0; padding: 0; list-style: none; }
+    .segment { padding: 12px 14px; border: 1px solid var(--line); border-radius: 13px; line-height: 1.6; }
+    .segment.correct { background: #fff0e8; border-color: #ffc0ae; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .decision-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+    .decision-row button { color: var(--ink); background: white; border-color: var(--line); }
+    .decision-row button.selected { box-shadow: 0 0 0 3px rgba(24, 52, 92, 0.12); border-width: 2px; }
+    .decision-row [data-value="accept"].selected { background: var(--mint); border-color: var(--green); }
+    .decision-row [data-value="revise"].selected { background: #fff0e8; border-color: var(--coral); }
+    .decision-row [data-value="reject"].selected { background: #eef0f3; border-color: #59616e; }
+    .note { margin-top: 12px; }
+    .hidden { display: none; }
+    @media (max-width: 760px) {
+      .form-grid, .grid, .decision-row { grid-template-columns: 1fr; }
+      .toolbar, .card-head { align-items: stretch; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <h1>問題レビュー</h1>
+      <p class="muted">運営者専用です。Supabaseで認証した許可済みアカウントだけが、問題本文を読み込めます。</p>
+    </section>
+
+    <section class="panel" id="auth-panel">
+      <h2>ログイン</h2>
+      <div class="form-grid">
+        <label>Supabase Project URL
+          <input id="project-url" value="https://jlvuhkofnnkbkwvwkhze.supabase.co" autocomplete="url">
+        </label>
+        <label>Publishable key
+          <input id="publishable-key" type="password" autocomplete="off" placeholder="sb_publishable_... または anon key">
+        </label>
+        <label>許可済みメールアドレス
+          <input id="email" type="email" autocomplete="email" placeholder="name@example.com">
+        </label>
+        <label>バッチ名
+          <input id="batch-label" value="premium-launch-20260712">
+        </label>
+      </div>
+      <div class="actions">
+        <button id="send-link" type="button">ログイン用メールを送る</button>
+        <button id="load-batch" type="button">問題を読み込む</button>
+        <button id="logout" type="button" class="secondary">ログアウト</button>
+      </div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </section>
+
+    <section id="review-area" class="hidden">
+      <div class="toolbar">
+        <div class="counts" id="counts"></div>
+        <button id="export" type="button">判定ファイルを保存</button>
+      </div>
+      <div id="cards"></div>
+    </section>
+  </main>
+
+  <script>
+    const fields = {
+      projectUrl: document.getElementById('project-url'),
+      publishableKey: document.getElementById('publishable-key'),
+      email: document.getElementById('email'),
+      batchLabel: document.getElementById('batch-label')
+    };
+    const status = document.getElementById('status');
+    const cards = document.getElementById('cards');
+    const reviewArea = document.getElementById('review-area');
+    let batch = null;
+    let decisions = {};
+
+    function setStatus(message) { status.textContent = message; }
+    function rememberSettings() {
+      localStorage.setItem('minukuru-review-settings', JSON.stringify({
+        projectUrl: fields.projectUrl.value.trim(),
+        publishableKey: fields.publishableKey.value.trim(),
+        email: fields.email.value.trim(),
+        batchLabel: fields.batchLabel.value.trim()
+      }));
+    }
+    function restoreSettings() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('minukuru-review-settings') || '{}');
+        for (const [key, value] of Object.entries(saved)) if (value && fields[key]) fields[key].value = value;
+      } catch { /* 入力欄の初期値を使う */ }
+    }
+    function captureSessionFromUrl() {
+      const fragment = new URLSearchParams(location.hash.slice(1));
+      const token = fragment.get('access_token');
+      if (!token) return;
+      sessionStorage.setItem('minukuru-review-access-token', token);
+      history.replaceState(null, '', location.pathname + location.search);
+      setStatus('ログインできました。「問題を読み込む」を押してください。');
+    }
+    function element(tag, text, className) {
+      const node = document.createElement(tag);
+      if (text !== undefined) node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    }
+    function decisionStorageKey() { return `minukuru-review:${batch.batchFingerprint}`; }
+    function updateCounts() {
+      const counts = { pending: 0, accept: 0, revise: 0, reject: 0 };
+      batch.drafts.forEach(draft => counts[decisions[draft.draftId]?.decision || 'pending'] += 1);
+      document.getElementById('counts').textContent =
+        `未判定 ${counts.pending}　採用 ${counts.accept}　再生成 ${counts.revise}　見送り ${counts.reject}`;
+    }
+    function saveDecision(draft, card, decision) {
+      const note = card.querySelector('textarea').value.trim();
+      decisions[draft.draftId] = {
+        draftId: draft.draftId,
+        generatedQuestionId: draft.generatedQuestionId,
+        decision,
+        note,
+        decidedAt: new Date().toISOString()
+      };
+      localStorage.setItem(decisionStorageKey(), JSON.stringify(decisions));
+      card.dataset.decision = decision;
+      card.querySelectorAll('[data-value]').forEach(button =>
+        button.classList.toggle('selected', button.dataset.value === decision));
+      updateCounts();
+    }
+    function renderDraft(draft, review) {
+      const card = element('article', undefined, 'card');
+      const saved = decisions[draft.draftId];
+      card.dataset.decision = saved?.decision || 'pending';
+
+      const head = element('div', undefined, 'card-head');
+      const heading = element('div');
+      heading.append(element('h2', draft.question.title), element('p', draft.generatedQuestionId, 'muted'));
+      const badges = element('div', undefined, 'badges');
+      [draft.mode, draft.contentFlavor, `AI ${review?.review?.compositeScore ?? '-'}`]
+        .forEach(value => badges.append(element('span', value, 'badge')));
+      head.append(heading, badges);
+      card.append(head);
+
+      const correct = new Set(draft.question.correctSegmentIds || []);
+      const segments = element('ol', undefined, 'segments');
+      draft.question.segments.forEach(segment => {
+        const row = element('li', segment.text, `segment${correct.has(segment.id) ? ' correct' : ''}`);
+        segments.append(row);
+      });
+      card.append(segments);
+
+      const detail = element('div', undefined, 'grid');
+      const explanation = element('section');
+      explanation.append(element('h3', '解説'), element('p', draft.question.explanation));
+      const verification = element('section');
+      verification.append(element('h3', '確認のしかた'), element('p', draft.question.verificationTip));
+      detail.append(explanation, verification);
+      card.append(detail);
+
+      const decisionRow = element('div', undefined, 'decision-row');
+      [['accept', '採用'], ['revise', '再生成'], ['reject', '見送り']].forEach(([value, label]) => {
+        const button = element('button', label);
+        button.type = 'button';
+        button.dataset.value = value;
+        button.classList.toggle('selected', saved?.decision === value);
+        button.addEventListener('click', () => saveDecision(draft, card, value));
+        decisionRow.append(button);
+      });
+      card.append(decisionRow);
+
+      const noteLabel = element('label', undefined, 'note');
+      noteLabel.append(document.createTextNode('判定メモ'));
+      const note = element('textarea');
+      note.rows = 3;
+      note.placeholder = '再生成・見送りでは必須です';
+      note.value = saved?.note || '';
+      note.addEventListener('change', () => {
+        if (!decisions[draft.draftId]) return;
+        decisions[draft.draftId].note = note.value.trim();
+        decisions[draft.draftId].decidedAt = new Date().toISOString();
+        localStorage.setItem(decisionStorageKey(), JSON.stringify(decisions));
+      });
+      noteLabel.append(note);
+      card.append(noteLabel);
+      return card;
+    }
+    function renderBatch(payload) {
+      batch = payload;
+      try { decisions = JSON.parse(localStorage.getItem(decisionStorageKey()) || '{}'); } catch { decisions = {}; }
+      cards.replaceChildren();
+      const reviewByDraft = new Map(payload.reviews.map(review => [review.draftId, review]));
+      payload.drafts.forEach(draft => cards.append(renderDraft(draft, reviewByDraft.get(draft.draftId))));
+      reviewArea.classList.remove('hidden');
+      updateCounts();
+    }
+
+    document.getElementById('send-link').addEventListener('click', async () => {
+      rememberSettings();
+      const projectUrl = fields.projectUrl.value.trim().replace(/\/$/, '');
+      const key = fields.publishableKey.value.trim();
+      const email = fields.email.value.trim();
+      if (!projectUrl || !key || !email) return setStatus('Project URL、Publishable key、メールアドレスを入力してください。');
+      setStatus('ログイン用メールを送っています…');
+      const response = await fetch(`${projectUrl}/auth/v1/otp`, {
+        method: 'POST',
+        headers: { apikey: key, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, options: { emailRedirectTo: location.href.split('#')[0] } })
+      });
+      setStatus(response.ok ? 'メールを送りました。届いたリンクをこのブラウザで開いてください。' : 'メールを送れませんでした。入力内容とSupabase Auth設定を確認してください。');
+    });
+
+    document.getElementById('load-batch').addEventListener('click', async () => {
+      rememberSettings();
+      const token = sessionStorage.getItem('minukuru-review-access-token');
+      if (!token) return setStatus('先にログイン用メールからログインしてください。');
+      const projectUrl = fields.projectUrl.value.trim().replace(/\/$/, '');
+      const batchLabel = fields.batchLabel.value.trim();
+      setStatus('問題を読み込んでいます…');
+      const response = await fetch(`${projectUrl}/functions/v1/content-review-admin?batchLabel=${encodeURIComponent(batchLabel)}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) return setStatus(`読み込めませんでした: ${payload.error || response.status}`);
+      renderBatch(payload);
+      setStatus(`${payload.drafts.length}問を読み込みました。判定はこのブラウザに自動保存されます。`);
+    });
+
+    document.getElementById('logout').addEventListener('click', () => {
+      sessionStorage.removeItem('minukuru-review-access-token');
+      reviewArea.classList.add('hidden');
+      setStatus('ログアウトしました。');
+    });
+
+    document.getElementById('export').addEventListener('click', () => {
+      const rows = Object.values(decisions);
+      const invalid = rows.find(row => ['revise', 'reject'].includes(row.decision) && !row.note.trim());
+      if (invalid) return setStatus('再生成・見送りには判定メモを入力してください。');
+      const payload = {
+        schemaVersion: 1,
+        batchFingerprint: batch.batchFingerprint,
+        exportedAt: new Date().toISOString(),
+        decisions: rows.sort((a, b) => a.draftId.localeCompare(b.draftId))
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2) + '\n'], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'human_review_decisions.json';
+      link.click();
+      URL.revokeObjectURL(link.href);
+      setStatus('判定ファイルを保存しました。');
+    });
+
+    restoreSettings();
+    captureSessionFromUrl();
+  </script>
+</body>
+</html>

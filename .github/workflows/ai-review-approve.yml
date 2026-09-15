@@ -1,0 +1,26 @@
+name: AI Review Head Approval
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Open PR number whose current head is approved
+        required: true
+        type: number
+      reason:
+        description: Maintainer-reviewed reason for transmitting this head
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  approve:
+    uses: pershey/ai-review-workflows/.github/workflows/reusable-head-approval.yml@4ad1fbb11d5c7c6d96a0b8e6da4c0a652644c410
+    with:
+      pr_number: ${{ fromJSON(inputs.pr_number) }}
+      reason: ${{ inputs.reason }}

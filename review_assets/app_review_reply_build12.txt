@@ -1,0 +1,29 @@
+Hello,
+
+Thank you for the review.
+
+We addressed the premium purchase flow in version 1.0 build 12.
+
+What changed:
+- We separated product loading, entitlement refresh, purchase, and restore into distinct states.
+- The purchase button is no longer blocked by background entitlement checks after the premium product has loaded.
+- The loading indicator is now shown only during the actual purchase or restore flow.
+- We enabled the In-App Purchase capability in the app target used for this build.
+- The premium screen now clearly distinguishes between:
+  - product info still loading
+  - product unavailable / retry needed
+  - purchase available
+
+How to test:
+1. Launch the app.
+2. Tap "プレミアムを見る" on the title screen.
+3. Wait until the premium product is loaded.
+4. Tap "プレミアムを購入する".
+
+Expected result:
+- The App Store purchase sheet opens from the premium page.
+- After a successful purchase, premium access is unlocked in the app.
+
+No login or account creation is required.
+
+Thank you.
