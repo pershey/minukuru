@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minukuru Human Review Decisions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "batchFingerprint",
+    "exportedAt",
+    "decisions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "batchFingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "exportedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "draftId",
+          "generatedQuestionId",
+          "decision",
+          "note",
+          "decidedAt"
+        ],
+        "properties": {
+          "draftId": { "type": "string", "minLength": 1 },
+          "generatedQuestionId": { "type": "string", "minLength": 1 },
+          "decision": {
+            "type": "string",
+            "enum": ["accept", "revise", "reject"]
+          },
+          "note": { "type": "string" },
+          "decidedAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

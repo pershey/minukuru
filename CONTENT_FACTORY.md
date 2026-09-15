@@ -62,6 +62,16 @@ premium 問題を安全に量産して、`free / premium / full` の3系統で�
 6. `build-manifest-set` で `free / premium / full` をまとめて作る
 7. Storage へ upload し、`stage-manifest` / `publish-now` で公開する
 
+## まとめてレビューする
+
+生成した問題は、[CONTENT_REVIEW_ADMIN.md](CONTENT_REVIEW_ADMIN.md) の手順で一覧表示できます。
+
+- ローカル版は生成済みHTMLだけで動き、判定をブラウザ内へ自動保存する
+- ホスト版はGitHub Pagesに問題本文を置かず、Supabase Authと運営メールの許可リストを通して取得する
+- 「採用」「再生成」「見送り」とメモをJSONへ保存できる
+- `prepare-human-review` で、人手レビュー・再生成タスク・見送り一覧へ安全に分ける
+- 判定ファイルと現在の問題バッチが一致しない場合は処理を止める
+
 ## まず試すコマンド
 
 ### 0. Supabase に素材と型を同期する
@@ -254,6 +264,7 @@ python3 /Users/naoyaochiai/minukuru/tools/content_factory/pipeline.py \
 - `realWorld` は必ず人手レビュー
 - `similarityRatio` が高いものは落とすか revise に回す
 - `ready_publish_candidates` は公開候補の見える化用
+- AIレビューの `accept` だけでは公開せず、運営の「採用」を通した `human_reviews.jsonl` からmanifestを作る
 
 ## 精度を上げる仮説
 

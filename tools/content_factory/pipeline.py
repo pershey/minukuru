@@ -21,6 +21,8 @@ from urllib import error, parse, request
 
 import jsonschema
 
+from review_workflow import ReviewWorkflowError, compile_review_outputs, read_decision_file
+
 ROOT = Path(__file__).resolve().parents[2]
 FACTORY_DIR = ROOT / "content_factory"
 SCHEMA_DIR = FACTORY_DIR / "schemas"
@@ -83,6 +85,13 @@ def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
         for row in rows:
             handle.write(json.dumps(row, ensure_ascii=False))
             handle.write("\n")
+
+
+def append_jsonl_row(path: Path, row: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row, ensure_ascii=False))
+        handle.write("\n")
 
 
 def sql_json_literal(payload: Any) -> str:
@@ -232,6 +241,13 @@ def merge_questions(base_questions: list[dict[str, Any]], overlay_questions: lis
 
 def file_checksum(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def generated_question_id_for_task(task: dict[str, Any]) -> str:
+    access_tier = str(task["accessTier"]).strip().lower()
+    blueprint_slug = str(task["blueprint"]["slug"]).strip().lower()
+    task_suffix = str(task["taskId"]).split("-")[0].lower()
+    return f"{access_tier}-{blueprint_slug}-{task_suffix}"
 
 
 def existing_questions_from_manifest(path: Path) -> list[ExistingQuestion]:
@@ -1168,6 +1184,7 @@ def reviews_sql_rows(path: Path) -> list[dict[str, Any]]:
         validate_payload(row["review"], SCHEMA_DIR / "review_result.schema.json")
         prepared.append(
             {
+                "reviewExternalKey": row.get("reviewId"),
                 "draftExternalKey": row["draftId"],
                 "generatedQuestionId": row.get("generatedQuestionId"),
                 "reviewStage": row["reviewStage"],
@@ -1188,6 +1205,7 @@ with payload as (
   select jsonb_array_elements({sql_json_literal(review_rows)}) as row
 ), inserted as (
   insert into admin.review_runs (
+    external_key,
     draft_id,
     review_stage,
     reviewer_kind,
@@ -1205,6 +1223,7 @@ with payload as (
     created_at
   )
   select
+    nullif(row->>'reviewExternalKey', ''),
     d.id,
     row->>'reviewStage',
     row->>'reviewerKind',
@@ -1223,6 +1242,7 @@ with payload as (
   from payload
   join admin.question_drafts d
     on d.external_key = row->>'draftExternalKey'
+  on conflict (external_key) where external_key is not null do nothing
   returning draft_id
 )
 select count(*) as imported_reviews from inserted;
@@ -1395,14 +1415,30 @@ def validate_fixtures(args: argparse.Namespace) -> None:
 
 
 def run_generation(args: argparse.Namespace) -> None:
-    tasks = read_jsonl(Path(args.tasks))
-    validate_jsonl(Path(args.tasks), SCHEMA_DIR / "generation_task.schema.json")
+    tasks_path = Path(args.tasks)
+    output_path = Path(args.out)
+    tasks = read_jsonl(tasks_path)
+    validate_jsonl(tasks_path, SCHEMA_DIR / "generation_task.schema.json")
     question_schema = read_json(SCHEMA_DIR / "quiz_question.schema.json")
     system_prompt = load_prompt("generator_system_ja.md")
     model = resolve_model(args.provider, args.model)
-    rows: list[dict[str, Any]] = []
+    limited_tasks = tasks[: args.limit or None]
 
-    for index, task in enumerate(tasks[: args.limit or None], start=1):
+    existing_rows = read_jsonl(output_path)
+    completed_task_ids = {row.get("taskId") for row in existing_rows if row.get("taskId")}
+    rows: list[dict[str, Any]] = list(existing_rows)
+    pending_tasks = [task for task in limited_tasks if task["taskId"] not in completed_task_ids]
+
+    if existing_rows:
+        print(f"Resuming with {len(existing_rows)} existing drafts from {output_path}")
+
+    if not pending_tasks:
+        print(f"No pending tasks. {len(rows)} drafts are already saved in {output_path}")
+        return
+
+    total_tasks = len(limited_tasks)
+    for task in pending_tasks:
+        index = len(rows) + 1
         if args.provider == "openai":
             question = call_openai_json(
                 model=model,
@@ -1423,6 +1459,7 @@ def run_generation(args: argparse.Namespace) -> None:
         else:
             raise PipelineError("run-generation は openai か gemini を指定してください。")
 
+        question["id"] = generated_question_id_for_task(task)
         question["mode"] = task["mode"]
         question["accessTier"] = task["accessTier"]
         question["contentFlavor"] = task["contentFlavor"]
@@ -1452,11 +1489,11 @@ def run_generation(args: argparse.Namespace) -> None:
             "createdAt": utc_now(),
         }
         rows.append(row)
+        append_jsonl_row(output_path, row)
         if args.delay_seconds:
             time.sleep(args.delay_seconds)
-        print(f"[{index}/{len(tasks)}] generated {question['id']}")
+        print(f"[{index}/{total_tasks}] generated {question['id']}")
 
-    write_jsonl(Path(args.out), rows)
     print(f"Wrote {len(rows)} generated drafts to {args.out}")
 
 
@@ -1811,6 +1848,51 @@ select jsonb_build_object(
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
+def prepare_human_review(args: argparse.Namespace) -> None:
+    drafts = read_jsonl(Path(args.drafts))
+    ai_reviews = read_jsonl(Path(args.reviews))
+    tasks = read_jsonl(Path(args.tasks))
+    decisions = read_decision_file(Path(args.decisions))
+    validate_payload(decisions, SCHEMA_DIR / "human_review_decisions.schema.json")
+    outputs = compile_review_outputs(
+        drafts,
+        ai_reviews,
+        tasks,
+        decisions,
+        require_complete=args.require_complete,
+    )
+
+    output_dir = Path(args.out_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    paths = {
+        "approved": output_dir / "approved_drafts.jsonl",
+        "reviews": output_dir / "human_reviews.jsonl",
+        "regenerate": output_dir / "regeneration_tasks.jsonl",
+        "rejected": output_dir / "rejected_drafts.jsonl",
+        "pending": output_dir / "pending_drafts.jsonl",
+        "summary": output_dir / "decision_summary.json",
+    }
+    write_jsonl(paths["approved"], outputs["acceptedDrafts"])
+    write_jsonl(paths["reviews"], outputs["humanReviews"])
+    write_jsonl(paths["regenerate"], outputs["regenerationTasks"])
+    write_jsonl(paths["rejected"], outputs["rejectedDrafts"])
+    write_jsonl(paths["pending"], outputs["pendingDrafts"])
+    write_json(paths["summary"], outputs["summary"])
+
+    for row in outputs["humanReviews"]:
+        validate_payload(row["review"], SCHEMA_DIR / "review_result.schema.json")
+    validate_jsonl(paths["regenerate"], SCHEMA_DIR / "generation_task.schema.json")
+
+    if args.sync:
+        review_rows = reviews_sql_rows(paths["reviews"])
+        inserted_result = run_supabase_sql(build_insert_reviews_sql(review_rows), output="json")
+        updated_result = run_supabase_sql(build_refresh_drafts_from_reviews_sql(review_rows), output="json")
+        print(json.dumps({"inserted": inserted_result, "updated": updated_result}, ensure_ascii=False, indent=2))
+
+    print(json.dumps(outputs["summary"], ensure_ascii=False, indent=2))
+    print(f"Wrote human review outputs to {output_dir}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Minukuru content factory pipeline")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -1864,6 +1946,19 @@ def build_parser() -> argparse.ArgumentParser:
     import_reviews_parser = subparsers.add_parser("import-reviews", help="review 結果を Supabase に取り込む")
     import_reviews_parser.add_argument("--reviews", default=str(FACTORY_DIR / "output" / "reviews.jsonl"))
     import_reviews_parser.set_defaults(func=import_reviews)
+
+    human_review = subparsers.add_parser(
+        "prepare-human-review",
+        help="レビュー画面の判定から人手レビュー結果と再生成タスクを作る",
+    )
+    human_review.add_argument("--drafts", required=True)
+    human_review.add_argument("--reviews", required=True)
+    human_review.add_argument("--tasks", required=True)
+    human_review.add_argument("--decisions", required=True)
+    human_review.add_argument("--out-dir", required=True)
+    human_review.add_argument("--require-complete", action="store_true")
+    human_review.add_argument("--sync", action="store_true", help="人手レビュー結果を Supabase に同期する")
+    human_review.set_defaults(func=prepare_human_review)
 
     assemble = subparsers.add_parser("assemble-manifest", help="review を通った draft から manifest を作る")
     assemble.add_argument("--drafts", default=str(FACTORY_DIR / "sample_data" / "sample_drafts.jsonl"))
@@ -1937,7 +2032,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         args.func(args)
-    except (PipelineError, jsonschema.ValidationError, KeyError) as exc:
+    except (PipelineError, ReviewWorkflowError, jsonschema.ValidationError, KeyError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     return 0

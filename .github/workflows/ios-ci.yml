@@ -1,4 +1,4 @@
-name: iOS CI
+name: CI
 
 on:
   push:
@@ -7,13 +7,41 @@ on:
   pull_request:
 
 jobs:
+  content-factory-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install content factory dependencies
+        run: python3 -m pip install --disable-pip-version-check jsonschema
+
+      - name: Check content factory Python
+        run: >
+          python3 -m py_compile
+          tools/content_factory/pipeline.py
+          tools/content_factory/render_review_dashboard.py
+          tools/content_factory/review_workflow.py
+
+      - name: Test review workflow
+        run: python3 -m unittest discover -s tools/content_factory/tests -v
+
+      - name: Validate content fixtures
+        run: python3 tools/content_factory/pipeline.py validate-fixtures
+
+      - name: Check hosted review page JavaScript
+        run: |
+          node -e 'const fs=require("fs");const h=fs.readFileSync("docs/content-review-admin.html","utf8");const s=[...h.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]);s.forEach(x=>new Function(x));console.log(`checked ${s.length} script(s)`);'
+
   build-and-test:
     runs-on: macos-15
     timeout-minutes: 30
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Set up XcodeGen
         run: brew install xcodegen
@@ -41,3 +69,37 @@ jobs:
           -destination 'platform=iOS Simulator,name=iPhone 16'
           ONLY_ACTIVE_ARCH=YES
           test
+
+  review-bundle:
+    if: github.event_name == 'pull_request'
+    needs: [content-factory-checks, build-and-test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Build bound review evidence
+        run: >
+          python3 tools/ci/build_review_bundle.py
+          --repository "${{ github.repository }}"
+          --pr-number "${{ github.event.pull_request.number }}"
+          --run-id "${{ github.run_id }}"
+          --run-attempt "${{ github.run_attempt }}"
+          --head-sha "${{ github.event.pull_request.head.sha }}"
+          --base-sha "${{ github.event.pull_request.base.sha }}"
+          --out-dir "${{ runner.temp }}/review-bundle"
+
+      - name: Upload exact review evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: chatgpt-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/review-bundle/chatgpt-review-bundle.json
+          if-no-files-found: error
+          retention-days: 30

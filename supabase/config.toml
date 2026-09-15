@@ -2,3 +2,6 @@ project_id = "minukuru"
 
 [functions.content-manifest]
 verify_jwt = false
+
+[functions.content-review-admin]
+verify_jwt = false

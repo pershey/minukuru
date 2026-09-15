@@ -125,5 +125,77 @@
       "maxCorrectSegments": 3,
       "tone": "realworld-profile"
     }
+  },
+  {
+    "id": "bp-news-small-sample-001",
+    "slug": "news-small-sample-overreach",
+    "name": "少人数アンケートから全体結論へ飛ぶ記事",
+    "mode": "newsPoison",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["news"],
+    "hookTypes": ["small_sample", "trend_jump"],
+    "redFlagTags": ["suspiciousNumber", "tooStrongClaim", "noSource"],
+    "targetDifficulty": "normal",
+    "audienceTone": "seniorFriendly",
+    "generatorNotes": "少人数の声や短いアンケート結果から、地域全体や長期的な人気へ飛躍させる。地域記事らしい落ち着いた文体を保つ。",
+    "realismConstraints": {
+      "maxCorrectSegments": 2,
+      "tone": "local-news"
+    }
+  },
+  {
+    "id": "bp-profile-invite-proof-001",
+    "slug": "profile-invite-soft-proof",
+    "name": "ぼんやりした実績と非公開導線のプロフィール",
+    "mode": "profileHunter",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["profile", "messaging"],
+    "hookTypes": ["vague_credential", "testimonial_hint", "private_invite"],
+    "redFlagTags": ["fakeAuthority", "secretInfo", "hardToVerify"],
+    "targetDifficulty": "normal",
+    "audienceTone": "general",
+    "generatorNotes": "プロフィール文の短さを保ちながら、すごそうに見えるが裏づけのない実績と、個別案内への導線を自然に混ぜる。",
+    "realismConstraints": {
+      "maxCorrectSegments": 2,
+      "tone": "social-profile"
+    }
+  },
+  {
+    "id": "bp-real-msg-private-room-001",
+    "slug": "realworld-message-private-room",
+    "name": "現実モードの非公開補足メッセージ",
+    "mode": "scamAdChecker",
+    "accessTier": "premium",
+    "contentFlavor": "realWorld",
+    "sourceChannels": ["messaging", "ad"],
+    "hookTypes": ["reply_now", "private_room", "limited_offer"],
+    "redFlagTags": ["urgency", "secretInfo", "hardToVerify"],
+    "targetDifficulty": "hard",
+    "audienceTone": "general",
+    "generatorNotes": "実際の個別募集文に近い短さで、公開外の補足、返信誘導、枠の少なさを自然に混ぜる。露骨すぎる金額訴求は避ける。",
+    "realismConstraints": {
+      "maxCorrectSegments": 3,
+      "tone": "realworld-message"
+    }
+  },
+  {
+    "id": "bp-explanation-overgeneralization-001",
+    "slug": "explanation-overgeneralization",
+    "name": "学習読み物の言いすぎ一般化",
+    "mode": "explanationSnipe",
+    "accessTier": "premium",
+    "contentFlavor": "standard",
+    "sourceChannels": ["other"],
+    "hookTypes": ["nature_column", "overgeneralization"],
+    "redFlagTags": ["tooStrongClaim", "hardToVerify"],
+    "targetDifficulty": "easy",
+    "audienceTone": "childFriendly",
+    "generatorNotes": "学習読み物の中に『いつも』『かならず』の言いすぎを一か所だけ入れる。残りは落ち着いた事実説明に寄せる。",
+    "realismConstraints": {
+      "maxCorrectSegments": 1,
+      "tone": "educational"
+    }
   }
 ]
