@@ -44,6 +44,15 @@ final class LearningFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["3. 次にどうする？"].exists)
         keepScreenshot(named: "learning-result")
 
+        let feedback = app.buttons["question-feedback"]
+        for _ in 0..<4 where !feedback.isHittable { app.swipeUp() }
+        XCTAssertTrue(feedback.isHittable)
+        feedback.tap()
+        XCTAssertTrue(app.navigationBars["気づいたことを伝える"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "問題ID:")).firstMatch.exists)
+        keepScreenshot(named: "question-feedback-preview")
+        app.buttons["閉じる"].tap()
+
         let nextButton = app.buttons.matching(
             NSPredicate(format: "label CONTAINS %@", "同じテーマの次へ")
         ).firstMatch

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "mext-information-literacy",
+      "title": "文部科学省 情報モラル教育の動画教材",
+      "url": "https://www.mext.go.jp/a_menu/shotou/zyouhou/detail/1416322.htm",
+      "checkedAt": "2026-11-05",
+      "scope": "educational",
+      "reviewedSummary": "小学4〜6年生向けのネット検索による真偽確認、小学生向けの生成AI、中学生向けのSNS拡散など、対象学年とテーマを分けた教材が掲載されている。個別の架空の出来事が実際に起きたことや、アプリの学習効果を裏付ける資料ではない。"
+    },
+    {
+      "id": "caa-advertising-conditions",
+      "title": "消費者庁 インターネット上の広告表示",
+      "url": "https://www.caa.go.jp/policies/policy/representation/fair_labeling/representation_regulation/internet/",
+      "checkedAt": "2026-11-05",
+      "scope": "educational",
+      "reviewedSummary": "広告の取引条件を消費者が認識できる表示、条件を見落としやすいリンク先表示、比較する条件を揃えることを説明している。教材では条件を確かめる観点だけを参照し、架空広告について法律違反や詐欺と断定しない。"
+    },
+    {
+      "id": "caa-game-charges",
+      "title": "消費者庁 オンラインゲームトラブル",
+      "url": "https://www.caa.go.jp/policies/policy/consumer_policy/caution/internet/trouble/online.html",
+      "checkedAt": "2026-11-05",
+      "scope": "educational",
+      "reviewedSummary": "無料と思って利用したゲームでの課金など、保護者と子供のオンラインゲームに関する相談事例を紹介している。無料の範囲や利用条件を確認する教材の背景資料であり、特定のゲームを危険と判定する根拠ではない。"
+    },
+    {
+      "id": "dig-lateral-reading",
+      "title": "Digital Inquiry Group Teaching Lateral Reading",
+      "url": "https://cor.inquirygroup.org/curriculum/collections/teaching-lateral-reading/",
+      "checkedAt": "2026-11-05",
+      "scope": "educational",
+      "reviewedSummary": "情報源自身の説明だけを信用せず、外部の情報源から発信者や主張を確かめる読み方を教える教材。確認先を選ぶ問題の設計を参照する。日本の子供に対するミヌクルの効果や、架空の設定の事実性を保証するものではない。"
+    }
+  ]
+}

@@ -31,16 +31,21 @@ jobs:
       - name: Validate content fixtures
         run: python3 tools/content_factory/pipeline.py validate-fixtures
 
+      - name: Validate editorial benchmark
+        run: python3 tools/content_factory/benchmark.py validate
+
       - name: Check Supabase Edge Functions
         run: >
           npx --yes deno@2.9.6 check
           supabase/functions/content-manifest/index.ts
           supabase/functions/content-manifest-v2/index.ts
+          supabase/functions/content-review-admin/index.ts
 
       - name: Test premium entitlement validation
         run: >
           npx --yes deno@2.9.6 test
           supabase/functions/content-manifest-v2/entitlement_test.ts
+          supabase/functions/content-review-admin/review_fingerprint_test.ts
 
       - name: Check hosted review page JavaScript
         run: |

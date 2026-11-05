@@ -1,4 +1,5 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { reviewBatchFingerprint } from "./review_fingerprint.ts";
 
 function splitList(value: string | undefined): string[] {
   return (value ?? "")
@@ -76,5 +77,6 @@ Deno.serve(async (request) => {
     return Response.json({ error: "Failed to load review data." }, { status: 500, headers });
   }
 
+  data.batchFingerprint = await reviewBatchFingerprint(data.drafts, data.reviews);
   return Response.json(data, { status: 200, headers });
 });

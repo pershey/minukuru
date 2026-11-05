@@ -19,6 +19,7 @@
     "summary"
   ],
   "properties": {
+    "qualityEvidence": {"type": "object"},
     "passed": {
       "type": "boolean"
     },

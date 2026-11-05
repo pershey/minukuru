@@ -20,6 +20,10 @@ from typing import Any
 from urllib import error, parse, request
 
 import jsonschema
+from content_quality import (
+    BLIND_ANSWER_SCHEMA, POLICY_VERSION, draft_fingerprint, fingerprint,
+    blind_question, publication_blockers, quality_blockers, semantic_schema, validate_brief,
+)
 
 from review_workflow import ReviewWorkflowError, compile_review_outputs, read_decision_file
 
@@ -130,7 +134,9 @@ def openai_strict_schema(schema: dict[str, Any]) -> dict[str, Any]:
         if not isinstance(node, dict):
             return node
 
-        converted = {key: value for key, value in node.items() if key != "$schema"}
+        # APIで使えない条件は送信せず、応答後に元のschemaと不変条件で検査する。
+        unsupported = {"$schema", "allOf", "not", "dependentRequired", "dependentSchemas", "if", "then", "else", "uniqueItems"}
+        converted = {key: value for key, value in node.items() if key not in unsupported}
 
         if converted.get("type") == "object" or "properties" in converted:
             original_properties = converted.get("properties", {})
@@ -280,6 +286,7 @@ def top_similar_questions(question: dict[str, Any], existing_questions: list[Exi
                 "title": existing.title,
                 "mode": existing.mode,
                 "similarityRatio": ratio,
+                "excerpt": existing.combined_text[:1800],
             }
         )
     scored.sort(key=lambda row: row["similarityRatio"], reverse=True)
@@ -1288,14 +1295,16 @@ with payload as (
   from admin.review_runs rr
   join affected_drafts ad
     on ad.id = rr.draft_id
-  order by rr.draft_id, rr.created_at desc
+  order by rr.draft_id, rr.created_at desc, rr.id desc
 ), updated as (
   update admin.question_drafts d
   set lifecycle_status = case
         when latest.action = 'reject' then 'rejected'
-        when latest.action = 'accept' and latest.review_stage = 'human_review' then 'approved'
-        when latest.action = 'accept' then 'ai_reviewed'
-        when latest.action = 'needs_human' then 'human_reviewed'
+        when latest.passed = true and latest.action = 'accept' and latest.review_stage = 'human_review'
+          and latest.review_payload->'qualityEvidence'->>'policyVersion' = 'content-quality-v1' then 'approved'
+        when latest.action = 'accept' and latest.review_stage = 'ai_review'
+          and latest.review_payload->'qualityEvidence'->>'policyVersion' = 'content-quality-v1' then 'ai_reviewed'
+        when latest.action = 'needs_human' then 'generated'
         else 'generated'
       end,
       realism_score = latest.realism_score,
@@ -1339,33 +1348,28 @@ def export_ready_manifest(args: argparse.Namespace) -> None:
         else f"\n  and content_flavor = '{args.content_flavor}'"
     )
     sql = f"""
-select
-  draft_id,
-  generated_question_id,
-  mode,
-  access_tier,
-  content_flavor,
-  question_payload,
-  realism_score,
-  safety_score,
-  learning_score,
-  uniqueness_score,
-  composite_score,
-  similarity_ratio,
-  latest_action,
-  latest_passed,
-  reviewed_at
-from admin.ready_publish_candidates
-where latest_action = 'accept'
-  and latest_passed = true
-  and coalesce(composite_score, 0) >= {int(args.min_composite)}
-  and coalesce(safety_score, 0) >= {int(args.min_safety)}
-  and coalesce(realism_score, 0) >= {int(args.min_realism)}
-  and coalesce(learning_score, 0) >= {int(args.min_learning)}
-  and coalesce(similarity_ratio, 0) <= {float(args.max_similarity)}
-  and access_tier = '{args.access_tier}'
-{content_flavor_filter}
-order by reviewed_at desc nulls last
+select d.id as draft_id, d.external_key, d.generated_question_id, d.mode, d.access_tier,
+  d.content_flavor, d.question_payload, d.source_snapshot, d.provider, d.model_name,
+  r.realism_score, r.safety_score, r.learning_score, r.uniqueness_score,
+  (r.review_payload->>'compositeScore')::numeric as composite_score,
+  r.similarity_ratio, r.review_stage, r.reviewer_kind, r.review_payload,
+  r.created_at as reviewed_at
+from admin.question_drafts d
+join lateral (
+  select * from admin.review_runs where draft_id = d.id
+  order by created_at desc, id desc limit 1
+) r on true
+where d.lifecycle_status in ('approved', 'published')
+  and r.action = 'accept' and r.passed = true
+  and r.review_stage = 'human_review' and r.reviewer_kind = 'manual'
+  and coalesce((r.review_payload->>'compositeScore')::numeric, 0) >= {int(args.min_composite)}
+  and coalesce(r.safety_score, 0) >= {int(args.min_safety)}
+  and coalesce(r.realism_score, 0) >= {int(args.min_realism)}
+  and coalesce(r.learning_score, 0) >= {int(args.min_learning)}
+  and coalesce(r.similarity_ratio, 0) <= {float(args.max_similarity)}
+  and d.access_tier = {sql_string_literal(args.access_tier)}
+{content_flavor_filter.replace('content_flavor', 'd.content_flavor')}
+order by r.created_at desc
 limit {int(args.limit)};
 """
     result = run_supabase_sql(sql, output="json")
@@ -1373,7 +1377,17 @@ limit {int(args.limit)};
     now = utc_now()
     questions = []
     report_rows = []
+    catalog = read_json(FACTORY_DIR / "quality" / "reference_catalog.json")
     for row in rows:
+        draft = {"draftId": row["external_key"], "generatedQuestionId": row["generated_question_id"],
+                 "question": row["question_payload"], "sourceSnapshot": row["source_snapshot"],
+                 "provider": row["provider"], "model": row["model_name"]}
+        review = {"generatedQuestionId": row["generated_question_id"], "review": row["review_payload"],
+                  "reviewStage": row["review_stage"], "reviewerKind": row["reviewer_kind"]}
+        blockers = publication_blockers(draft, review, catalog)
+        if blockers:
+            report_rows.append({"draftId": row["draft_id"], "publicationBlockers": blockers})
+            continue
         question = row["question_payload"]
         question["reviewStatus"] = "approved"
         question["authorName"] = "content-factory"
@@ -1445,6 +1459,12 @@ def run_generation(args: argparse.Namespace) -> None:
     rows: list[dict[str, Any]] = list(existing_rows)
     pending_tasks = [task for task in limited_tasks if task["taskId"] not in completed_task_ids]
 
+    catalog = read_json(FACTORY_DIR / "quality" / "reference_catalog.json")
+    for task in pending_tasks:
+        errors = validate_brief(task["sourceExample"].get("editorialBrief"), catalog)
+        if errors:
+            raise PipelineError("生成前に素材の editorialBrief を整えてください: " + " / ".join(errors))
+
     if existing_rows:
         print(f"Resuming with {len(existing_rows)} existing drafts from {output_path}")
 
@@ -1455,11 +1475,12 @@ def run_generation(args: argparse.Namespace) -> None:
     total_tasks = len(limited_tasks)
     for task in pending_tasks:
         index = len(rows) + 1
+        task_prompt = task["userPrompt"] + "\n\n## 編集で定めた学習目標と根拠\n" + json.dumps(task["sourceExample"]["editorialBrief"], ensure_ascii=False)
         if args.provider == "openai":
             question = call_openai_json(
                 model=model,
                 system_prompt=system_prompt,
-                user_prompt=task["userPrompt"],
+                user_prompt=task_prompt,
                 schema_name="minukuru_quiz_question",
                 schema=question_schema,
                 temperature=args.temperature,
@@ -1468,7 +1489,7 @@ def run_generation(args: argparse.Namespace) -> None:
             question = call_gemini_json(
                 model=model,
                 system_prompt=system_prompt,
-                user_prompt=task["userPrompt"],
+                user_prompt=task_prompt,
                 schema=question_schema,
                 temperature=args.temperature,
             )
@@ -1499,7 +1520,7 @@ def run_generation(args: argparse.Namespace) -> None:
             "question": question,
             "sourceSnapshot": task["sourceExample"],
             "generationContext": {
-                "promptHash": hash_text(task["userPrompt"]),
+                "promptHash": hash_text(task_prompt),
                 "blueprint": task["blueprint"]["slug"],
             },
             "createdAt": utc_now(),
@@ -1517,16 +1538,55 @@ def run_review(args: argparse.Namespace) -> None:
     drafts = read_jsonl(Path(args.drafts))
     existing_questions = existing_questions_from_manifest(Path(args.existing_manifest))
     review_schema = read_json(SCHEMA_DIR / "review_result.schema.json")
-    system_prompt = load_prompt("reviewer_system_ja.md")
     model = None if args.provider == "rulebased" else resolve_model(args.provider, args.model)
     rows: list[dict[str, Any]] = []
 
+    # 同じ生成バッチと、指定した未公開ストックも重複検査の対象にする。
+    comparison_drafts = list(drafts)
+    for stock_path in args.stock_drafts:
+        comparison_drafts.extend(read_jsonl(Path(stock_path)))
+    for item in comparison_drafts:
+        q = item["question"]
+        existing_questions.append(ExistingQuestion(id=q["id"], mode=q["mode"], title=q["title"], combined_text=question_to_text(q)))
+    selected_drafts = drafts[: args.limit or None]
+    if args.limit is not None and args.limit < 1:
+        raise PipelineError("--limit は1以上にしてください。")
+    if len({d["generatedQuestionId"] for d in drafts}) != len(drafts) or len({d["draftId"] for d in drafts}) != len(drafts):
+        raise PipelineError("同じ問題IDまたはdraftIdがバッチ内で重複しています。")
+    catalog = read_json(FACTORY_DIR / "quality" / "reference_catalog.json")
+    briefs = read_json(Path(args.briefs)) if args.provider != "rulebased" else {}
+    solver_provider = args.solver_provider or args.provider
+    solver_model = args.solver_model
+    if args.provider != "rulebased":
+        if Path(args.out).exists():
+            raise PipelineError("審査ファイルはすでに存在します。保存済みの結果を確認し、新しい --out を指定してください。")
+        if not solver_model:
+            raise PipelineError("内容審査には --solver-model で別の解答モデルを指定してください。")
+        if len(selected_drafts) * 2 > args.max_api_calls:
+            raise PipelineError("内容審査のAPI呼び出し上限を超えます。--limit でバッチを小さくしてください。")
+        for draft in selected_drafts:
+            if not draft.get("provider") or not draft.get("model"):
+                raise PipelineError("内容審査の前に、下書きの作成元モデルを記録してください。")
+            brief = briefs.get(draft["generatedQuestionId"]) or draft.get("sourceSnapshot", {}).get("editorialBrief")
+            briefs[draft["generatedQuestionId"]] = brief
+            if draft["question"]["id"] != draft["generatedQuestionId"]:
+                raise PipelineError("問題IDと下書きの問題IDが一致しません。")
+            validate_payload(draft["question"], SCHEMA_DIR / "quiz_question.schema.json")
+            ensure_question_invariants(draft["question"])
+            errors = validate_brief(brief, catalog)
+            if errors:
+                raise PipelineError(f"{draft['generatedQuestionId']}: " + " / ".join(errors))
+            if (solver_provider, solver_model) == (draft.get("provider"), draft.get("model")):
+                raise PipelineError("作成モデルとは別の --solver-provider / --solver-model を指定してください。")
+
     for index, draft in enumerate(drafts[: args.limit or None], start=1):
         question = draft["question"]
+        if question["id"] != draft["generatedQuestionId"]:
+            raise PipelineError("問題IDと下書きの問題IDが一致しません。")
         validate_payload(question, SCHEMA_DIR / "quiz_question.schema.json")
         ensure_question_invariants(question)
 
-        local_result = local_review(question, existing_questions)
+        local_result = local_review(question, [q for q in existing_questions if q.id != question["id"]])
 
         if args.provider == "rulebased":
             final_review = local_result
@@ -1534,29 +1594,40 @@ def run_review(args: argparse.Namespace) -> None:
             reviewer_kind = "rulebased"
             reviewer_model = "local-heuristics"
         else:
-            user_prompt = build_review_user_prompt(question, local_result, local_result["_topSimilarQuestions"])
-            if args.provider == "openai":
-                ai_review = call_openai_json(
-                    model=model,
-                    system_prompt=system_prompt,
-                    user_prompt=user_prompt,
-                    schema_name="minukuru_review_result",
-                    schema=review_schema,
-                    temperature=args.temperature,
-                )
-            elif args.provider == "gemini":
-                ai_review = call_gemini_json(
-                    model=model,
-                    system_prompt=system_prompt,
-                    user_prompt=user_prompt,
-                    schema=review_schema,
-                    temperature=args.temperature,
-                )
-            else:
-                raise PipelineError("run-review の provider は rulebased/openai/gemini のいずれかです。")
+            def ask(provider, selected_model, prompt_name, payload, schema, schema_name):
+                options = dict(model=selected_model, system_prompt=load_prompt(prompt_name),
+                               user_prompt=json.dumps(payload, ensure_ascii=False), schema=schema,
+                               temperature=args.temperature)
+                if provider == "openai":
+                    response = call_openai_json(**options, schema_name=schema_name)
+                else:
+                    response = call_gemini_json(**options)
+                jsonschema.validate(response, schema)
+                return response
 
-            validate_payload(ai_review, SCHEMA_DIR / "review_result.schema.json")
-            final_review = merge_ai_review(ai_review, local_result)
+            blind_answer = ask(solver_provider, solver_model, "blind_solver_ja.md", blind_question(question),
+                               BLIND_ANSWER_SCHEMA, "minukuru_blind_answer")
+            brief = briefs[draft["generatedQuestionId"]]
+            judgment = ask(args.provider, model, "semantic_reviewer_ja.md", {
+                "question": question, "editorialBrief": brief,
+                "references": [s for s in catalog["sources"] if s["id"] in brief["sourceIds"]],
+                "blindAnswer": blind_answer, "similarQuestions": local_result["_topSimilarQuestions"],
+            }, semantic_schema(review_schema), "minukuru_content_review")
+            final_review = merge_ai_review(judgment["review"], local_result)
+            final_review["qualityEvidence"] = {
+                "policyVersion": POLICY_VERSION, "draftFingerprint": draft_fingerprint(draft),
+                "catalogFingerprint": fingerprint(catalog), "brief": brief,
+                "references": [s for s in catalog["sources"] if s["id"] in brief["sourceIds"]],
+                "solver": {"provider": solver_provider, "model": solver_model, "answer": blind_answer},
+                "reviewer": {"provider": args.provider, "model": model},
+                "checks": judgment["checks"], "findingNotes": judgment["findingNotes"],
+            }
+            blockers = quality_blockers(draft, final_review, catalog)
+            if blockers:
+                final_review["passed"] = False
+                if final_review["action"] != "reject":
+                    final_review["action"] = "needs_human"
+                final_review["concerns"] = sorted(set(final_review["concerns"] + blockers))
             review_stage = "ai_review"
             reviewer_kind = args.provider
             reviewer_model = model
@@ -1574,6 +1645,8 @@ def run_review(args: argparse.Namespace) -> None:
             "createdAt": utc_now(),
         }
         rows.append(row)
+        # 成功済みの審査は残す。中断後に自動でAPIを再試行しない。
+        write_jsonl(Path(args.out), rows)
         if args.delay_seconds and args.provider != "rulebased":
             time.sleep(args.delay_seconds)
         print(f"[{index}/{len(drafts)}] reviewed {draft['generatedQuestionId']} -> {row['review']['action']}")
@@ -1597,6 +1670,7 @@ def approved_questions_and_report(
     approved_questions: list[dict[str, Any]] = []
     report_rows: list[dict[str, Any]] = []
     now = utc_now()
+    catalog = read_json(FACTORY_DIR / "quality" / "reference_catalog.json")
 
     for draft_id, draft in drafts.items():
         review = reviews.get(draft_id)
@@ -1604,8 +1678,12 @@ def approved_questions_and_report(
             continue
 
         result = review["review"]
+        validate_payload(draft["question"], SCHEMA_DIR / "quiz_question.schema.json")
+        ensure_question_invariants(draft["question"])
+        blockers = publication_blockers(draft, review, catalog)
         passes_thresholds = (
-            result["passed"]
+            not blockers
+            and result["passed"]
             and result["compositeScore"] >= min_composite
             and result["safetyScore"] >= min_safety
             and result["realismScore"] >= min_realism
@@ -1625,6 +1703,7 @@ def approved_questions_and_report(
                 "learningScore": result["learningScore"],
                 "uniquenessScore": result["uniquenessScore"],
                 "similarityRatio": review["similarityRatio"],
+                "publicationBlockers": blockers,
             }
         )
 
@@ -1663,7 +1742,7 @@ def assemble_manifest(args: argparse.Namespace) -> None:
     manifest = {
         "schemaVersion": 1,
         "contentVersion": args.content_version,
-        "updatedAt": now,
+        "updatedAt": utc_now(),
         "questions": published_questions,
     }
 
@@ -1819,11 +1898,16 @@ select jsonb_build_object(
   'blueprintCount', (select count(*) from admin.pattern_blueprints),
   'draftCount', (select count(*) from admin.question_drafts),
   'reviewCount', (select count(*) from admin.review_runs),
-  'readyCount', (
+  'humanAcceptedCount', (
     select count(*)
-    from admin.ready_publish_candidates
-    where latest_action = 'accept'
-      and latest_passed = true
+    from admin.question_drafts d
+    join lateral (
+      select * from admin.review_runs where draft_id = d.id
+      order by created_at desc, id desc limit 1
+    ) r on true
+    where r.action = 'accept' and r.passed = true
+      and r.review_stage = 'human_review' and r.reviewer_kind = 'manual'
+      and r.review_payload->'qualityEvidence'->>'policyVersion' = 'content-quality-v1'
   ),
   'schedule', (
     select value
@@ -1953,6 +2037,11 @@ def build_parser() -> argparse.ArgumentParser:
     review.add_argument("--existing-manifest", default=str(APP_QUESTIONS_PATH))
     review.add_argument("--provider", choices=["rulebased", "openai", "gemini"], default="rulebased")
     review.add_argument("--model")
+    review.add_argument("--solver-provider", choices=["openai", "gemini"])
+    review.add_argument("--solver-model")
+    review.add_argument("--briefs", default=str(FACTORY_DIR / "quality" / "editorial_briefs.json"))
+    review.add_argument("--stock-drafts", action="append", default=[])
+    review.add_argument("--max-api-calls", type=int, default=20)
     review.add_argument("--temperature", type=float)
     review.add_argument("--delay-seconds", type=float, default=0.0)
     review.add_argument("--limit", type=int)

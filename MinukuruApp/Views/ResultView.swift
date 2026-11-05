@@ -4,6 +4,7 @@ struct ResultView: View {
     @EnvironmentObject private var appViewModel: AppViewModel
     let viewModel: QuizSessionViewModel
     let result: QuizEvaluation
+    @State private var showsFeedback = false
 
     var body: some View {
         ScrollView {
@@ -17,10 +18,21 @@ struct ResultView: View {
                     isHiraganaMode: appViewModel.settings.isHiraganaMode
                 )
                 actionButtons
+                Button {
+                    showsFeedback = true
+                } label: {
+                    Label(appViewModel.settings.isHiraganaMode ? "この もんだいについて つたえる" : "この問題について伝える", systemImage: "bubble.left")
+                        .font(.body)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .accessibilityIdentifier("question-feedback")
             }
             .padding(20)
             .frame(maxWidth: 760)
             .frame(maxWidth: .infinity)
+        }
+        .sheet(isPresented: $showsFeedback) {
+            QuestionFeedbackView(question: viewModel.question, isHiraganaMode: appViewModel.settings.isHiraganaMode)
         }
     }
 

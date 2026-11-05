@@ -1,0 +1,127 @@
+{
+  "drafts": [
+    {
+      "draftId": "draft-001",
+      "taskId": "task-001",
+      "batchLabel": "batch-001",
+      "provider": "openai",
+      "model": "test-model",
+      "mode": "scamAdChecker",
+      "accessTier": "premium",
+      "contentFlavor": "standard",
+      "generatedQuestionId": "premium-test-001",
+      "question": {
+        "id": "premium-test-001",
+        "mode": "scamAdChecker",
+        "title": "限定案内",
+        "difficulty": "normal",
+        "instruction": "怪しいところを選んでください。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "通常の案内です。"
+          },
+          {
+            "id": "s2",
+            "text": "今だけ必ず得をします。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "言い切りに根拠がありません。書かれた条件だけでは、得になるとは確認できません。",
+        "verificationTip": "公式の案内で料金や利用条件と、説明の出典を確認します。",
+        "hint": "強い言い方に注目しましょう。",
+        "recommendedReasonTags": [
+          "tooStrongClaim"
+        ],
+        "accessTier": "premium",
+        "contentFlavor": "standard"
+      },
+      "sourceSnapshot": {
+        "title": "素材",
+        "redactedExcerpt": "匿名化済みの素材です。",
+        "referenceNotes": "テスト"
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "reviewId": "review-001",
+      "draftId": "draft-001",
+      "generatedQuestionId": "premium-test-001",
+      "reviewStage": "ai_review",
+      "reviewerKind": "openai",
+      "reviewerModel": "review-model",
+      "similarityRatio": 0.1,
+      "topSimilarQuestions": [],
+      "review": {
+        "passed": true,
+        "action": "accept",
+        "realismScore": 80,
+        "safetyScore": 95,
+        "learningScore": 85,
+        "uniquenessScore": 90,
+        "segmentClarityScore": 88,
+        "compositeScore": 87,
+        "matchedSignals": [
+          "tooStrongClaim"
+        ],
+        "concerns": [],
+        "duplicateSignals": [],
+        "revisionAdvice": [],
+        "summary": "本文、正解と解説、確認先のつながりについて確認しました。",
+        "qualityEvidence": {
+          "policyVersion": "content-quality-v1",
+          "draftFingerprint": "9913ba85cccbfbd49ecbe473dccd9901a9b6ea310a2fcfb59bbc7856d4381530",
+          "catalogFingerprint": "aad813de395c3256b2ea30bfd119e4862411159f57cb21345e67453944211391",
+          "references": [
+            {
+              "id": "caa-advertising-conditions",
+              "title": "消費者庁 インターネット上の広告表示",
+              "url": "https://www.caa.go.jp/policies/policy/representation/fair_labeling/representation_regulation/internet/",
+              "checkedAt": "2026-11-05",
+              "scope": "educational",
+              "reviewedSummary": "広告の取引条件を消費者が認識できる表示、条件を見落としやすいリンク先表示、比較する条件を揃えることを説明している。教材では条件を確かめる観点だけを参照し、架空広告について法律違反や詐欺と断定しない。"
+            }
+          ],
+          "brief": {
+            "learningObjective": "根拠のない言い切りに気づく練習。",
+            "factBasis": "fictionalScenario",
+            "evidenceNotes": "架空の案内に書かれた条件から、言い切りの根拠を確かめる。",
+            "sourceIds": [
+              "caa-advertising-conditions"
+            ]
+          },
+          "solver": {
+            "provider": "gemini",
+            "model": "solver-model",
+            "answer": {
+              "selectedSegmentIds": [
+                "s2"
+              ],
+              "selectedChoiceId": null,
+              "answerable": true,
+              "hasAlternativeAnswer": false,
+              "summary": "根拠を示さずに得をすると言い切っています。"
+            }
+          },
+          "reviewer": {
+            "provider": "openai",
+            "model": "review-model"
+          },
+          "checks": {
+            "answerValidity": "pass",
+            "evidenceGrounding": "pass",
+            "ageAppropriateness": "pass",
+            "explanationAlignment": "pass",
+            "actionability": "pass"
+          },
+          "findingNotes": "架空の案内の本文、正解、解説と次の確認先が対応していることを確認しました。"
+        }
+      },
+      "createdAt": "2026-09-15T00:00:00Z"
+    }
+  ],
+  "expected": "da0578ca845669f590d929d210da3a3865774d0b17a672f86531ae1fa8c58ddb"
+}

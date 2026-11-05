@@ -1,5 +1,7 @@
 # Minukuru Content Factory
 
+1.1以降は [基準問題と内容審査](docs/content-quality-v1.md) を先に参照してください。ルールの一次確認だけでは採用・公開候補にできません。旧画面の判定ファイルは再出力が必要です。
+
 premium 問題を安全に量産して、`free / premium / full` の3系統で配信するための運営用パイプラインです。
 
 ## ねらい

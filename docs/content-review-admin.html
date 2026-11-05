@@ -215,7 +215,7 @@
       const heading = element('div');
       heading.append(element('h2', draft.question.title), element('p', draft.generatedQuestionId, 'muted'));
       const badges = element('div', undefined, 'badges');
-      [draft.mode, draft.contentFlavor, `AI ${review?.review?.compositeScore ?? '-'}`]
+      [draft.mode, draft.contentFlavor, `${review?.reviewerKind === 'rulebased' ? 'ルール一次確認' : '審査'} ${review?.review?.compositeScore ?? '-'}`]
         .forEach(value => badges.append(element('span', value, 'badge')));
       head.append(heading, badges);
       card.append(head);
@@ -227,6 +227,21 @@
         segments.append(row);
       });
       card.append(segments);
+      card.append(element('p', draft.question.instruction));
+      if (draft.question.responseType === 'singleChoice') {
+        const choices = element('ul');
+        (draft.question.answerChoices || []).forEach(choice => {
+          choices.append(element('li', `${choice.id === draft.question.correctChoiceId ? '正解: ' : ''}${choice.text}`));
+        });
+        card.append(choices);
+      }
+      const quality = review?.review?.qualityEvidence;
+      const evidence = element('section');
+      evidence.append(element('h3', '内容審査の証跡'));
+      evidence.append(element('pre', quality ? JSON.stringify(quality, null, 2) : 'ルールの一次確認のみです。内容審査を実施してから採用してください。'));
+      evidence.style.whiteSpace = 'pre-wrap';
+      evidence.style.overflowWrap = 'anywhere';
+      card.append(evidence);
 
       const detail = element('div', undefined, 'grid');
       const explanation = element('section');
@@ -240,6 +255,10 @@
       [['accept', '採用'], ['revise', '再生成'], ['reject', '見送り']].forEach(([value, label]) => {
         const button = element('button', label);
         button.type = 'button';
+        if (value === 'accept' && (!quality || review?.review?.passed !== true || review?.review?.action !== 'accept'
+            || Object.values(quality.checks || {}).length !== 5 || Object.values(quality.checks).some(item => item !== 'pass'))) {
+          button.disabled = true;
+        }
         button.dataset.value = value;
         button.classList.toggle('selected', saved?.decision === value);
         button.addEventListener('click', () => saveDecision(draft, card, value));

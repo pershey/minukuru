@@ -11,6 +11,9 @@ from statistics import mean
 from typing import Any
 
 from review_workflow import batch_fingerprint
+from content_quality import quality_blockers
+
+CATALOG = json.loads((Path(__file__).resolve().parents[2] / "content_factory/quality/reference_catalog.json").read_text())
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -100,6 +103,17 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
     concerns = review_row.get("review", {}).get("concerns", []) if review_row else []
     advice = review_row.get("review", {}).get("revisionAdvice", []) if review_row else []
     top_similar = review_row.get("topSimilarQuestions", []) if review_row else []
+    evidence = review_row.get("review", {}).get("qualityEvidence", {}) if review_row else {}
+    blockers = quality_blockers(draft_row, (review_row or {}).get("review", {}), CATALOG)
+    blocked_attribute = "disabled" if blockers or not metrics["passed"] else ""
+    quality_details = html.escape(json.dumps({
+        "学習目標と根拠": evidence.get("brief", "未入力"),
+        "参照資料": evidence.get("references", "未入力"),
+        "正解を伏せた解答": evidence.get("solver", "未実施"),
+        "項目別の内容審査": evidence.get("checks", "未実施"),
+        "確認メモ": evidence.get("findingNotes", "未実施"),
+        "採用前の未完了事項": blockers,
+    }, ensure_ascii=False, indent=2))
 
     similar_html = "".join(
         f"<li>{html.escape(item['title'])} "
@@ -129,6 +143,7 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
       </div>
 
       <div class="grid">
+        <section><h3>内容審査の証跡</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{quality_details}</pre></section>
         <section>
           <h3>問題文</h3>
           <p class="instruction">{html.escape(question['instruction'])}</p>
@@ -204,7 +219,7 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
           <span class="decision-status" data-decision-status>未判定</span>
         </div>
         <div class="decision-buttons" role="group" aria-label="この問題の判定">
-          <button type="button" class="decision-button decision-accept" data-decision="accept">採用</button>
+          <button type="button" class="decision-button decision-accept" data-decision="accept" {blocked_attribute}>採用</button>
           <button type="button" class="decision-button decision-revise" data-decision="revise">再生成</button>
           <button type="button" class="decision-button decision-reject" data-decision="reject">見送り</button>
         </div>
@@ -218,7 +233,7 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
 
 
 def build_dashboard(drafts: list[dict[str, Any]], reviews: list[dict[str, Any]], title: str) -> str:
-    fingerprint = batch_fingerprint(drafts)
+    fingerprint = batch_fingerprint(drafts, reviews)
     review_by_draft = {row["draftId"]: row for row in reviews}
     mode_counts = Counter(row["mode"] for row in drafts)
     flavor_counts = Counter(row["contentFlavor"] for row in drafts)
