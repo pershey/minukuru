@@ -106,9 +106,15 @@ struct QuizView: View {
                 .font(.body)
                 .foregroundStyle(MinukuruTheme.muted)
 
+            if StarterPractice.questionIDs.contains(viewModel.question.id) {
+                Text(appViewModel.settings.isHiraganaMode ? "きょうざいようの こうこく" : "教材用の架空の広告")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(MinukuruTheme.muted)
+            }
+
             if viewModel.question.responseType == .selectSegments {
                 SegmentFlowLayout(horizontalSpacing: 10, verticalSpacing: 12) {
-                    ForEach(viewModel.question.segments) { segment in
+                    ForEach(viewModel.question.displayedSegments) { segment in
                         let isSelected = viewModel.selectedSegmentIds.contains(segment.id)
                         InlineSegmentChip(
                             text: segment.displayText(isHiraganaMode: appViewModel.settings.isHiraganaMode),
@@ -274,7 +280,8 @@ struct QuizView: View {
     }
 
     private var primaryActionHint: String {
-        if viewModel.phase == .answer, viewModel.question.responseType == .selectSegments, !viewModel.isGuidedExample {
+        if viewModel.phase == .answer, viewModel.question.responseType == .selectSegments,
+           !viewModel.isGuidedExample, !viewModel.question.recommendedReasonTags.isEmpty {
             return "選んだ箇所はまだ採点せず、理由を選ぶ画面へ進みます"
         }
         return "自動では次の問題へ進まず、答えと解説を表示します"

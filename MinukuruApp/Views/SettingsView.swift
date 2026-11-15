@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var appViewModel: AppViewModel
+    @EnvironmentObject private var adPrivacy: AdPrivacyState
 
     var body: some View {
         ScrollView {
@@ -20,6 +21,15 @@ struct SettingsView: View {
                 readingSection
                 premiumSection
                 contentSection
+                if adPrivacy.needsPrivacyOptions {
+                    Button("広告のプライバシー設定") {
+                        Task { await adPrivacy.showPrivacyOptions() }
+                    }
+                    .frame(minHeight: 44)
+                    if adPrivacy.privacyOptionsError {
+                        Text("広告の設定を開けませんでした。")
+                    }
+                }
                 noticeSection
             }
             .padding(20)

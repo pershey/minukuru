@@ -22,6 +22,7 @@ final class PurchaseManager: ObservableObject {
     @Published private(set) var isRefreshingEntitlements = false
     @Published private(set) var isPurchasing = false
     @Published private(set) var isRestoring = false
+    @Published private(set) var hasCheckedEntitlements = false
     @Published private(set) var purchaseMessage: String?
     @Published private(set) var purchaseDebugDetail: String?
     @Published private(set) var productFetchState: ProductFetchState = .idle
@@ -73,6 +74,10 @@ final class PurchaseManager: ObservableObject {
 
     var isLoading: Bool {
         isFetchingProducts || isRefreshingEntitlements || isPurchasing || isRestoring
+    }
+
+    var isConfirmedFreeForAds: Bool {
+        hasCheckedEntitlements && !hasPremiumAccess && !isRestoring && !isPurchasing && !isRefreshingEntitlements
     }
 
     deinit {
@@ -302,6 +307,7 @@ final class PurchaseManager: ObservableObject {
 
         premiumEntitlementJWS = hasPremium ? entitlementJWS : nil
         hasPremiumAccess = hasPremium
+        hasCheckedEntitlements = true
     }
 
     private func observeTransactionUpdates() -> Task<Void, Never> {

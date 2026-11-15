@@ -694,5 +694,184 @@
     "phoneticExplanation": "なのっている ことだけでは ほんとうの れんらくがかりか わかりません。とどいた あいてへの へんじではなく、いつも つかっている れんらくさきから たしかめます。",
     "phoneticVerificationTip": "ふだんの くらぶの れんらくさきや たんとうの せんせいに、あたらしい あかうんとが せいしきな ものか かくにんして もらいます。",
     "phoneticAttentionPoint": "あいてが していした れんらくさき いがいから ほんにんか かくにんする。"
+  },
+  {
+    "id": "core-ad-start-conditions",
+    "mode": "scamAdChecker",
+    "difficulty": "easy",
+    "accessTier": "free",
+    "contentFlavor": "standard",
+    "audience": "child",
+    "learningStage": "practice",
+    "learningFocus": "verify",
+    "responseType": "singleChoice",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "【広告】お試し980円、日曜まで。",
+        "phoneticText": "【こうこく】おためし 980えん、にちようまで。"
+      },
+      {
+        "id": "s2",
+        "text": "【広告の条件】単品、税込980円、送料込み。次の請求はありません。",
+        "phoneticText": "【こうこくの じょうけん】たんぴん、ぜいこみ 980えん、そうりょうこみ。つぎの せいきゅうは ありません。"
+      },
+      {
+        "id": "s3",
+        "text": "【最終確認画面】単品、税込980円、送料込み。次の請求はありません。",
+        "phoneticText": "【さいしゅう かくにん がめん】たんぴん、ぜいこみ 980えん、そうりょうこみ。つぎの せいきゅうは ありません。"
+      }
+    ],
+    "correctSegmentIds": [],
+    "recommendedReasonTags": [],
+    "contentRevision": 1,
+    "title": "広告と注文の条件",
+    "phoneticTitle": "こうこくと ちゅうもんの じょうけん",
+    "instruction": "この表示から、注文の条件について何が分かりますか？",
+    "phoneticInstruction": "この ひょうじから、ちゅうもんの じょうけんについて なにが わかりますか？",
+    "attentionPoint": "広告と確認画面の総額・送料・次回請求を比べよう。",
+    "phoneticAttentionPoint": "こうこくと かくにん がめんの ごうけい・そうりょう・じかいの せいきゅうを くらべよう。",
+    "explanation": "二つの画面はどちらも単品で、税と送料を含む980円、次の請求なしと書いてあります。日曜は価格の期限で、期限だけで危険とは判断できません。",
+    "phoneticExplanation": "ふたつの がめんは どちらも たんぴんで、ぜいと そうりょうを ふくむ 980えん、つぎの せいきゅうなしと かいてあります。にちようは かかくの きげんで、きげんだけで きけんとは はんだん できません。",
+    "verificationTip": "買う前に家の人と、最後の画面の合計金額と、次の請求があるかを確認しよう。",
+    "phoneticVerificationTip": "かう まえに いえの ひとと、さいごの がめんの ごうけい きんがくと、つぎの せいきゅうが あるかを かくにん しよう。",
+    "hint": "日曜の期限だけでなく、二つの画面に書かれた金額を見よう。",
+    "phoneticHint": "にちようの きげんだけでなく、ふたつの がめんに かかれた きんがくを みよう。",
+    "answerChoices": [
+      {
+        "id": "c1",
+        "text": "980円は初回分だけで、次の請求もある。",
+        "phoneticText": "980えんは しょかいぶんだけで、つぎの せいきゅうも ある。",
+        "semantic": "other"
+      },
+      {
+        "id": "c2",
+        "text": "送料込みで合計980円。次の請求はない。",
+        "phoneticText": "そうりょうこみで ごうけい 980えん。つぎの せいきゅうは ない。",
+        "semantic": "noIssueFound"
+      },
+      {
+        "id": "c3",
+        "text": "注文すると、980円とは別に送料がかかる。",
+        "phoneticText": "ちゅうもんすると、980えんとは べつに そうりょうが かかる。",
+        "semantic": "other"
+      }
+    ],
+    "correctChoiceId": "c2"
+  },
+  {
+    "id": "core-ad-start-missing-info",
+    "mode": "scamAdChecker",
+    "difficulty": "easy",
+    "accessTier": "free",
+    "contentFlavor": "standard",
+    "audience": "child",
+    "learningStage": "practice",
+    "learningFocus": "verify",
+    "responseType": "singleChoice",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "【広告】お試し980円、日曜まで。",
+        "phoneticText": "【こうこく】おためし 980えん、にちようまで。"
+      },
+      {
+        "id": "s2",
+        "text": "【広告の説明】箱には、工作に使う紙とシールが入っています。",
+        "phoneticText": "【こうこくの せつめい】はこには、こうさくに つかう かみと しーるが はいっています。"
+      },
+      {
+        "id": "s3",
+        "text": "【いま見ている画面】商品の写真と「注文へ進む」ボタンがあります。",
+        "phoneticText": "【いま みている がめん】しょうひんの しゃしんと「ちゅうもんへ すすむ」ぼたんが あります。"
+      }
+    ],
+    "correctSegmentIds": [],
+    "recommendedReasonTags": [],
+    "contentRevision": 1,
+    "title": "お試し価格の続き",
+    "phoneticTitle": "おためし かかくの つづき",
+    "instruction": "980円を払ったあと、次の請求があるか、この画面だけで分かりますか？",
+    "phoneticInstruction": "980えんを はらった あと、つぎの せいきゅうが あるか、この がめんだけで わかりますか？",
+    "attentionPoint": "締め切りと、注文が続くかどうかは別のことだよ。",
+    "phoneticAttentionPoint": "しめきりと、ちゅうもんが つづくか どうかは べつの ことだよ。",
+    "explanation": "日曜までという表示は、お試し価格の期限です。1回だけの注文か、次も届く注文かが書いていないので、次の請求があるかはまだ決められません。",
+    "phoneticExplanation": "にちようまでという ひょうじは、おためし かかくの きげんです。1かいだけの ちゅうもんか、つぎも とどく ちゅうもんかが かいていないので、つぎの せいきゅうが あるかは まだ きめられません。",
+    "verificationTip": "注文はまだ確定せず、家の人と最終確認画面で、続けて届くか、次の金額、やめる条件を確認しよう。",
+    "phoneticVerificationTip": "ちゅうもんは まだ かくていせず、いえの ひとと さいしゅう かくにん がめんで、つづけて とどくか、つぎの きんがく、やめる じょうけんを かくにん しよう。",
+    "hint": "商品がもう一度届くか、どこかに書かれているかな。",
+    "phoneticHint": "しょうひんが もういちど とどくか、どこかに かかれているかな。",
+    "answerChoices": [
+      {
+        "id": "c1",
+        "text": "次の請求について書いていないので、まだ分からない。",
+        "phoneticText": "つぎの せいきゅうについて かいていないので、まだ わからない。",
+        "semantic": "insufficientInformation"
+      },
+      {
+        "id": "c2",
+        "text": "日曜までとあるので、次の請求はない。",
+        "phoneticText": "にちようまでと あるので、つぎの せいきゅうは ない。",
+        "semantic": "other"
+      },
+      {
+        "id": "c3",
+        "text": "お試しとあるので、次の請求がある。",
+        "phoneticText": "おためしと あるので、つぎの せいきゅうが ある。",
+        "semantic": "other"
+      }
+    ],
+    "correctChoiceId": "c1"
+  },
+  {
+    "id": "core-ad-start-mismatch",
+    "mode": "scamAdChecker",
+    "difficulty": "easy",
+    "accessTier": "free",
+    "contentFlavor": "standard",
+    "audience": "child",
+    "learningStage": "challenge",
+    "learningFocus": "evidence",
+    "responseType": "selectSegments",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "【広告】お試し980円、日曜まで。",
+        "phoneticText": "【こうこく】おためし 980えん、にちようまで。"
+      },
+      {
+        "id": "s2",
+        "text": "【広告の条件】980円で1回だけ。次の商品は自動では届きません。",
+        "phoneticText": "【こうこくの じょうけん】980えんで 1かいだけ。つぎの しょうひんは じどうでは とどきません。"
+      },
+      {
+        "id": "s3",
+        "text": "【最終確認画面】初回980円。",
+        "phoneticText": "【さいしゅう かくにん がめん】しょかい 980えん。"
+      },
+      {
+        "id": "s4",
+        "text": "【最終確認画面】2回目から3,980円。商品は毎月自動で届きます。",
+        "phoneticText": "【さいしゅう かくにん がめん】2かいめから 3,980えん。しょうひんは まいつき じどうで とどきます。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2",
+      "s4"
+    ],
+    "recommendedReasonTags": [],
+    "contentRevision": 1,
+    "title": "注文画面と広告の違い",
+    "phoneticTitle": "ちゅうもん がめんと こうこくの ちがい",
+    "instruction": "注文が続くかどうかで、食い違っている表示を2つ選ぼう。",
+    "phoneticInstruction": "ちゅうもんが つづくか どうかで、くいちがっている ひょうじを 2つ えらぼう。",
+    "attentionPoint": "「1回だけ」と「毎月自動で届く」を比べよう。",
+    "phoneticAttentionPoint": "「1かいだけ」と「まいつき じどうで とどく」を くらべよう。",
+    "explanation": "広告には1回だけと書かれていますが、最終確認画面では毎月自動で届くと書かれています。初回の金額が同じでも、次の注文と支払いの条件が違います。",
+    "phoneticExplanation": "こうこくには 1かいだけと かかれていますが、さいしゅう かくにん がめんでは まいつき じどうで とどくと かかれています。しょかいの きんがくが おなじでも、つぎの ちゅうもんと しはらいの じょうけんが ちがいます。",
+    "verificationTip": "注文の確定ボタンは押さず、二つの表示を家の人と見比べよう。",
+    "phoneticVerificationTip": "ちゅうもんの かくてい ぼたんは おさず、ふたつの ひょうじを いえの ひとと みくらべよう。",
+    "hint": "980円はどちらにもあるよ。次に届くかを示す二つの表示を見よう。",
+    "phoneticHint": "980えんは どちらにも あるよ。つぎに とどくかを しめす ふたつの ひょうじを みよう。"
   }
 ]

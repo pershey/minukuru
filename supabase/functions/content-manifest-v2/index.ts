@@ -1,4 +1,5 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { premiumSummary } from "./premium_summary.ts";
 import {
   EntitlementConfigurationError,
   EntitlementServiceError,
@@ -19,11 +20,13 @@ Deno.serve(async (request) => {
   try {
     const url = new URL(request.url);
     const requestedChannel = url.searchParams.get("channel");
-    const channel = requestedChannel === "free" || requestedChannel === "premium" || requestedChannel === "full"
+    const summaryOnly = requestedChannel === "premium-summary";
+    const channel = summaryOnly ? "premium"
+      : requestedChannel === "free" || requestedChannel === "premium" || requestedChannel === "full"
       ? requestedChannel
       : "full";
 
-    if (channel !== "free") {
+    if (channel !== "free" && !summaryOnly) {
       const transactionJWS = request.headers.get("x-minukuru-storekit-jws") ?? "";
       await verifyPremiumTransaction(transactionJWS);
     }
@@ -60,6 +63,11 @@ Deno.serve(async (request) => {
     }
 
     const body = await fileData.text();
+    if (summaryOnly) {
+      return Response.json(premiumSummary(JSON.parse(body)), {
+        headers: { ...corsHeaders, "Cache-Control": "public, max-age=300" },
+      });
+    }
     return new Response(body, {
       status: 200,
       headers: {

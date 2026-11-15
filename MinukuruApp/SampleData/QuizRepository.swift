@@ -10,6 +10,10 @@ protocol QuizRefreshing {
     func refreshIfNeeded(force: Bool) async -> Bool
 }
 
+protocol PremiumCatalogProviding {
+    func fetchPremiumCatalog() async throws -> PremiumCatalog
+}
+
 protocol QuizAccessConfigProviding {
     var freeQuestionLimit: Int { get }
 }
@@ -319,6 +323,20 @@ extension HybridQuizRepository: QuizEntitlementAware {
 
     func setPremiumTransactionJWS(_ transactionJWS: String?) {
         premiumTransactionJWS = transactionJWS
+    }
+}
+
+extension HybridQuizRepository: PremiumCatalogProviding {
+    func fetchPremiumCatalog() async throws -> PremiumCatalog {
+        let configuration = store.loadConfiguration(from: bundle)
+        guard let endpoint = configuration.remotePremiumQuestionsURL,
+              var url = URLComponents(url: endpoint, resolvingAgainstBaseURL: false) else {
+            throw URLError(.badURL)
+        }
+        url.queryItems = [URLQueryItem(name: "channel", value: "premium-summary")]
+        guard let summaryURL = url.url else { throw URLError(.badURL) }
+        let data = try await remoteFetcher.fetchData(from: summaryURL, premiumTransactionJWS: nil)
+        return try JSONDecoder().decode(PremiumCatalog.self, from: data)
     }
 }
 

@@ -25,6 +25,7 @@ final class AppViewModel: ObservableObject {
     @Published private(set) var questionBank: [QuizQuestion]
     @Published private(set) var isRefreshingContent = false
     @Published private(set) var contentRefreshMessage: String?
+    @Published private(set) var premiumCatalog: PremiumCatalog?
     @Published var settings: AppSettings
 
     let repository: QuizProviding
@@ -37,6 +38,7 @@ final class AppViewModel: ObservableObject {
     private var modeProgress: [GameMode: Int] = [:]
     private var practiceProgress: Int = 0
     private var hasAttemptedContentRefresh = false
+    private var isFetchingPremiumCatalog = false
     private var cancellables: Set<AnyCancellable> = []
 
     init(
@@ -256,6 +258,16 @@ final class AppViewModel: ObservableObject {
         }
     }
 
+    func loadPremiumCatalog() async {
+        guard !isFetchingPremiumCatalog, let source = repository as? PremiumCatalogProviding else { return }
+        isFetchingPremiumCatalog = true
+        defer { isFetchingPremiumCatalog = false }
+        let catalog = try? await source.fetchPremiumCatalog()
+        if !Task.isCancelled {
+            premiumCatalog = catalog?.isValid == true ? catalog : nil
+        }
+    }
+
     func leavePremium(_ origin: PremiumOrigin) {
         switch origin {
         case .home:
@@ -286,6 +298,10 @@ final class AppViewModel: ObservableObject {
 
     func startPractice() {
         let questions = accessibleQuestionBank
+        if let starter = StarterPractice.next(in: questions, results: results) {
+            beginSession(for: starter)
+            return
+        }
         let answeredIDs = Set(results.map(\.questionId))
         guard let question = accessPolicy.nextQuestion(
             from: questions,
@@ -354,7 +370,16 @@ final class AppViewModel: ObservableObject {
     }
 
     func startNextQuestion(after question: QuizQuestion) {
+        if StarterPractice.questionIDs.contains(question.id) {
+            startPractice()
+            return
+        }
         startQuiz(for: question.mode)
+    }
+
+    func canShowResultAd(for result: QuizResult) -> Bool {
+        purchaseManager.isConfirmedFreeForAds
+            && StarterPractice.endsAdEligibleSet(for: result, history: results)
     }
 
     func answeredCount(for mode: GameMode) -> Int {

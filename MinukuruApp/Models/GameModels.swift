@@ -306,8 +306,10 @@ struct QuizQuestion: Identifiable, Codable, Hashable {
     }
 
     func displayFullText(isHiraganaMode: Bool) -> String {
-        segments.map { $0.displayText(isHiraganaMode: isHiraganaMode) }.joined(separator: "")
+        displayedSegments.map { $0.displayText(isHiraganaMode: isHiraganaMode) }.joined(separator: "")
     }
+
+    var displayedSegments: [TextSegment] { LegacyQuestionPresentation.segments(for: self) }
 }
 
 enum AccessTier: String, Codable, CaseIterable {

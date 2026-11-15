@@ -72,7 +72,7 @@ final class QuizSessionViewModel: ObservableObject {
         if isGuidedExample {
             return "お手本の答えを見る"
         }
-        if phase == .answer, question.responseType == .selectSegments {
+        if phase == .answer, question.responseType == .selectSegments, !question.recommendedReasonTags.isEmpty {
             return "理由を考える"
         }
         return "答えを見る"

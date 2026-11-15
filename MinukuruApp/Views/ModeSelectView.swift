@@ -43,6 +43,7 @@ struct ModeSelectView: View {
                         }
                         .frame(maxWidth: .infinity, minHeight: 72, alignment: .leading)
                         .padding(.horizontal, 18)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .foregroundStyle(.white)
@@ -65,7 +66,7 @@ struct ModeSelectView: View {
                 .foregroundStyle(.white)
                 .background(MinukuruTheme.primary)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .accessibilityHint("お手本から順に練習を始めます")
+                .accessibilityHint("初めてなら、広告の条件を見比べる3問から始めます")
 
                 DisclosureGroup(isExpanded: $showsAllModes) {
                     VStack(spacing: 14) {
@@ -85,10 +86,6 @@ struct ModeSelectView: View {
                 .background(Color.white.opacity(0.92))
                 .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
 
-                if !appViewModel.hasPremiumAccess {
-                    BannerAdView()
-                        .accessibilityLabel("広告")
-                }
             }
             .padding(20)
             .frame(maxWidth: 760)

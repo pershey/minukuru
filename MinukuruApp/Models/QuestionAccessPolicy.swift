@@ -13,6 +13,7 @@ struct QuestionAccessPolicy {
         hasPremiumAccess: Bool
     ) -> [QuizQuestion] {
         let baseQuestions = allQuestions.filter { question in
+            guard LegacyQuestionPresentation.includes(question) else { return false }
             if !hasPremiumAccess && question.accessTier == .premium {
                 return false
             }

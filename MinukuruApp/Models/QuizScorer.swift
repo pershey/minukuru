@@ -35,8 +35,9 @@ enum QuizScorer {
         let matchedTags = selectedReasonTags.intersection(recommendedSet)
         let missedRecommendedTags = recommendedSet.subtracting(selectedReasonTags)
         let offTargetReasonTags = selectedReasonTags.subtracting(recommendedSet)
-        let missedSegments = question.segments.filter { correctSet.contains($0.id) && !selectedSegmentIds.contains($0.id) }
-        let wrongSegments = question.segments.filter { wrongSelections.contains($0.id) }
+        let segments = question.displayedSegments
+        let missedSegments = segments.filter { correctSet.contains($0.id) && !selectedSegmentIds.contains($0.id) }
+        let wrongSegments = segments.filter { wrongSelections.contains($0.id) }
 
         let selectedChoice = question.answerChoices.first { $0.id == selectedChoiceId }
         let correctChoice = question.answerChoices.first { $0.id == question.correctChoiceId }
@@ -121,8 +122,8 @@ enum QuizScorer {
             result: result,
             scoreMessage: scoreMessage,
             encouragement: encouragement,
-            selectedSegments: question.segments.filter { selectedSegmentIds.contains($0.id) },
-            correctSegments: question.segments.filter { correctSet.contains($0.id) },
+            selectedSegments: segments.filter { selectedSegmentIds.contains($0.id) },
+            correctSegments: segments.filter { correctSet.contains($0.id) },
             missedSegments: missedSegments,
             wrongSegments: wrongSegments,
             matchedAnyCorrect: question.responseType == .singleChoice ? isPerfect : !correctSelections.isEmpty,

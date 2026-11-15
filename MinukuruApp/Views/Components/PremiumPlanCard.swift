@@ -41,17 +41,15 @@ struct PremiumPlanCard: View {
             }
 
             premiumFeatureRow(
-                title: appViewModel.settings.isHiraganaMode ? "ぜんもんだい かいほう" : "全問題解放",
-                detail: appViewModel.settings.isHiraganaMode
-                    ? "むりょうばんの 50もん いこうも、ついかされた もんだいを あそべます。"
-                    : "無料版の50問以降も、追加された問題を遊べます。"
+                title: appViewModel.settings.isHiraganaMode ? "ついか もんだい" : "追加問題",
+                detail: premiumCatalogDescription
             )
 
             premiumFeatureRow(
                 title: appViewModel.settings.isHiraganaMode ? "こうこく ひひょうじ" : "広告非表示",
                 detail: appViewModel.settings.isHiraganaMode
-                    ? "むりょうばんで ひょうじされる こうこくエリアを けします。"
-                    : "無料版で表示される広告エリアを消します。"
+                    ? "れんしゅうの あとに、こうこくを ひょうじしません。"
+                    : "練習の後に広告が表示されません。"
             )
 
             premiumFeatureRow(
@@ -64,8 +62,8 @@ struct PremiumPlanCard: View {
             premiumFeatureRow(
                 title: appViewModel.settings.isHiraganaMode ? "げんじつモード" : "現実モード",
                 detail: appViewModel.settings.isHiraganaMode
-                    ? "じっさいの さぎこうこく などを もとにした、むずかしい もんだいも だします。"
-                    : "実際の詐欺広告などをモデルにした、難しい問題も出します。"
+                    ? "こうこくと ちゅうもん がめんを くらべたり、ちょうさの じょうけんを たしかめたり できます。"
+                    : "広告と注文画面を見比べたり、調査結果の対象や条件を確かめたりする応用問題です。"
             )
 
             if let product = appViewModel.purchaseManager.premiumProduct, !appViewModel.hasPremiumAccess {
@@ -202,11 +200,23 @@ struct PremiumPlanCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.white.opacity(0.9))
         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .task { await appViewModel.loadPremiumCatalog() }
         .task {
             await appViewModel.purchaseManager.ensurePremiumProductAvailable(
                 maxRefreshPasses: automaticRefreshPasses
             )
         }
+    }
+
+    private var premiumCatalogDescription: String {
+        guard let catalog = appViewModel.premiumCatalog else {
+            return appViewModel.settings.isHiraganaMode
+                ? "かいほう できる もんだいの かずは、はいしん じょうきょうを かくにん できた ときに ひょうじします。"
+                : "配信状況を確認できたときに、追加問題の数を表示します。"
+        }
+        return appViewModel.settings.isHiraganaMode
+            ? "プレミアムの はいしんは \(catalog.standardCount + catalog.realWorldCount)もん。ふつう \(catalog.standardCount)もん、げんじつモード \(catalog.realWorldCount)もん。"
+            : "プレミアム配信は\(catalog.standardCount + catalog.realWorldCount)問。通常\(catalog.standardCount)問、現実モード\(catalog.realWorldCount)問。"
     }
 
     private func premiumFeatureRow(title: String, detail: String) -> some View {

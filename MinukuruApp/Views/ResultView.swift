@@ -26,11 +26,16 @@ struct ResultView: View {
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .accessibilityIdentifier("question-feedback")
+                if appViewModel.canShowResultAd(for: result.result) {
+                    Divider().padding(.vertical, 16)
+                    BannerAdView()
+                }
             }
             .padding(20)
             .frame(maxWidth: 760)
             .frame(maxWidth: .infinity)
         }
+        .clipped()
         .sheet(isPresented: $showsFeedback) {
             QuestionFeedbackView(question: viewModel.question, isHiraganaMode: appViewModel.settings.isHiraganaMode)
         }
@@ -166,7 +171,7 @@ struct ResultView: View {
             Button {
                 appViewModel.startNextQuestion(after: viewModel.question)
             } label: {
-                Label(appViewModel.settings.isHiraganaMode ? "おなじ テーマの つぎへ" : "同じテーマの次へ", systemImage: "arrow.right.circle.fill")
+                Label(nextQuestionTitle, systemImage: "arrow.right.circle.fill")
                     .font(.title3.weight(.bold))
                     .frame(maxWidth: .infinity, minHeight: 54)
             }
@@ -199,6 +204,13 @@ struct ResultView: View {
             .background(MinukuruTheme.accentSoft)
             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
+    }
+
+    private var nextQuestionTitle: String {
+        if StarterPractice.questionIDs.contains(viewModel.question.id) {
+            return appViewModel.settings.isHiraganaMode ? "つぎの れんしゅうへ" : "次の練習へ"
+        }
+        return appViewModel.settings.isHiraganaMode ? "おなじ テーマの つぎへ" : "同じテーマの次へ"
     }
 
     private var resultTitle: String {
