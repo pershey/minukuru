@@ -7,6 +7,7 @@ from datetime import date
 from typing import Any
 
 POLICY_VERSION = "content-quality-v1"
+REVIEW_AI_PROVIDERS = ("openai", "gemini", "claude")
 CHECK_NAMES = ("answerValidity", "evidenceGrounding", "ageAppropriateness", "explanationAlignment", "actionability")
 
 
@@ -133,7 +134,7 @@ def quality_blockers(draft: dict, result: dict, catalog: dict) -> list[str]:
     solver = evidence.get("solver") if isinstance(evidence.get("solver"), dict) else {}
     reviewer = evidence.get("reviewer") if isinstance(evidence.get("reviewer"), dict) else {}
     for role in (solver, reviewer):
-        if role.get("provider") not in ("openai", "gemini") or not role.get("model"):
+        if role.get("provider") not in REVIEW_AI_PROVIDERS or not role.get("model"):
             blockers.append("内容審査のモデル情報が不足しています。")
     generator = (draft.get("provider"), draft.get("model"))
     if not all(generator):

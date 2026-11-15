@@ -67,6 +67,25 @@ python3 tools/content_factory/benchmark.py evaluate \
 
 ## 人の確認と公開候補
 
+### Claude Codeで手元の下書きを審査する
+
+契約アカウントでログインしたClaude Codeでも、正解を伏せた解答と内容審査を行えます。1回につき最大20問。別々のセッションで教材データだけを渡し、問題IDと実際に使用されたモデルを照合します。生成元とは別モデルで解き、審査後に人の採用を受ける条件は同じです。
+
+```bash
+python3 tools/content_factory/pipeline.py run-review \
+  --drafts content_factory/output/drafts.jsonl \
+  --existing-manifest content_factory/output/comparison.json \
+  --provider claude --solver-provider claude \
+  --solver-model "$MINUKURU_CLAUDE_SOLVER_MODEL" \
+  --model "$MINUKURU_CLAUDE_REVIEW_MODEL" \
+  --limit 20 --max-api-calls 2 \
+  --out content_factory/output/reviews-claude-01.jsonl
+```
+
+モデルは別名ではなく完全なIDを指定します。`--max-api-calls 2` はCLIの呼び出し数で、モデルの内部ターン数ではありません。既存出力を上書きせず、解答と内容審査の生の応答はそれぞれ `.claude-blind.json` と `.claude-semantic.json` として隣に残します。未公開の原稿・答え・審査応答をGitに入れないでください。DB上の実行種別は既存の `script` を使い、作成元・解答元・審査元は審査証跡に記録します。
+
+### 採用する
+
 既存の `render_review_dashboard.py` → 判定JSON → `prepare-human-review` の経路を使います。ルール確認だけの問題は採用できません。問題全文、ひらがな表示、正解、素材、作成元、内容審査結果を保存済み判定に結び付けます。変更後は画面を作り直して再判定してください。旧画面の判定は再利用できません。
 
 `assemble-manifest` と `build-manifest-set` の `--reviews` には、最終的な `human_reviews.jsonl` を指定します。Supabaseからの `export-ready-manifest` でも、最新の人手採用判定、問題、根拠資料との一致を再確認します。

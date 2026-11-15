@@ -75,6 +75,21 @@ def render_reason_tags(question: dict[str, Any]) -> str:
     return "".join(f'<span class="tag">{html.escape(tag)}</span>' for tag in tags)
 
 
+def render_readings(question: dict[str, Any]) -> str:
+    pairs = [
+        (label, question.get(field))
+        for label, field in (
+            ("題名", "phoneticTitle"), ("設問", "phoneticInstruction"),
+            ("ヒント", "phoneticHint"), ("注目する点", "phoneticAttentionPoint"),
+            ("解説", "phoneticExplanation"), ("次の行動", "phoneticVerificationTip"),
+        )
+    ]
+    pairs.extend((f"本文 {item['id']}", item.get("phoneticText")) for item in question["segments"])
+    pairs.extend((f"選択肢 {item['id']}", item.get("phoneticText")) for item in question.get("answerChoices", []))
+    items = "".join(f"<dt>{html.escape(label)}</dt><dd>{html.escape(value)}</dd>" for label, value in pairs if value)
+    return f"<dl>{items}</dl>" if items else "<p>ひらがな表示の個別指定はありません。</p>"
+
+
 def review_metrics(review_row: dict[str, Any]) -> dict[str, Any]:
     review = review_row.get("review", {})
     return {
@@ -96,6 +111,7 @@ def review_metrics(review_row: dict[str, Any]) -> dict[str, Any]:
 
 def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) -> str:
     question = draft_row["question"]
+    source = draft_row.get("sourceSnapshot") or {}
     metrics = review_metrics(review_row or {})
     mode = draft_row["mode"]
     flavor = draft_row["contentFlavor"]
@@ -110,6 +126,7 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
         "学習目標と根拠": evidence.get("brief", "未入力"),
         "参照資料": evidence.get("references", "未入力"),
         "正解を伏せた解答": evidence.get("solver", "未実施"),
+        "内容審査モデル": evidence.get("reviewer", "未実施"),
         "項目別の内容審査": evidence.get("checks", "未実施"),
         "確認メモ": evidence.get("findingNotes", "未実施"),
         "採用前の未完了事項": blockers,
@@ -133,7 +150,9 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
         </div>
         <div class="badges">
           {badge("モード", mode)}
+          {badge("配信枠", draft_row["accessTier"])}
           {badge("flavor", flavor)}
+          {badge("問題版", str(question.get("contentRevision", 1)))}
           {badge("対象", question.get("audience", "general"))}
           {badge("段階", question.get("learningStage", "challenge"))}
           {badge("観点", question.get("learningFocus", "evidence"))}
@@ -195,13 +214,17 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
       </div>
 
       <details>
+        <summary>ひらがな表示を確認する</summary>
+        {render_readings(question)}
+      </details>
+      <details>
         <summary>生成素材と近い既存問題を見る</summary>
         <div class="grid compact">
           <section>
             <h3>元素材</h3>
-            <p class="meta">{html.escape(draft_row['sourceSnapshot']['title'])}</p>
-            <p>{html.escape(draft_row['sourceSnapshot']['redactedExcerpt'])}</p>
-            <p class="meta">{html.escape(draft_row['sourceSnapshot'].get('referenceNotes', ''))}</p>
+            <p class="meta">{html.escape(source.get('title') or '編集メモを参照')}</p>
+            <p>{html.escape(source.get('redactedExcerpt') or '')}</p>
+            <p class="meta">{html.escape(source.get('referenceNotes') or '')}</p>
           </section>
           <section>
             <h3>近い既存問題</h3>

@@ -20,8 +20,9 @@ from typing import Any
 from urllib import error, parse, request
 
 import jsonschema
+from claude_batch_review import ClaudeBatchError, MAX_QUESTIONS, require_model_id, run_claude_batch
 from content_quality import (
-    BLIND_ANSWER_SCHEMA, POLICY_VERSION, draft_fingerprint, fingerprint,
+    BLIND_ANSWER_SCHEMA, POLICY_VERSION, REVIEW_AI_PROVIDERS, draft_fingerprint, fingerprint,
     blind_question, publication_blockers, quality_blockers, semantic_schema, validate_brief,
 )
 
@@ -1534,6 +1535,14 @@ def run_generation(args: argparse.Namespace) -> None:
     print(f"Wrote {len(rows)} generated drafts to {args.out}")
 
 
+def semantic_review_input(question: dict, brief: dict, catalog: dict, blind_answer: dict, local_result: dict) -> dict:
+    return {
+        "question": question, "editorialBrief": brief,
+        "references": [s for s in catalog["sources"] if s["id"] in brief["sourceIds"]],
+        "blindAnswer": blind_answer, "similarQuestions": local_result["_topSimilarQuestions"],
+    }
+
+
 def run_review(args: argparse.Namespace) -> None:
     drafts = read_jsonl(Path(args.drafts))
     existing_questions = existing_questions_from_manifest(Path(args.existing_manifest))
@@ -1557,13 +1566,17 @@ def run_review(args: argparse.Namespace) -> None:
     briefs = read_json(Path(args.briefs)) if args.provider != "rulebased" else {}
     solver_provider = args.solver_provider or args.provider
     solver_model = args.solver_model
+    claude_batch = args.provider == "claude"
+    if (solver_provider == "claude") != claude_batch:
+        raise PipelineError("Claude Codeを使う場合は、解答と内容審査の両方にclaudeを指定してください。")
     if args.provider != "rulebased":
         if Path(args.out).exists():
             raise PipelineError("審査ファイルはすでに存在します。保存済みの結果を確認し、新しい --out を指定してください。")
         if not solver_model:
             raise PipelineError("内容審査には --solver-model で別の解答モデルを指定してください。")
-        if len(selected_drafts) * 2 > args.max_api_calls:
-            raise PipelineError("内容審査のAPI呼び出し上限を超えます。--limit でバッチを小さくしてください。")
+        calls = 2 if claude_batch else len(selected_drafts) * 2
+        if calls > args.max_api_calls:
+            raise PipelineError("内容審査の呼び出し上限を超えます。--limit または --max-api-calls を確認してください。")
         for draft in selected_drafts:
             if not draft.get("provider") or not draft.get("model"):
                 raise PipelineError("内容審査の前に、下書きの作成元モデルを記録してください。")
@@ -1579,6 +1592,38 @@ def run_review(args: argparse.Namespace) -> None:
             if (solver_provider, solver_model) == (draft.get("provider"), draft.get("model")):
                 raise PipelineError("作成モデルとは別の --solver-provider / --solver-model を指定してください。")
 
+    def check_local(question):
+        return local_review(question, [q for q in existing_questions if q.id != question["id"]])
+
+    if claude_batch:
+        require_model_id(solver_model)
+        require_model_id(model)
+        if args.temperature is not None or args.delay_seconds:
+            raise PipelineError("Claude Codeの一括審査は --temperature と --delay-seconds に対応していません。")
+        if not 1 <= len(selected_drafts) <= MAX_QUESTIONS:
+            raise PipelineError(f"Claude Codeの審査は1〜{MAX_QUESTIONS}問にしてください。")
+        blind_audit = Path(str(args.out) + ".claude-blind.json")
+        semantic_audit = Path(str(args.out) + ".claude-semantic.json")
+        if blind_audit.exists() or semantic_audit.exists():
+            raise PipelineError("Claude Codeの保存済み応答があります。新しい --out を指定してください。")
+        local_results = {d["generatedQuestionId"]: check_local(d["question"]) for d in selected_drafts}
+        answers = run_claude_batch(
+            solver_model, load_prompt("blind_solver_ja.md"),
+            [{"questionId": d["generatedQuestionId"], **blind_question(d["question"])} for d in selected_drafts],
+            BLIND_ANSWER_SCHEMA, blind_audit,
+        )
+        semantic_items = []
+        for draft in selected_drafts:
+            qid = draft["generatedQuestionId"]
+            semantic_items.append({
+                "questionId": qid,
+                **semantic_review_input(draft["question"], briefs[qid], catalog, answers[qid], local_results[qid]),
+            })
+        judgments = run_claude_batch(
+            model, load_prompt("semantic_reviewer_ja.md"),
+            semantic_items, semantic_schema(review_schema), semantic_audit,
+        )
+
     for index, draft in enumerate(drafts[: args.limit or None], start=1):
         question = draft["question"]
         if question["id"] != draft["generatedQuestionId"]:
@@ -1586,7 +1631,7 @@ def run_review(args: argparse.Namespace) -> None:
         validate_payload(question, SCHEMA_DIR / "quiz_question.schema.json")
         ensure_question_invariants(question)
 
-        local_result = local_review(question, [q for q in existing_questions if q.id != question["id"]])
+        local_result = local_results[question["id"]] if claude_batch else check_local(question)
 
         if args.provider == "rulebased":
             final_review = local_result
@@ -1605,14 +1650,17 @@ def run_review(args: argparse.Namespace) -> None:
                 jsonschema.validate(response, schema)
                 return response
 
-            blind_answer = ask(solver_provider, solver_model, "blind_solver_ja.md", blind_question(question),
-                               BLIND_ANSWER_SCHEMA, "minukuru_blind_answer")
             brief = briefs[draft["generatedQuestionId"]]
-            judgment = ask(args.provider, model, "semantic_reviewer_ja.md", {
-                "question": question, "editorialBrief": brief,
-                "references": [s for s in catalog["sources"] if s["id"] in brief["sourceIds"]],
-                "blindAnswer": blind_answer, "similarQuestions": local_result["_topSimilarQuestions"],
-            }, semantic_schema(review_schema), "minukuru_content_review")
+            if claude_batch:
+                blind_answer, judgment = answers[question["id"]], judgments[question["id"]]
+            else:
+                blind_answer = ask(solver_provider, solver_model, "blind_solver_ja.md", blind_question(question),
+                                   BLIND_ANSWER_SCHEMA, "minukuru_blind_answer")
+                judgment = ask(
+                    args.provider, model, "semantic_reviewer_ja.md",
+                    semantic_review_input(question, brief, catalog, blind_answer, local_result),
+                    semantic_schema(review_schema), "minukuru_content_review",
+                )
             final_review = merge_ai_review(judgment["review"], local_result)
             final_review["qualityEvidence"] = {
                 "policyVersion": POLICY_VERSION, "draftFingerprint": draft_fingerprint(draft),
@@ -1629,7 +1677,8 @@ def run_review(args: argparse.Namespace) -> None:
                     final_review["action"] = "needs_human"
                 final_review["concerns"] = sorted(set(final_review["concerns"] + blockers))
             review_stage = "ai_review"
-            reviewer_kind = args.provider
+            # 既存DBの列はscriptを許可する。実際の作成元・解答元・審査元は証跡に記録する。
+            reviewer_kind = "script" if claude_batch else args.provider
             reviewer_model = model
 
         row = {
@@ -2035,9 +2084,9 @@ def build_parser() -> argparse.ArgumentParser:
     review = subparsers.add_parser("run-review", help="draft 問題にレビューをかける")
     review.add_argument("--drafts", default=str(FACTORY_DIR / "sample_data" / "sample_drafts.jsonl"))
     review.add_argument("--existing-manifest", default=str(APP_QUESTIONS_PATH))
-    review.add_argument("--provider", choices=["rulebased", "openai", "gemini"], default="rulebased")
+    review.add_argument("--provider", choices=["rulebased", *REVIEW_AI_PROVIDERS], default="rulebased")
     review.add_argument("--model")
-    review.add_argument("--solver-provider", choices=["openai", "gemini"])
+    review.add_argument("--solver-provider", choices=REVIEW_AI_PROVIDERS)
     review.add_argument("--solver-model")
     review.add_argument("--briefs", default=str(FACTORY_DIR / "quality" / "editorial_briefs.json"))
     review.add_argument("--stock-drafts", action="append", default=[])
@@ -2137,7 +2186,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         args.func(args)
-    except (PipelineError, ReviewWorkflowError, jsonschema.ValidationError, KeyError) as exc:
+    except (PipelineError, ReviewWorkflowError, ClaudeBatchError, jsonschema.ValidationError, KeyError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     return 0

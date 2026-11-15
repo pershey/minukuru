@@ -9,7 +9,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from benchmark import benchmark_draft, evaluate_reviews, load_records, validate_benchmark
-from content_quality import answer_matches, blind_question, publication_blockers, quality_blockers
+from claude_batch_review import ClaudeBatchError, parse_batch, result_schema
+from content_quality import BLIND_ANSWER_SCHEMA, answer_matches, blind_question, publication_blockers, quality_blockers
 from pipeline import approved_questions_and_report, build_parser, build_refresh_drafts_from_reviews_sql, openai_strict_schema, run_review
 from review_workflow import ReviewWorkflowError, batch_fingerprint, compile_review_outputs
 from test_review_workflow import ai_review, decisions, draft, task
@@ -144,6 +145,54 @@ class ContentQualityTests(unittest.TestCase):
         wire = openai_strict_schema(schema)
         self.assertNotIn("allOf", wire)
         self.assertIn("allOf", schema)
+
+    def test_claude_batch_requires_actual_model_and_exact_question_ids(self):
+        model = "claude-sonnet-5-5"
+        response = {
+            "is_error": False, "subtype": "success", "modelUsage": {model: {"provider": "firstParty"}},
+            "structured_output": {"results": [{
+                "questionId": "q-1", "selectedSegmentIds": ["s1"], "selectedChoiceId": None,
+                "answerable": True, "hasAlternativeAnswer": False, "summary": "根拠は本文にある一文に書かれています。",
+            }]},
+        }
+        schema = result_schema(BLIND_ANSWER_SCHEMA)
+        self.assertIn("q-1", parse_batch(response, model, schema, ["q-1"]))
+        with self.assertRaises(ClaudeBatchError):
+            parse_batch(response, "claude-opus-5-5", schema, ["q-1"])
+        with self.assertRaises(ClaudeBatchError):
+            parse_batch(response, model, schema, ["q-2"])
+        response["structured_output"]["results"] *= 2
+        with self.assertRaises(ClaudeBatchError):
+            parse_batch(response, model, schema, ["q-1"])
+
+    def test_claude_review_records_model_and_preserves_human_gate(self):
+        source = benchmark_draft(load_records()[0])
+        question_id = source["generatedQuestionId"]
+        draft_review = copy.deepcopy(ai_review()["review"])
+        quality = draft_review.pop("qualityEvidence")
+        answer = {"selectedSegmentIds": source["question"]["correctSegmentIds"], "selectedChoiceId": None,
+                  "answerable": True, "hasAlternativeAnswer": False, "summary": "せかす表現を見つけ、条件を確認します。"}
+        judgment = {"review": draft_review, "checks": quality["checks"], "findingNotes": quality["findingNotes"]}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "drafts").write_text(json.dumps(source) + "\n")
+            args = build_parser().parse_args([
+                "run-review", "--provider", "claude", "--model", "claude-opus-5-5",
+                "--solver-model", "claude-sonnet-5-5", "--max-api-calls", "2",
+                "--drafts", str(root / "drafts"), "--out", str(root / "reviews"),
+            ])
+            with patch("pipeline.run_claude_batch", side_effect=[{question_id: answer}, {question_id: judgment}]) as call:
+                run_review(args)
+                self.assertEqual(call.call_count, 2)
+                blind_input = call.call_args_list[0].args[2][0]
+                self.assertNotIn("correctSegmentIds", blind_input)
+                semantic_input = call.call_args_list[1].args[2][0]
+                self.assertEqual(semantic_input["blindAnswer"], answer)
+            row = json.loads((root / "reviews").read_text())
+            self.assertEqual(row["reviewerKind"], "script")
+            self.assertEqual(row["review"]["qualityEvidence"]["reviewer"], {"provider": "claude", "model": "claude-opus-5-5"})
+            self.assertEqual(quality_blockers(source, row["review"], CATALOG), [])
+            self.assertTrue(publication_blockers(source, row, CATALOG))
 
     def test_benchmark_requires_actual_complete_bound_measurements(self):
         with self.assertRaises(ValueError):

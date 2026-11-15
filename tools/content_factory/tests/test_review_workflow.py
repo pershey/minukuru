@@ -204,6 +204,16 @@ class ReviewWorkflowTests(unittest.TestCase):
         self.assertIn("確認先を選びます。", output)
         self.assertIn("action", output)
 
+    def test_dashboard_renders_editorial_drafts_without_source_excerpt(self) -> None:
+        row = draft()
+        row["sourceSnapshot"] = {"editorialBrief": ai_review()["review"]["qualityEvidence"]["brief"]}
+        row["question"]["phoneticExplanation"] = "まず つぎの あんないを よみます。"
+
+        output = build_dashboard([row], [ai_review()], "レビュー")
+
+        self.assertIn("編集メモを参照", output)
+        self.assertIn("まず つぎの あんないを よみます。", output)
+
     def test_prepare_command_writes_manifest_inputs(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
