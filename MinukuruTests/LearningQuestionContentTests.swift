@@ -22,14 +22,15 @@ final class LearningQuestionContentTests: XCTestCase {
         })
     }
 
-    func testBundledLearningQuestionsHaveConsistentAnswersAndExplanations() {
-        let questions = FileQuizContentStore()
-            .loadBundledManifest(from: .main)
-            .questions
-            .filter { $0.id.hasPrefix("core-") }
+    func testBundledLearningQuestionsHaveConsistentAnswersAndExplanations() throws {
+        let questions = try XCTUnwrap(FileQuizContentStore()
+            .loadBundledCurriculum(from: .main)).questions
 
         XCTAssertFalse(questions.isEmpty)
+        XCTAssertEqual(Set(questions.map(\.id)).count, questions.count)
         for question in questions {
+            XCTAssertEqual(question.accessTier, .free, question.id)
+            XCTAssertEqual(question.contentFlavor, .standard, question.id)
             XCTAssertFalse(question.explanation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, question.id)
             XCTAssertFalse(question.verificationTip.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty, question.id)
             XCTAssertFalse(question.displayAttentionPoint(isHiraganaMode: false).isEmpty, question.id)

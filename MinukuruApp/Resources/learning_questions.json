@@ -469,5 +469,230 @@
     "correctChoiceId": "c3",
     "attentionPoint": "紹介された感想は一人分で、全体を比べる調査がありません。",
     "contentRevision": 1
+  },
+  {
+    "id": "benchmark-child-001",
+    "mode": "explanationSnipe",
+    "title": "紙ひこうきの実験記録",
+    "difficulty": "easy",
+    "instruction": "注意して読むところを1こ選びましょう。",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "一人が同じ紙ひこうきを2回飛ばすと、2回目の方が遠くへ飛びました。",
+        "phoneticText": "ひとりが おなじ かみひこうきを にかい とばすと、にかいめの ほうが とおくへ とびました。"
+      },
+      {
+        "id": "s2",
+        "text": "この結果から、どんな紙ひこうきも2回目は必ず遠くへ飛ぶと説明しています。",
+        "phoneticText": "この けっかから、どんな かみひこうきも にかいめは かならず とおくへ とぶと せつめい しています。"
+      }
+    ],
+    "correctSegmentIds": [
+      "s2"
+    ],
+    "explanation": "2回だけの結果では、どんな紙ひこうきにも当てはまるとは言えません。飛ばし方や風などの条件もそろえて比べる必要があります。",
+    "verificationTip": "同じ条件で何回試したのか、ほかの紙ひこうきでも同じ結果なのか、実験の記録を確認します。",
+    "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+    "recommendedReasonTags": [
+      "tooStrongClaim"
+    ],
+    "accessTier": "free",
+    "contentFlavor": "standard",
+    "audience": "child",
+    "learningStage": "practice",
+    "learningFocus": "evidence",
+    "responseType": "selectSegments",
+    "answerChoices": [],
+    "correctChoiceId": null,
+    "attentionPoint": "少ない結果から全体へ言い切っていないかを確かめる。",
+    "contentRevision": 2,
+    "phoneticInstruction": "ちゅういして よむ ところを ひとつ えらびましょう。",
+    "phoneticHint": "かかれている じょうけんと、たしかめられる じょうほうに ちゅうもく しましょう。",
+    "phoneticTitle": "かみひこうきの じっけん きろく",
+    "phoneticExplanation": "にかい だけの けっかでは、どんな かみひこうきにも あてはまるとは いえません。とばしかたや かぜなどの じょうけんも そろえて くらべる ひつようが あります。",
+    "phoneticVerificationTip": "おなじ じょうけんで なんかい ためしたのか、ほかの かみひこうきでも おなじ けっかなのか、じっけんの きろくを かくにんします。",
+    "phoneticAttentionPoint": "すくない けっかから ぜんたいへ いいきって いないかを たしかめる。"
+  },
+  {
+    "id": "benchmark-child-007",
+    "mode": "newsPoison",
+    "title": "本が増えたという記事",
+    "difficulty": "normal",
+    "instruction": "記事の書き方について、この文面に合う判断はどれですか？",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "学校図書室の担当の先生は、新しい本が20冊入ったと知らせました。",
+        "phoneticText": "がっこう としょしつの たんとうの せんせいは、あたらしい ほんが にじゅっさつ はいったと しらせました。"
+      },
+      {
+        "id": "s2",
+        "text": "記事には本の一覧があり、図書室で確かめられると書かれています。",
+        "phoneticText": "きじには ほんの いちらんが あり、としょしつで たしかめられると かかれています。"
+      }
+    ],
+    "correctSegmentIds": [],
+    "explanation": "この文には、担当の人と確認できる一覧が示されています。ここに書かれた表現に問題が見当たらないという判断で、すべての情報を無条件に信じる意味ではありません。",
+    "verificationTip": "気になるときは、図書室にある一覧や担当の先生の案内を確認します。",
+    "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+    "recommendedReasonTags": [],
+    "accessTier": "free",
+    "contentFlavor": "standard",
+    "audience": "child",
+    "learningStage": "challenge",
+    "learningFocus": "evidence",
+    "responseType": "singleChoice",
+    "answerChoices": [
+      {
+        "id": "c1",
+        "text": "発信者が分からないので、出どころを確かめられない。",
+        "semantic": "suspicious",
+        "phoneticText": "はっしんしゃが わからないので、でどころを たしかめられない。"
+      },
+      {
+        "id": "c2",
+        "text": "本の名前を確認できないので、冊数を確かめる方法がない。",
+        "semantic": "other",
+        "phoneticText": "ほんの なまえを かくにん できないので、さっすうを たしかめる ほうほうが ない。"
+      },
+      {
+        "id": "c3",
+        "text": "出どころも確認する方法も書いてあり、文面に問題は見当たらない。",
+        "semantic": "noIssueFound",
+        "phoneticText": "でどころも かくにんする ほうほうも かいてあり、ぶんめんに もんだいは みあたらない。"
+      }
+    ],
+    "correctChoiceId": "c3",
+    "attentionPoint": "誰が知らせたかと、何で確かめられるかに注目する。",
+    "contentRevision": 2,
+    "phoneticInstruction": "きじの かきかたについて、この ぶんめんに あう はんだんは どれですか？",
+    "phoneticHint": "かかれている じょうけんと、たしかめられる じょうほうに ちゅうもく しましょう。",
+    "phoneticTitle": "ほんが ふえたという きじ",
+    "phoneticExplanation": "この ぶんには、たんとうの ひとと かくにんできる いちらんが しめされています。ここに かかれた ひょうげんに もんだいが みあたらないという はんだんで、すべての じょうほうを むじょうけんに しんじる いみでは ありません。",
+    "phoneticVerificationTip": "きになる ときは、としょしつに ある いちらんや たんとうの せんせいの あんないを かくにんします。",
+    "phoneticAttentionPoint": "だれが しらせたかと、なにで たしかめられるかに ちゅうもくする。"
+  },
+  {
+    "id": "benchmark-child-009",
+    "mode": "scamAdChecker",
+    "title": "無料の遊びと追加アイテム",
+    "difficulty": "normal",
+    "instruction": "この場面では、どう考えるとよいでしょう。",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "ゲームの広告には、基本の遊びは無料と書かれています。",
+        "phoneticText": "げーむの こうこくには、きほんの あそびは むりょうと かかれています。"
+      },
+      {
+        "id": "s2",
+        "text": "追加のアイテムには料金がかかると、説明されています。",
+        "phoneticText": "ついかの あいてむには りょうきんが かかると、せつめい されています。"
+      }
+    ],
+    "correctSegmentIds": [],
+    "explanation": "基本の遊びが無料でも、すべての機能が無料とは限りません。この文は追加料金を説明しているので、無料という言葉だけで嘘とは決めません。",
+    "verificationTip": "家の人と公式の料金案内を見て、無料で使える範囲と、お金がかかる操作を確かめます。",
+    "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+    "recommendedReasonTags": [
+      "hardToVerify"
+    ],
+    "accessTier": "free",
+    "contentFlavor": "standard",
+    "audience": "child",
+    "learningStage": "action",
+    "learningFocus": "verify",
+    "responseType": "singleChoice",
+    "answerChoices": [
+      {
+        "id": "c1",
+        "text": "無料で遊べる範囲を家の人と確かめる",
+        "semantic": "verifySource",
+        "phoneticText": "むりょうで あそべる はんいを いえの ひとと たしかめる。"
+      },
+      {
+        "id": "c2",
+        "text": "確かめずに、書かれたとおりにする",
+        "semantic": "other",
+        "phoneticText": "たしかめずに、かかれた とおりに する。"
+      },
+      {
+        "id": "c3",
+        "text": "元の情報を見ずに、みんなに知らせる",
+        "semantic": "other",
+        "phoneticText": "もとの じょうほうを みずに、みんなに しらせる。"
+      }
+    ],
+    "correctChoiceId": "c1",
+    "attentionPoint": "無料の範囲と追加料金を分けて確認する。",
+    "contentRevision": 2,
+    "phoneticInstruction": "この ばめんでは、どう かんがえると よいでしょう。",
+    "phoneticHint": "かかれている じょうけんと、たしかめられる じょうほうに ちゅうもく しましょう。",
+    "phoneticTitle": "むりょうの あそびと ついか あいてむ",
+    "phoneticExplanation": "きほんの あそびが むりょうでも、すべての きのうが むりょうとは かぎりません。この ぶんは ついか りょうきんを せつめい しているので、むりょうという ことばだけで うそとは きめません。",
+    "phoneticVerificationTip": "いえの ひとと こうしきの りょうきん あんないを みて、むりょうで つかえる はんいと、おかねが かかる そうさを たしかめます。",
+    "phoneticAttentionPoint": "むりょうの はんいと ついか りょうきんを わけて かくにんする。"
+  },
+  {
+    "id": "benchmark-child-012",
+    "mode": "profileHunter",
+    "title": "チームの新しい連絡係",
+    "difficulty": "normal",
+    "instruction": "この場面では、どう考えるとよいでしょう。",
+    "segments": [
+      {
+        "id": "s1",
+        "text": "クラブの連絡係を名乗る、初めて見るアカウントから参加予定を聞かれました。",
+        "phoneticText": "くらぶの れんらくがかりを なのる、はじめて みる あかうんとから さんか よていを きかれました。"
+      },
+      {
+        "id": "s2",
+        "text": "クラブの予定表には、新しい連絡先はまだ載っていません。",
+        "phoneticText": "くらぶの よていひょうには、あたらしい れんらくさきは まだ のっていません。"
+      }
+    ],
+    "correctSegmentIds": [],
+    "explanation": "名乗っていることだけでは本当の連絡係か分かりません。届いた相手への返事ではなく、いつも使っている連絡先から確かめます。",
+    "verificationTip": "普段のクラブの連絡先や担当の先生に、新しいアカウントが正式なものか確認してもらいます。",
+    "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+    "recommendedReasonTags": [
+      "fakeAuthority"
+    ],
+    "accessTier": "free",
+    "contentFlavor": "standard",
+    "audience": "child",
+    "learningStage": "action",
+    "learningFocus": "verify",
+    "responseType": "singleChoice",
+    "answerChoices": [
+      {
+        "id": "c1",
+        "text": "いつものクラブの連絡先で本人か確かめる",
+        "semantic": "verifySource",
+        "phoneticText": "いつもの くらぶの れんらくさきで ほんにんか たしかめる。"
+      },
+      {
+        "id": "c2",
+        "text": "確かめずに、書かれたとおりにする",
+        "semantic": "other",
+        "phoneticText": "たしかめずに、かかれた とおりに する。"
+      },
+      {
+        "id": "c3",
+        "text": "元の情報を見ずに、みんなに知らせる",
+        "semantic": "other",
+        "phoneticText": "もとの じょうほうを みずに、みんなに しらせる。"
+      }
+    ],
+    "correctChoiceId": "c1",
+    "attentionPoint": "相手が指定した連絡先以外から本人か確認する。",
+    "contentRevision": 2,
+    "phoneticInstruction": "この ばめんでは、どう かんがえると よいでしょう。",
+    "phoneticHint": "かかれている じょうけんと、たしかめられる じょうほうに ちゅうもく しましょう。",
+    "phoneticTitle": "ちーむの あたらしい れんらくがかり",
+    "phoneticExplanation": "なのっている ことだけでは ほんとうの れんらくがかりか わかりません。とどいた あいてへの へんじではなく、いつも つかっている れんらくさきから たしかめます。",
+    "phoneticVerificationTip": "ふだんの くらぶの れんらくさきや たんとうの せんせいに、あたらしい あかうんとが せいしきな ものか かくにんして もらいます。",
+    "phoneticAttentionPoint": "あいてが していした れんらくさき いがいから ほんにんか かくにんする。"
   }
 ]
