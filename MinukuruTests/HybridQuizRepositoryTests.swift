@@ -97,6 +97,39 @@ final class HybridQuizRepositoryTests: XCTestCase {
         XCTAssertEqual(store.savedManifests[.premium]?.contentVersion, "premium-v2")
     }
 
+    func testBundledCurriculumKeepsNewQuestionIDsAcrossCacheAndRefresh() async throws {
+        let newLesson = makeQuestion(id: "new-lesson", title: "バージョン内の新題")
+        let curriculum = QuizContentManifest(contentVersion: "bundle-lessons", questions: [newLesson])
+        let cached = QuizContentManifest(
+            contentVersion: "cached-free",
+            questions: [makeQuestion(id: "previous-free", title: "旧版に配信する問題")]
+        )
+        let remote = QuizContentManifest(
+            contentVersion: "updated-free",
+            questions: [makeQuestion(id: "remote-free", title: "更新された共通問題")]
+        )
+        let store = InMemoryQuizContentStore(
+            bundledManifest: curriculum,
+            bundledCurriculum: curriculum,
+            configuration: RemoteQuizConfiguration(
+                remoteQuestionsURL: nil,
+                remoteFreeQuestionsURL: URL(string: "https://example.com/free.json"),
+                remotePremiumQuestionsURL: URL(string: "https://example.com/premium.json"),
+                minimumFetchIntervalMinutes: 0
+            )
+        )
+        store.cachedManifests[.free] = cached
+        let repository = HybridQuizRepository(
+            store: store,
+            remoteFetcher: MockQuizRemoteFetcher(result: .success(try FileQuizContentStore.makeEncoder().encode(remote)))
+        )
+
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["new-lesson", "previous-free"])
+        let didRefresh = await repository.refreshIfNeeded()
+        XCTAssertTrue(didRefresh)
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["new-lesson", "remote-free"])
+    }
+
     func testPremiumFeedReceivesVerifiedTransactionAndCacheIsRetainedButHiddenWhenAccessEnds() async throws {
         let bundledManifest = QuizContentManifest(
             contentVersion: "bundle-v1",
@@ -175,6 +208,7 @@ final class HybridQuizRepositoryTests: XCTestCase {
 
 private final class InMemoryQuizContentStore: QuizContentStoring {
     let bundledManifest: QuizContentManifest
+    let bundledCurriculum: QuizContentManifest?
     let configuration: RemoteQuizConfiguration
     var cachedManifests: [QuizContentCacheKind: QuizContentManifest] = [:]
     var savedManifests: [QuizContentCacheKind: QuizContentManifest] = [:]
@@ -182,10 +216,12 @@ private final class InMemoryQuizContentStore: QuizContentStoring {
 
     init(
         bundledManifest: QuizContentManifest,
+        bundledCurriculum: QuizContentManifest? = nil,
         configuration: RemoteQuizConfiguration,
         cachedManifest: QuizContentManifest? = nil
     ) {
         self.bundledManifest = bundledManifest
+        self.bundledCurriculum = bundledCurriculum
         self.configuration = configuration
         if let cachedManifest {
             self.cachedManifests[.full] = cachedManifest
@@ -194,6 +230,10 @@ private final class InMemoryQuizContentStore: QuizContentStoring {
 
     func loadBundledManifest(from bundle: Bundle) -> QuizContentManifest {
         bundledManifest
+    }
+
+    func loadBundledCurriculum(from bundle: Bundle) -> QuizContentManifest? {
+        bundledCurriculum
     }
 
     func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest? {

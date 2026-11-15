@@ -126,7 +126,8 @@ final class HybridQuizRepository: QuizProviding, QuizRefreshing, QuizAccessConfi
         self.remoteFetcher = remoteFetcher
 
         let bundledManifest = store.loadBundledManifest(from: bundle)
-        let coreQuestions = bundledManifest.questions.filter { $0.id.hasPrefix("core-") }
+        let coreQuestions = store.loadBundledCurriculum(from: bundle)?.questions
+            ?? bundledManifest.questions.filter { $0.id.hasPrefix("core-") }
         self.bundledCoreQuestions = coreQuestions
         let configuration = store.loadConfiguration(from: bundle)
         self.freeQuestionLimit = configuration.freeQuestionLimit

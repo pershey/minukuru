@@ -30,6 +30,7 @@ enum QuizContentCacheKind: Hashable {
 
 protocol QuizContentStoring {
     func loadBundledManifest(from bundle: Bundle) -> QuizContentManifest
+    func loadBundledCurriculum(from bundle: Bundle) -> QuizContentManifest?
     func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest?
     func saveCachedManifest(_ manifest: QuizContentManifest, kind: QuizContentCacheKind)
     func removeCachedManifest(kind: QuizContentCacheKind)
@@ -59,9 +60,7 @@ final class FileQuizContentStore: QuizContentStoring {
             return QuizContentManifest(contentVersion: "empty-bundle", questions: [])
         }
 
-        guard let curriculumURL = bundle.url(forResource: "learning_questions", withExtension: "json"),
-              let curriculumData = try? Data(contentsOf: curriculumURL),
-              let curriculum = try? Self.decodeManifest(from: curriculumData, defaultVersion: "bundled-curriculum") else {
+        guard let curriculum = loadBundledCurriculum(from: bundle) else {
             return manifest
         }
 
@@ -74,6 +73,14 @@ final class FileQuizContentStore: QuizContentStoring {
             updatedAt: manifest.updatedAt,
             questions: merged
         )
+    }
+
+    func loadBundledCurriculum(from bundle: Bundle) -> QuizContentManifest? {
+        guard let url = bundle.url(forResource: "learning_questions", withExtension: "json"),
+              let data = try? Data(contentsOf: url) else {
+            return nil
+        }
+        return try? Self.decodeManifest(from: data, defaultVersion: "bundled-curriculum")
     }
 
     func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest? {
