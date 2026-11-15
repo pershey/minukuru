@@ -97,6 +97,82 @@ final class HybridQuizRepositoryTests: XCTestCase {
         XCTAssertEqual(store.savedManifests[.premium]?.contentVersion, "premium-v2")
     }
 
+    func testBundledCurriculumKeepsNewQuestionIDsAcrossCacheAndRefresh() async throws {
+        let newLesson = makeQuestion(id: "new-lesson", title: "バージョン内の新題")
+        let curriculum = QuizContentManifest(contentVersion: "bundle-lessons", questions: [newLesson])
+        let cached = QuizContentManifest(
+            contentVersion: "cached-free",
+            questions: [makeQuestion(id: "previous-free", title: "旧版に配信する問題")]
+        )
+        let remote = QuizContentManifest(
+            contentVersion: "updated-free",
+            questions: [makeQuestion(id: "remote-free", title: "更新された共通問題")]
+        )
+        let store = InMemoryQuizContentStore(
+            bundledManifest: curriculum,
+            bundledCurriculum: curriculum,
+            configuration: RemoteQuizConfiguration(
+                remoteQuestionsURL: nil,
+                remoteFreeQuestionsURL: URL(string: "https://example.com/free.json"),
+                remotePremiumQuestionsURL: URL(string: "https://example.com/premium.json"),
+                minimumFetchIntervalMinutes: 0
+            )
+        )
+        store.cachedManifests[.free] = cached
+        let repository = HybridQuizRepository(
+            store: store,
+            remoteFetcher: MockQuizRemoteFetcher(result: .success(try FileQuizContentStore.makeEncoder().encode(remote)))
+        )
+
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["new-lesson", "previous-free"])
+        let didRefresh = await repository.refreshIfNeeded()
+        XCTAssertTrue(didRefresh)
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["new-lesson", "remote-free"])
+    }
+
+    func testPremiumFeedReceivesVerifiedTransactionAndCacheIsRetainedButHiddenWhenAccessEnds() async throws {
+        let bundledManifest = QuizContentManifest(
+            contentVersion: "bundle-v1",
+            questions: [makeQuestion(id: "free-1", title: "無料問題")]
+        )
+        let premiumManifest = QuizContentManifest(
+            contentVersion: "premium-v1",
+            questions: [makeQuestion(id: "premium-1", title: "追加問題", accessTier: .premium)]
+        )
+        let store = InMemoryQuizContentStore(
+            bundledManifest: bundledManifest,
+            configuration: RemoteQuizConfiguration(
+                remoteQuestionsURL: nil,
+                remoteFreeQuestionsURL: URL(string: "https://example.com/free.json"),
+                remotePremiumQuestionsURL: URL(string: "https://example.com/premium.json"),
+                minimumFetchIntervalMinutes: 0,
+                minimumPremiumFetchIntervalMinutes: 0
+            )
+        )
+        let fetcher = CapturingQuizRemoteFetcher(responses: [
+            "https://example.com/free.json": try FileQuizContentStore.makeEncoder().encode(bundledManifest),
+            "https://example.com/premium.json": try FileQuizContentStore.makeEncoder().encode(premiumManifest),
+        ])
+        let repository = HybridQuizRepository(bundle: .main, store: store, remoteFetcher: fetcher)
+        repository.setPremiumAccess(true)
+        repository.setPremiumTransactionJWS("signed-storekit-transaction")
+
+        _ = await repository.refreshIfNeeded(force: true)
+
+        let capturedTransactionJWS = await fetcher.transactionJWS(for: "https://example.com/premium.json")
+        XCTAssertEqual(capturedTransactionJWS, "signed-storekit-transaction")
+        XCTAssertNotNil(store.cachedManifests[.premium])
+
+        repository.setPremiumAccess(false)
+
+        XCTAssertNotNil(store.cachedManifests[.premium])
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["free-1"])
+
+        repository.setPremiumAccess(true)
+
+        XCTAssertEqual(repository.allQuestions().map(\.id), ["free-1", "premium-1"])
+    }
+
     private func makeQuestion(id: String, title: String, accessTier: AccessTier = .free) -> QuizQuestion {
         QuizQuestion(
             id: id,
@@ -132,6 +208,7 @@ final class HybridQuizRepositoryTests: XCTestCase {
 
 private final class InMemoryQuizContentStore: QuizContentStoring {
     let bundledManifest: QuizContentManifest
+    let bundledCurriculum: QuizContentManifest?
     let configuration: RemoteQuizConfiguration
     var cachedManifests: [QuizContentCacheKind: QuizContentManifest] = [:]
     var savedManifests: [QuizContentCacheKind: QuizContentManifest] = [:]
@@ -139,10 +216,12 @@ private final class InMemoryQuizContentStore: QuizContentStoring {
 
     init(
         bundledManifest: QuizContentManifest,
+        bundledCurriculum: QuizContentManifest? = nil,
         configuration: RemoteQuizConfiguration,
         cachedManifest: QuizContentManifest? = nil
     ) {
         self.bundledManifest = bundledManifest
+        self.bundledCurriculum = bundledCurriculum
         self.configuration = configuration
         if let cachedManifest {
             self.cachedManifests[.full] = cachedManifest
@@ -153,6 +232,10 @@ private final class InMemoryQuizContentStore: QuizContentStoring {
         bundledManifest
     }
 
+    func loadBundledCurriculum(from bundle: Bundle) -> QuizContentManifest? {
+        bundledCurriculum
+    }
+
     func loadCachedManifest(kind: QuizContentCacheKind) -> QuizContentManifest? {
         cachedManifests[kind]
     }
@@ -160,6 +243,11 @@ private final class InMemoryQuizContentStore: QuizContentStoring {
     func saveCachedManifest(_ manifest: QuizContentManifest, kind: QuizContentCacheKind) {
         savedManifests[kind] = manifest
         cachedManifests[kind] = manifest
+    }
+
+    func removeCachedManifest(kind: QuizContentCacheKind) {
+        cachedManifests[kind] = nil
+        savedManifests[kind] = nil
     }
 
     func loadConfiguration(from bundle: Bundle) -> RemoteQuizConfiguration {
@@ -178,7 +266,7 @@ private final class InMemoryQuizContentStore: QuizContentStoring {
 private struct MockQuizRemoteFetcher: QuizRemoteFetching {
     let result: Result<Data, Error>
 
-    func fetchData(from url: URL) async throws -> Data {
+    func fetchData(from url: URL, premiumTransactionJWS: String?) async throws -> Data {
         try result.get()
     }
 }
@@ -186,10 +274,31 @@ private struct MockQuizRemoteFetcher: QuizRemoteFetching {
 private struct URLMapQuizRemoteFetcher: QuizRemoteFetching {
     let responses: [String: Data]
 
-    func fetchData(from url: URL) async throws -> Data {
+    func fetchData(from url: URL, premiumTransactionJWS: String?) async throws -> Data {
         guard let data = responses[url.absoluteString] else {
             throw URLError(.fileDoesNotExist)
         }
         return data
+    }
+}
+
+private actor CapturingQuizRemoteFetcher: QuizRemoteFetching {
+    let responses: [String: Data]
+    private var transactionJWSByURL: [String: String?] = [:]
+
+    init(responses: [String: Data]) {
+        self.responses = responses
+    }
+
+    func fetchData(from url: URL, premiumTransactionJWS: String?) async throws -> Data {
+        transactionJWSByURL[url.absoluteString] = premiumTransactionJWS
+        guard let data = responses[url.absoluteString] else {
+            throw URLError(.fileDoesNotExist)
+        }
+        return data
+    }
+
+    func transactionJWS(for url: String) -> String? {
+        transactionJWSByURL[url] ?? nil
     }
 }

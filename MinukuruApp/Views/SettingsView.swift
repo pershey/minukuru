@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var appViewModel: AppViewModel
+    @EnvironmentObject private var adPrivacy: AdPrivacyState
 
     var body: some View {
         ScrollView {
@@ -10,18 +11,30 @@ struct SettingsView: View {
                     appViewModel.goHome()
                 }
                 .font(.headline.bold())
+                .frame(minHeight: 44)
                 .foregroundStyle(MinukuruTheme.primary)
 
                 Text(appViewModel.settings.isHiraganaMode ? "せってい" : "設定")
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
                     .foregroundStyle(MinukuruTheme.primary)
 
-                premiumSection
                 readingSection
+                premiumSection
                 contentSection
+                if adPrivacy.needsPrivacyOptions {
+                    Button("広告のプライバシー設定") {
+                        Task { await adPrivacy.showPrivacyOptions() }
+                    }
+                    .frame(minHeight: 44)
+                    if adPrivacy.privacyOptionsError {
+                        Text("広告の設定を開けませんでした。")
+                    }
+                }
                 noticeSection
             }
             .padding(20)
+            .frame(maxWidth: 760)
+            .frame(maxWidth: .infinity)
         }
     }
 
@@ -137,8 +150,8 @@ struct SettingsView: View {
                 .font(.title2.weight(.bold))
                 .foregroundStyle(MinukuruTheme.primary)
             Text(appViewModel.settings.isHiraganaMode
-                 ? "いまは アプリの ひょうじぶんを ちゅうしんに ひらがな よりに しています。もんだいぶんも、こんご ふりがなつき データに たいおうできます。"
-                 : "いまはアプリの表示文を中心に、ひらがな寄りにしています。問題文も今後、ふりがな付きデータに対応できます。")
+                 ? "たいおうした もんだいは、もんだいぶんや せつめいも ひらがな よりに ひょうじします。"
+                 : "対応した問題は、問題文や解説もひらがな寄りに表示します。")
                 .font(.body)
                 .foregroundStyle(MinukuruTheme.muted)
         }
@@ -149,15 +162,29 @@ struct SettingsView: View {
     }
 
     private func statusLine(title: String, value: String) -> some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(title)
-                .font(.body.weight(.semibold))
-                .foregroundStyle(MinukuruTheme.primary)
-            Spacer()
-            Text(value)
-                .font(.body)
-                .foregroundStyle(MinukuruTheme.muted)
-                .multilineTextAlignment(.trailing)
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline) {
+                statusTitle(title)
+                Spacer()
+                statusValue(value, alignment: .trailing)
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                statusTitle(title)
+                statusValue(value, alignment: .leading)
+            }
         }
+    }
+
+    private func statusTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.body.weight(.semibold))
+            .foregroundStyle(MinukuruTheme.primary)
+    }
+
+    private func statusValue(_ value: String, alignment: TextAlignment) -> some View {
+        Text(value)
+            .font(.body)
+            .foregroundStyle(MinukuruTheme.muted)
+            .multilineTextAlignment(alignment)
     }
 }

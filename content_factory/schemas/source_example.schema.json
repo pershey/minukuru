@@ -15,6 +15,7 @@
     "allowRealWorldFlavor"
   ],
   "properties": {
+    "editorialBrief": {"type": "object"},
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$"

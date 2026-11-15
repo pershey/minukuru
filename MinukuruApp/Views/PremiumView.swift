@@ -47,6 +47,8 @@ struct PremiumView: View {
                 }
             }
             .padding(20)
+            .frame(maxWidth: 760)
+            .frame(maxWidth: .infinity)
         }
     }
 

@@ -10,6 +10,24 @@ struct ModeProgressSummary: Identifiable {
     var progressText: String {
         "\(answeredCount)/\(totalCount)問"
     }
+
+    static func make(
+        mode: GameMode,
+        questions: [QuizQuestion],
+        results: [QuizResult]
+    ) -> ModeProgressSummary {
+        let questionIDs = Set(questions.filter { $0.mode == mode }.map(\.id))
+        let modeResults = results.filter { questionIDs.contains($0.questionId) }
+        let answeredQuestionIDs = Set(modeResults.map(\.questionId))
+        let correctQuestionIDs = Set(modeResults.filter(\.isPerfect).map(\.questionId))
+
+        return ModeProgressSummary(
+            mode: mode,
+            answeredCount: answeredQuestionIDs.count,
+            totalCount: questionIDs.count,
+            perfectCount: correctQuestionIDs.count
+        )
+    }
 }
 
 struct RecentResultSummary: Identifiable {

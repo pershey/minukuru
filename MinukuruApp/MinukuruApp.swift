@@ -1,13 +1,18 @@
 import SwiftUI
-import GoogleMobileAds
 
 @main
 struct MinukuruApp: App {
-    @UIApplicationDelegateAdaptor private var appDelegate: MinukuruAppDelegate
     @StateObject private var purchaseManager: PurchaseManager
     @StateObject private var appViewModel: AppViewModel
+    @StateObject private var adPrivacy = AdPrivacyState()
 
     init() {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestingResetState"),
+           let bundleIdentifier = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
+        }
+#endif
         let purchaseManager = PurchaseManager()
         _purchaseManager = StateObject(wrappedValue: purchaseManager)
         _appViewModel = StateObject(wrappedValue: AppViewModel(purchaseManager: purchaseManager))
@@ -17,20 +22,11 @@ struct MinukuruApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appViewModel)
+                .environmentObject(adPrivacy)
                 .preferredColorScheme(.light)
                 .task {
                     await purchaseManager.prepare()
                 }
         }
-    }
-}
-
-final class MinukuruAppDelegate: NSObject, UIApplicationDelegate {
-    func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
-    ) -> Bool {
-        MobileAds.shared.start(completionHandler: nil)
-        return true
     }
 }

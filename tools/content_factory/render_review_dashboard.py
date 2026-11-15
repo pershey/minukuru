@@ -11,6 +11,9 @@ from statistics import mean
 from typing import Any
 
 from review_workflow import batch_fingerprint
+from content_quality import quality_blockers
+
+CATALOG = json.loads((Path(__file__).resolve().parents[2] / "content_factory/quality/reference_catalog.json").read_text())
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -46,11 +49,45 @@ def render_segments(question: dict[str, Any]) -> str:
     return "".join(items)
 
 
+def render_answer_area(question: dict[str, Any]) -> str:
+    if question.get("responseType", "selectSegments") != "singleChoice":
+        return f'<ol class="segments">{render_segments(question)}</ol>'
+
+    correct_choice_id = question.get("correctChoiceId")
+    items = []
+    for choice in question.get("answerChoices", []):
+        is_correct = choice.get("id") == correct_choice_id
+        cls = "segment segment-correct" if is_correct else "segment"
+        marker = "正解" if is_correct else "選択肢"
+        semantic = choice.get("semantic", "other")
+        items.append(
+            f'<li class="{cls}"><span class="segment-marker">{marker}</span>'
+            f"<span>{html.escape(choice.get('text', ''))}</span>"
+            f"<span class='muted'> {html.escape(semantic)}</span></li>"
+        )
+    return f'<ol class="segments">{"".join(items)}</ol>'
+
+
 def render_reason_tags(question: dict[str, Any]) -> str:
     tags = question.get("recommendedReasonTags", [])
     if not tags:
         return '<span class="muted">なし</span>'
     return "".join(f'<span class="tag">{html.escape(tag)}</span>' for tag in tags)
+
+
+def render_readings(question: dict[str, Any]) -> str:
+    pairs = [
+        (label, question.get(field))
+        for label, field in (
+            ("題名", "phoneticTitle"), ("設問", "phoneticInstruction"),
+            ("ヒント", "phoneticHint"), ("注目する点", "phoneticAttentionPoint"),
+            ("解説", "phoneticExplanation"), ("次の行動", "phoneticVerificationTip"),
+        )
+    ]
+    pairs.extend((f"本文 {item['id']}", item.get("phoneticText")) for item in question["segments"])
+    pairs.extend((f"選択肢 {item['id']}", item.get("phoneticText")) for item in question.get("answerChoices", []))
+    items = "".join(f"<dt>{html.escape(label)}</dt><dd>{html.escape(value)}</dd>" for label, value in pairs if value)
+    return f"<dl>{items}</dl>" if items else "<p>ひらがな表示の個別指定はありません。</p>"
 
 
 def review_metrics(review_row: dict[str, Any]) -> dict[str, Any]:
@@ -74,6 +111,7 @@ def review_metrics(review_row: dict[str, Any]) -> dict[str, Any]:
 
 def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) -> str:
     question = draft_row["question"]
+    source = draft_row.get("sourceSnapshot") or {}
     metrics = review_metrics(review_row or {})
     mode = draft_row["mode"]
     flavor = draft_row["contentFlavor"]
@@ -81,6 +119,18 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
     concerns = review_row.get("review", {}).get("concerns", []) if review_row else []
     advice = review_row.get("review", {}).get("revisionAdvice", []) if review_row else []
     top_similar = review_row.get("topSimilarQuestions", []) if review_row else []
+    evidence = review_row.get("review", {}).get("qualityEvidence", {}) if review_row else {}
+    blockers = quality_blockers(draft_row, (review_row or {}).get("review", {}), CATALOG)
+    blocked_attribute = "disabled" if blockers or not metrics["passed"] else ""
+    quality_details = html.escape(json.dumps({
+        "学習目標と根拠": evidence.get("brief", "未入力"),
+        "参照資料": evidence.get("references", "未入力"),
+        "正解を伏せた解答": evidence.get("solver", "未実施"),
+        "内容審査モデル": evidence.get("reviewer", "未実施"),
+        "項目別の内容審査": evidence.get("checks", "未実施"),
+        "確認メモ": evidence.get("findingNotes", "未実施"),
+        "採用前の未完了事項": blockers,
+    }, ensure_ascii=False, indent=2))
 
     similar_html = "".join(
         f"<li>{html.escape(item['title'])} "
@@ -100,23 +150,31 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
         </div>
         <div class="badges">
           {badge("モード", mode)}
+          {badge("配信枠", draft_row["accessTier"])}
           {badge("flavor", flavor)}
+          {badge("問題版", str(question.get("contentRevision", 1)))}
+          {badge("対象", question.get("audience", "general"))}
+          {badge("段階", question.get("learningStage", "challenge"))}
+          {badge("観点", question.get("learningFocus", "evidence"))}
           {badge("判定", metrics["action"], tone)}
           {badge("総合", str(metrics["composite"]), tone)}
         </div>
       </div>
 
       <div class="grid">
+        <section><h3>内容審査の証跡</h3><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{quality_details}</pre></section>
         <section>
           <h3>問題文</h3>
           <p class="instruction">{html.escape(question['instruction'])}</p>
-          <ol class="segments">{render_segments(question)}</ol>
+          {render_answer_area(question)}
         </section>
 
         <section>
-          <h3>解説</h3>
+          <h3>どこに注目するか</h3>
+          <p>{html.escape(question.get('attentionPoint', '未入力'))}</p>
+          <h3>なぜ気をつけるか</h3>
           <p>{html.escape(question['explanation'])}</p>
-          <h3>確認のしかた</h3>
+          <h3>次にどうするか</h3>
           <p>{html.escape(question['verificationTip'])}</p>
           <h3>ヒント</h3>
           <p>{html.escape(question['hint'])}</p>
@@ -156,13 +214,17 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
       </div>
 
       <details>
+        <summary>ひらがな表示を確認する</summary>
+        {render_readings(question)}
+      </details>
+      <details>
         <summary>生成素材と近い既存問題を見る</summary>
         <div class="grid compact">
           <section>
             <h3>元素材</h3>
-            <p class="meta">{html.escape(draft_row['sourceSnapshot']['title'])}</p>
-            <p>{html.escape(draft_row['sourceSnapshot']['redactedExcerpt'])}</p>
-            <p class="meta">{html.escape(draft_row['sourceSnapshot'].get('referenceNotes', ''))}</p>
+            <p class="meta">{html.escape(source.get('title') or '編集メモを参照')}</p>
+            <p>{html.escape(source.get('redactedExcerpt') or '')}</p>
+            <p class="meta">{html.escape(source.get('referenceNotes') or '')}</p>
           </section>
           <section>
             <h3>近い既存問題</h3>
@@ -180,7 +242,7 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
           <span class="decision-status" data-decision-status>未判定</span>
         </div>
         <div class="decision-buttons" role="group" aria-label="この問題の判定">
-          <button type="button" class="decision-button decision-accept" data-decision="accept">採用</button>
+          <button type="button" class="decision-button decision-accept" data-decision="accept" {blocked_attribute}>採用</button>
           <button type="button" class="decision-button decision-revise" data-decision="revise">再生成</button>
           <button type="button" class="decision-button decision-reject" data-decision="reject">見送り</button>
         </div>
@@ -194,7 +256,7 @@ def render_card(draft_row: dict[str, Any], review_row: dict[str, Any] | None) ->
 
 
 def build_dashboard(drafts: list[dict[str, Any]], reviews: list[dict[str, Any]], title: str) -> str:
-    fingerprint = batch_fingerprint(drafts)
+    fingerprint = batch_fingerprint(drafts, reviews)
     review_by_draft = {row["draftId"]: row for row in reviews}
     mode_counts = Counter(row["mode"] for row in drafts)
     flavor_counts = Counter(row["contentFlavor"] for row in drafts)

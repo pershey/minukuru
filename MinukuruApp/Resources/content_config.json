@@ -1,7 +1,7 @@
 {
   "remoteQuestionsURL": "https://jlvuhkofnnkbkwvwkhze.supabase.co/functions/v1/content-manifest",
   "remoteFreeQuestionsURL": "https://jlvuhkofnnkbkwvwkhze.supabase.co/functions/v1/content-manifest?channel=free",
-  "remotePremiumQuestionsURL": "https://jlvuhkofnnkbkwvwkhze.supabase.co/functions/v1/content-manifest?channel=premium",
+  "remotePremiumQuestionsURL": "https://jlvuhkofnnkbkwvwkhze.supabase.co/functions/v1/content-manifest-v2?channel=premium",
   "minimumFetchIntervalMinutes": 180,
   "minimumPremiumFetchIntervalMinutes": 15,
   "freeQuestionLimit": 50

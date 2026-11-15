@@ -8,6 +8,7 @@ import uuid
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+from content_quality import draft_fingerprint, fingerprint, quality_blockers
 
 
 DECISION_VALUES = {"accept", "revise", "reject"}
@@ -21,19 +22,16 @@ def utc_now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
-def batch_fingerprint(drafts: list[dict[str, Any]]) -> str:
+def batch_fingerprint(drafts: list[dict[str, Any]], reviews: list[dict[str, Any]] | None = None) -> str:
+    review_by_id = {r["draftId"]: r for r in reviews or []}
+    if len(review_by_id) != len(reviews or []):
+        raise ReviewWorkflowError("同じ問題の審査が重複しています。最新の1件だけを指定してください。")
     lines = []
     for row in sorted(drafts, key=lambda item: item["draftId"]):
-        question = row["question"]
-        question_text = " ".join(
-            [
-                question["title"],
-                " ".join(segment["text"] for segment in question["segments"]),
-                question["explanation"],
-                question["verificationTip"],
-            ]
-        )
-        question_hash = hashlib.sha256(question_text.encode("utf-8")).hexdigest()
+        review = review_by_id.get(row["draftId"], {})
+        question_hash = fingerprint({"draftFingerprint": draft_fingerprint(row), "review": {
+            k: review.get(k) for k in ("reviewStage", "reviewerKind", "reviewerModel", "similarityRatio", "review")
+        }})
         lines.append(f"{row['draftId']}\t{row['generatedQuestionId']}\t{question_hash}")
     return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
 
@@ -67,8 +65,9 @@ def validate_decisions(
     payload: dict[str, Any],
     *,
     require_complete: bool,
+    reviews: list[dict[str, Any]] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    expected_fingerprint = batch_fingerprint(drafts)
+    expected_fingerprint = batch_fingerprint(drafts, reviews)
     actual_fingerprint = payload.get("batchFingerprint")
     if not actual_fingerprint:
         raise ReviewWorkflowError("判定ファイルに batchFingerprint がありません。レビュー画面から再出力してください。")
@@ -180,8 +179,8 @@ def compile_review_outputs(
     *,
     require_complete: bool = False,
 ) -> dict[str, Any]:
-    fingerprint = batch_fingerprint(drafts)
-    decisions = validate_decisions(drafts, decision_payload, require_complete=require_complete)
+    fingerprint = batch_fingerprint(drafts, ai_reviews)
+    decisions = validate_decisions(drafts, decision_payload, require_complete=require_complete, reviews=ai_reviews)
     ai_review_by_draft = {row["draftId"]: row for row in ai_reviews}
     task_by_id = {row["taskId"]: row for row in tasks}
 
@@ -200,6 +199,17 @@ def compile_review_outputs(
         ai_review = ai_review_by_draft.get(draft["draftId"])
         if not ai_review:
             raise ReviewWorkflowError(f"AIレビューがありません: {draft['generatedQuestionId']}")
+
+        if decision["decision"] == "accept":
+            catalog_path = Path(__file__).resolve().parents[2] / "content_factory/quality/reference_catalog.json"
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+            blockers = quality_blockers(draft, ai_review["review"], catalog)
+            if ai_review.get("generatedQuestionId") != draft["generatedQuestionId"]:
+                blockers.append("内容審査の問題IDが一致しません。")
+            if ai_review["review"].get("passed") is not True or ai_review["review"].get("action") != "accept":
+                blockers.append("内容審査が採用候補ではありません。")
+            if blockers:
+                raise ReviewWorkflowError("採用には内容審査の完了が必要です: " + " / ".join(blockers))
 
         human_reviews.append(manual_review_row(draft, ai_review, decision, fingerprint))
         if decision["decision"] == "accept":

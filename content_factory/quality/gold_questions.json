@@ -1,0 +1,2002 @@
+{
+  "schemaVersion": 1,
+  "labelStatus": "editorial_provisional",
+  "audience": "小学校高学年以上",
+  "limitations": "編集上の基準候補。外部の専門家の合意、子供による試用、モデルの実測は未実施。採用・公開の人手判定は含まない。",
+  "records": [
+    {
+      "question": {
+        "id": "core-child-example-urgency-001",
+        "mode": "scamAdChecker",
+        "title": "今日までのお知らせ",
+        "phoneticTitle": "きょうまでの おしらせ",
+        "difficulty": "easy",
+        "instruction": "お手本です。色とチェック印が付いた言葉に注目してください。",
+        "phoneticInstruction": "おてほんです。いろと チェックじるしが ついた ことばに ちゅうもく してください。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "動画サービスの案内に、",
+            "phoneticText": "どうがサービスの あんないに、"
+          },
+          {
+            "id": "s2",
+            "text": "「今日までに申し込んで」と書かれています。",
+            "phoneticText": "「きょうまでに もうしこんで」と かかれています。"
+          },
+          {
+            "id": "s3",
+            "text": "月ごとの料金も表示されています。",
+            "phoneticText": "つきごとの りょうきんも ひょうじされています。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "「今日まで」は、考える時間を短くする言い方です。本当に期限がある場合もあるので、この言葉だけで嘘とは決められません。",
+        "phoneticExplanation": "「きょうまで」は、かんがえる じかんを みじかくする いいかたです。ほんとうに きげんが ある ばあいも あるので、この ことばだけで うそとは きめられません。",
+        "verificationTip": "すぐに申し込まず、料金や解約方法を公式の案内で確認します。",
+        "phoneticVerificationTip": "すぐに もうしこまず、りょうきんや やめかたを こうしきの あんないで たしかめます。",
+        "hint": "時間を短く区切る言葉を探してみましょう。",
+        "phoneticHint": "じかんを みじかく くぎる ことばを さがしてみましょう。",
+        "recommendedReasonTags": [
+          "urgency"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "example",
+        "learningFocus": "pause",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "「今日までに申し込んで」という、決めることを急がせる言葉です。",
+        "phoneticAttentionPoint": "「きょうまでに もうしこんで」という、きめることを いそがせる ことばです。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "「今日までに申し込んで」という、決めることを急がせる言葉です。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "caa-advertising-conditions"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s2"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "「今日まで」は、考える時間を短くする言い方です。本当に期限がある場合もあるので、この言葉だけで嘘とは決められません。"
+    },
+    {
+      "question": {
+        "id": "core-child-practice-source-001",
+        "mode": "newsPoison",
+        "title": "図書室の人気ニュース",
+        "phoneticTitle": "としょしつの にんきニュース",
+        "difficulty": "easy",
+        "instruction": "そう言える理由が書かれていないところを選びましょう。",
+        "phoneticInstruction": "そう いえる りゆうが かかれていない ところを えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "ひかり小学校の図書室に、新しい本が30冊入りました。",
+            "phoneticText": "ひかりしょうがっこうの としょしつに、あたらしい ほんが 30さつ はいりました。"
+          },
+          {
+            "id": "s2",
+            "text": "休み時間に借りることができます。",
+            "phoneticText": "やすみじかんに かりることが できます。"
+          },
+          {
+            "id": "s3",
+            "text": "これで町でいちばん人気の図書室になるでしょう。",
+            "phoneticText": "これで まちで いちばん にんきの としょしつに なるでしょう。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s3"
+        ],
+        "explanation": "本が増えたことだけでは、町でいちばん人気になるとは言えません。人気を比べた調査や人数が必要です。",
+        "phoneticExplanation": "ほんが ふえたことだけでは、まちで いちばん にんきに なるとは いえません。にんきを くらべた ちょうさや にんずうが ひつようです。",
+        "verificationTip": "どの図書室と、何人に、いつ聞いたのかを確認します。",
+        "phoneticVerificationTip": "どの としょしつと、なんにんに、いつ きいたのかを たしかめます。",
+        "hint": "「いちばん」と言うための比べ方が書かれているか見ましょう。",
+        "phoneticHint": "「いちばん」と いうための くらべかたが かかれているか みましょう。",
+        "recommendedReasonTags": [
+          "noSource",
+          "tooStrongClaim"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "practice",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "「町でいちばん人気」という結論に、比べた根拠がありません。",
+        "phoneticAttentionPoint": "「まちで いちばん にんき」という けつろんに、くらべた こんきょが ありません。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "「町でいちばん人気」という結論に、比べた根拠がありません。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s3"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "本が増えたことだけでは、町でいちばん人気になるとは言えません。人気を比べた調査や人数が必要です。"
+    },
+    {
+      "question": {
+        "id": "core-child-action-prize-001",
+        "mode": "scamAdChecker",
+        "title": "知らない相手からの当選連絡",
+        "phoneticTitle": "しらない あいてからの とうせんれんらく",
+        "difficulty": "easy",
+        "instruction": "次にすることを1つ選びましょう。",
+        "phoneticInstruction": "つぎに することを ひとつ えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "知らないアカウントから「ゲームの景品が当たりました」と届きました。",
+            "phoneticText": "しらない アカウントから「ゲームの けいひんが あたりました」と とどきました。"
+          },
+          {
+            "id": "s2",
+            "text": "受け取りは今日中に進めるよう書かれています。",
+            "phoneticText": "うけとりは きょうじゅうに すすめるよう かかれています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "知らない相手からの当選連絡は、本当かどうかをそのメッセージだけで判断できません。急いで返事をしないことが大切です。",
+        "phoneticExplanation": "しらない あいてからの とうせんれんらくは、ほんとうか どうかを その メッセージだけで はんだんできません。いそいで へんじを しないことが たいせつです。",
+        "verificationTip": "メッセージには返事をせず、普段から相談できる家の人に画面を見せます。",
+        "phoneticVerificationTip": "メッセージには へんじを せず、ふだんから そうだんできる いえの ひとに がめんを みせます。",
+        "hint": "メッセージを送った相手とは別の人に確かめられます。",
+        "phoneticHint": "メッセージを おくった あいてとは べつの ひとに たしかめられます。",
+        "recommendedReasonTags": [],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "consult",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "すぐにメッセージへ返事をする",
+            "phoneticText": "すぐに メッセージへ へんじを する",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "普段から相談できる家の人に画面を見せる",
+            "phoneticText": "ふだんから そうだんできる いえの ひとに がめんを みせる",
+            "semantic": "consultTrustedPerson"
+          },
+          {
+            "id": "c3",
+            "text": "友だち全員に同じ文を送る",
+            "phoneticText": "ともだち ぜんいんに おなじ ぶんを おくる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c2",
+        "attentionPoint": "知らない相手から届き、今日中の対応を求めている点です。",
+        "phoneticAttentionPoint": "しらない あいてから とどき、きょうじゅうの たいおうを もとめている てんです。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "知らない相手から届き、今日中の対応を求めている点です。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "caa-advertising-conditions"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c2"
+      },
+      "rationale": "知らない相手からの当選連絡は、本当かどうかをそのメッセージだけで判断できません。急いで返事をしないことが大切です。"
+    },
+    {
+      "question": {
+        "id": "core-child-challenge-unknown-001",
+        "mode": "newsPoison",
+        "title": "公園の新しい遊具",
+        "phoneticTitle": "こうえんの あたらしい ゆうぐ",
+        "difficulty": "easy",
+        "instruction": "この文だけで言えることを選びましょう。",
+        "phoneticInstruction": "この ぶんだけで いえることを えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "青葉公園に新しい遊具ができました。",
+            "phoneticText": "あおばこうえんに あたらしい ゆうぐが できました。"
+          },
+          {
+            "id": "s2",
+            "text": "遊んだ子ども一人が「前より楽しい」と話しました。",
+            "phoneticText": "あそんだ こども ひとりが「まえより たのしい」と はなしました。"
+          },
+          {
+            "id": "s3",
+            "text": "記事には、ほかの人に聞いた結果は書かれていません。",
+            "phoneticText": "きじには、ほかの ひとに きいた けっかは かかれていません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "一人の感想は参考になりますが、公園全体の人気が上がったかまでは判断できません。これは嘘と決まったのではなく、情報が足りない状態です。",
+        "phoneticExplanation": "ひとりの かんそうは さんこうに なりますが、こうえん ぜんたいの にんきが あがったかまでは はんだんできません。これは うそと きまったのではなく、じょうほうが たりない じょうたいです。",
+        "verificationTip": "利用者全体への調査や、前と後の利用人数があるか確認します。",
+        "phoneticVerificationTip": "りようしゃ ぜんたいへの ちょうさや、まえと あとの りようにんずうが あるか たしかめます。",
+        "hint": "一人の感想だけで、みんなのことまで言えるでしょうか。",
+        "phoneticHint": "ひとりの かんそうだけで、みんなの ことまで いえるでしょうか。",
+        "recommendedReasonTags": [],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "公園は必ず人気になった",
+            "phoneticText": "こうえんは かならず にんきに なった",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c2",
+            "text": "公園は人気がない",
+            "phoneticText": "こうえんは にんきが ない",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c3",
+            "text": "この情報だけでは人気が上がったか判断できない",
+            "phoneticText": "この じょうほうだけでは にんきが あがったか はんだんできない",
+            "semantic": "insufficientInformation"
+          }
+        ],
+        "correctChoiceId": "c3",
+        "attentionPoint": "感想を聞いた相手が一人だけで、全体を比べる材料がありません。",
+        "phoneticAttentionPoint": "かんそうを きいた あいてが ひとりだけで、ぜんたいを くらべる ざいりょうが ありません。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "感想を聞いた相手が一人だけで、全体を比べる材料がありません。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c3"
+      },
+      "rationale": "一人の感想は参考になりますが、公園全体の人気が上がったかまでは判断できません。これは嘘と決まったのではなく、情報が足りない状態です。"
+    },
+    {
+      "question": {
+        "id": "core-child-challenge-clear-001",
+        "mode": "explanationSnipe",
+        "title": "給食のお知らせ",
+        "phoneticTitle": "きゅうしょくの おしらせ",
+        "difficulty": "easy",
+        "instruction": "この文章の伝え方について選びましょう。",
+        "phoneticInstruction": "この ぶんしょうの つたえかたについて えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "学校だよりに「金曜日の給食はカレーです」とあります。",
+            "phoneticText": "がっこうだよりに「きんようびの きゅうしょくは カレーです」と あります。"
+          },
+          {
+            "id": "s2",
+            "text": "変更があるときは、学校の連絡ページで知らせると書かれています。",
+            "phoneticText": "へんこうが あるときは、がっこうの れんらくページで しらせると かかれています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "出どころと変更時の確認先が示されており、この文には特に問題のある表現は見当たりません。ただし、将来も絶対に変わらないという意味ではありません。",
+        "phoneticExplanation": "でどころと へんこうじの かくにんさきが しめされており、この ぶんには とくに もんだいの ある ひょうげんは みあたりません。ただし、しょうらいも ぜったいに かわらないという いみでは ありません。",
+        "verificationTip": "必要なときは、書かれている学校の連絡ページを確認します。",
+        "phoneticVerificationTip": "ひつような ときは、かかれている がっこうの れんらくページを たしかめます。",
+        "hint": "だれからのお知らせか、変更時の確認先があるか見ましょう。",
+        "phoneticHint": "だれからの おしらせか、へんこうじの かくにんさきが あるか みましょう。",
+        "recommendedReasonTags": [],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "問題のある表現は見当たらない",
+            "phoneticText": "もんだいの ある ひょうげんは みあたらない",
+            "semantic": "noIssueFound"
+          },
+          {
+            "id": "c2",
+            "text": "必ず嘘だと思う",
+            "phoneticText": "かならず うそだと おもう",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c3",
+            "text": "だれにも確認できない",
+            "phoneticText": "だれにも かくにんできない",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c1",
+        "attentionPoint": "学校だよりという出どころと、変更時の確認先が書かれています。",
+        "phoneticAttentionPoint": "がっこうだよりという でどころと、へんこうじの かくにんさきが かかれています。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "学校だよりという出どころと、変更時の確認先が書かれています。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c1"
+      },
+      "rationale": "出どころと変更時の確認先が示されており、この文には特に問題のある表現は見当たりません。ただし、将来も絶対に変わらないという意味ではありません。"
+    },
+    {
+      "question": {
+        "id": "core-child-practice-claim-001",
+        "mode": "profileHunter",
+        "title": "勉強アプリの紹介文",
+        "phoneticTitle": "べんきょうアプリの しょうかいぶん",
+        "difficulty": "easy",
+        "instruction": "言い切りすぎているところを選びましょう。",
+        "phoneticInstruction": "いいきりすぎている ところを えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "毎日10分の問題に取り組む学習アプリです。",
+            "phoneticText": "まいにち 10ぷんの もんだいに とりくむ がくしゅうアプリです。"
+          },
+          {
+            "id": "s2",
+            "text": "使った人は全員、どの教科も必ず得意になります。",
+            "phoneticText": "つかった ひとは ぜんいん、どの きょうかも かならず とくいに なります。"
+          },
+          {
+            "id": "s3",
+            "text": "問題の見本は紹介ページで確認できます。",
+            "phoneticText": "もんだいの みほんは しょうかいページで たしかめられます。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "同じ方法でも合う人と合わない人がいます。「全員」「必ず」という言い切りには、十分な根拠が必要です。",
+        "phoneticExplanation": "おなじ ほうほうでも あう ひとと あわない ひとが います。「ぜんいん」「かならず」という いいきりには、じゅうぶんな こんきょが ひつようです。",
+        "verificationTip": "どんな人を何人調べたのか、結果の出し方が説明されているか確認します。",
+        "phoneticVerificationTip": "どんな ひとを なんにん しらべたのか、けっかの だしかたが せつめいされているか たしかめます。",
+        "hint": "例外がないと言っている言葉を探しましょう。",
+        "phoneticHint": "れいがいが ないと いっている ことばを さがしましょう。",
+        "recommendedReasonTags": [
+          "tooStrongClaim"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "practice",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "「全員」「必ず」という、例外がないように見せる言葉です。",
+        "phoneticAttentionPoint": "「ぜんいん」「かならず」という、れいがいが ないように みせる ことばです。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "「全員」「必ず」という、例外がないように見せる言葉です。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "dig-lateral-reading"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s2"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "同じ方法でも合う人と合わない人がいます。「全員」「必ず」という言い切りには、十分な根拠が必要です。"
+    },
+    {
+      "question": {
+        "id": "core-child-action-event-001",
+        "mode": "newsPoison",
+        "title": "行事の時間が変わった？",
+        "phoneticTitle": "ぎょうじの じかんが かわった？",
+        "difficulty": "easy",
+        "instruction": "確かめる方法を1つ選びましょう。",
+        "phoneticInstruction": "たしかめる ほうほうを ひとつ えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "友だちから「明日の学校行事は1時間早くなったらしい」と届きました。",
+            "phoneticText": "ともだちから「あしたの がっこうぎょうじは 1じかん はやくなったらしい」と とどきました。"
+          },
+          {
+            "id": "s2",
+            "text": "どこで知ったかは書かれていません。",
+            "phoneticText": "どこで しったかは かかれていません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "友だちがわざと間違えたとは限りませんが、情報の出どころが分からないため、そのまま決めることはできません。",
+        "phoneticExplanation": "ともだちが わざと まちがえたとは かぎりませんが、じょうほうの でどころが わからないため、そのまま きめることは できません。",
+        "verificationTip": "学校から届いた連絡や公式の予定表を確認します。見つからなければ先生や家の人に聞きます。",
+        "phoneticVerificationTip": "がっこうから とどいた れんらくや こうしきの よていひょうを たしかめます。みつからなければ せんせいや いえの ひとに ききます。",
+        "hint": "予定を決めた人からの連絡を探しましょう。",
+        "phoneticHint": "よていを きめた ひとからの れんらくを さがしましょう。",
+        "recommendedReasonTags": [],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "別の友だち一人だけに聞く",
+            "phoneticText": "べつの ともだち ひとりだけに きく",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "学校からの連絡や公式の予定表を見る",
+            "phoneticText": "がっこうからの れんらくや こうしきの よていひょうを みる",
+            "semantic": "verifySource"
+          },
+          {
+            "id": "c3",
+            "text": "変わったと決めてみんなに送る",
+            "phoneticText": "かわったと きめて みんなに おくる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c2",
+        "attentionPoint": "時間変更の出どころが書かれていません。",
+        "phoneticAttentionPoint": "じかんへんこうの でどころが かかれていません。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "時間変更の出どころが書かれていません。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c2"
+      },
+      "rationale": "友だちがわざと間違えたとは限りませんが、情報の出どころが分からないため、そのまま決めることはできません。"
+    },
+    {
+      "question": {
+        "id": "core-child-practice-number-001",
+        "mode": "newsPoison",
+        "title": "人気おやつのアンケート",
+        "phoneticTitle": "にんき おやつの アンケート",
+        "difficulty": "easy",
+        "instruction": "数字の見せ方で気になるところを選びましょう。",
+        "phoneticInstruction": "すうじの みせかたで きに なる ところを えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "放課後クラブで新しいおやつを試しました。",
+            "phoneticText": "ほうかごクラブで あたらしい おやつを ためしました。"
+          },
+          {
+            "id": "s2",
+            "text": "食べた二人とも「好き」と答えました。",
+            "phoneticText": "たべた ふたりとも「すき」と こたえました。"
+          },
+          {
+            "id": "s3",
+            "text": "子どもの100パーセントが好きな大人気商品です。",
+            "phoneticText": "こどもの 100パーセントが すきな だいにんきしょうひんです。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s3"
+        ],
+        "explanation": "二人の結果を「子ども全体」に広げることはできません。100パーセントでも、何人に聞いた数字かが大切です。",
+        "phoneticExplanation": "ふたりの けっかを「こども ぜんたい」に ひろげることは できません。100パーセントでも、なんにんに きいた すうじかが たいせつです。",
+        "verificationTip": "答えた人数と、どんな人に聞いたのかを確認します。",
+        "phoneticVerificationTip": "こたえた にんずうと、どんな ひとに きいたのかを たしかめます。",
+        "hint": "パーセントだけでなく、答えた人数も見ましょう。",
+        "phoneticHint": "パーセントだけでなく、こたえた にんずうも みましょう。",
+        "recommendedReasonTags": [
+          "suspiciousNumber",
+          "tooStrongClaim"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "practice",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "二人だけの結果を「子どもの100パーセント」と広げています。",
+        "phoneticAttentionPoint": "ふたりだけの けっかを「こどもの 100パーセント」と ひろげています。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "二人だけの結果を「子どもの100パーセント」と広げています。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s3"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "二人の結果を「子ども全体」に広げることはできません。100パーセントでも、何人に聞いた数字かが大切です。"
+    },
+    {
+      "question": {
+        "id": "core-child-challenge-connect-001",
+        "mode": "conspiracyTrap",
+        "title": "止まった時計と雨",
+        "phoneticTitle": "とまった とけいと あめ",
+        "difficulty": "normal",
+        "instruction": "出来事を無理につないでいるところを選びましょう。",
+        "phoneticInstruction": "できごとを むりに つないでいる ところを えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "校庭の時計が止まった日に、午後から雨が降りました。",
+            "phoneticText": "こうていの とけいが とまった ひに、ごごから あめが ふりました。"
+          },
+          {
+            "id": "s2",
+            "text": "先月も時計の電池が切れた日に雨でした。",
+            "phoneticText": "せんげつも とけいの でんちが きれた ひに あめでした。"
+          },
+          {
+            "id": "s3",
+            "text": "だから、時計が止まると雨が降るのは間違いありません。",
+            "phoneticText": "だから、とけいが とまると あめが ふるのは まちがい ありません。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s3"
+        ],
+        "explanation": "同じ日に起きたことだけでは、時計が雨の原因とは言えません。偶然かどうかや、ほかの日の記録も必要です。",
+        "phoneticExplanation": "おなじ ひに おきたことだけでは、とけいが あめの げんいんとは いえません。ぐうぜんか どうかや、ほかの ひの きろくも ひつようです。",
+        "verificationTip": "時計が動いていた日と止まった日の天気を、もっと長い期間で比べます。",
+        "phoneticVerificationTip": "とけいが うごいていた ひと とまった ひの てんきを、もっと ながい きかんで くらべます。",
+        "hint": "同じ日に起きたことと、原因であることは同じでしょうか。",
+        "phoneticHint": "おなじ ひに おきたことと、げんいんで あることは おなじでしょうか。",
+        "recommendedReasonTags": [
+          "forcedConnection",
+          "tooStrongClaim"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "二つの出来事が同じ日に起きたことだけで、原因だと言い切っています。",
+        "phoneticAttentionPoint": "ふたつの できごとが おなじ ひに おきたことだけで、げんいんだと いいきっています。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "二つの出来事が同じ日に起きたことだけで、原因だと言い切っています。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s3"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "同じ日に起きたことだけでは、時計が雨の原因とは言えません。偶然かどうかや、ほかの日の記録も必要です。"
+    },
+    {
+      "question": {
+        "id": "core-child-action-secret-001",
+        "mode": "profileHunter",
+        "title": "ゲーム友だちからのお願い",
+        "phoneticTitle": "ゲームともだちからの おねがい",
+        "difficulty": "normal",
+        "instruction": "困ったときの行動を1つ選びましょう。",
+        "phoneticInstruction": "こまった ときの こうどうを ひとつ えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "ゲームで知り合った人から、別のチャットで話そうと誘われました。",
+            "phoneticText": "ゲームで しりあった ひとから、べつの チャットで はなそうと さそわれました。"
+          },
+          {
+            "id": "s2",
+            "text": "「家の人には内緒にして」と書かれています。",
+            "phoneticText": "「いえの ひとには ないしょに して」と かかれています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "秘密にするよう求められて不安なときは、一人で判断しなくて大丈夫です。相手に相談するのではなく、普段から信頼できる別の大人に見せます。",
+        "phoneticExplanation": "ひみつに するよう もとめられて ふあんな ときは、ひとりで はんだんしなくて だいじょうぶです。あいてに そうだんするのではなく、ふだんから しんらいできる べつの おとなに みせます。",
+        "verificationTip": "返事を止め、家の人や先生など普段から相談できる大人に画面を見せます。",
+        "phoneticVerificationTip": "へんじを とめ、いえの ひとや せんせいなど ふだんから そうだんできる おとなに がめんを みせます。",
+        "hint": "お願いをしてきた相手とは別の人に相談します。",
+        "phoneticHint": "おねがいを してきた あいてとは べつの ひとに そうだんします。",
+        "recommendedReasonTags": [],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "consult",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "内緒にして別のチャットへ移る",
+            "phoneticText": "ないしょに して べつの チャットへ うつる",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "相手に「信じてよいですか」と聞く",
+            "phoneticText": "あいてに「しんじて よいですか」と きく",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "返事を止め、普段から相談できる大人に画面を見せる",
+            "phoneticText": "へんじを とめ、ふだんから そうだんできる おとなに がめんを みせる",
+            "semantic": "consultTrustedPerson"
+          }
+        ],
+        "correctChoiceId": "c3",
+        "attentionPoint": "オンラインで知り合った相手が、周りの人に秘密にするよう求めています。",
+        "phoneticAttentionPoint": "オンラインで しりあった あいてが、まわりの ひとに ひみつに するよう もとめています。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "オンラインで知り合った相手が、周りの人に秘密にするよう求めています。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "dig-lateral-reading"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c3"
+      },
+      "rationale": "秘密にするよう求められて不安なときは、一人で判断しなくて大丈夫です。相手に相談するのではなく、普段から信頼できる別の大人に見せます。"
+    },
+    {
+      "question": {
+        "id": "core-child-challenge-pause-001",
+        "mode": "scamAdChecker",
+        "title": "無料スタンプの案内",
+        "phoneticTitle": "むりょうスタンプの あんない",
+        "difficulty": "normal",
+        "instruction": "まずどうするかを選びましょう。",
+        "phoneticInstruction": "まず どうするかを えらびましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "動画の途中に「限定スタンプを無料でもらえる」と表示されました。",
+            "phoneticText": "どうがの とちゅうに「げんていスタンプを むりょうで もらえる」と ひょうじされました。"
+          },
+          {
+            "id": "s2",
+            "text": "残り時間の数字が減っています。",
+            "phoneticText": "のこりじかんの すうじが へっています。"
+          },
+          {
+            "id": "s3",
+            "text": "運営元や利用条件は、その画面には見当たりません。",
+            "phoneticText": "うんえいもとや りようじょうけんは、その がめんには みあたりません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "無料という言葉や残り時間だけでは、本当に受け取れるか判断できません。まず画面を閉じて立ち止まると、確認する時間を作れます。",
+        "phoneticExplanation": "むりょうという ことばや のこりじかんだけでは、ほんとうに うけとれるか はんだんできません。まず がめんを とじて たちどまると、たしかめる じかんを つくれます。",
+        "verificationTip": "画面を閉じ、公式の案内で運営元と条件を確認します。分からなければ家の人に相談します。",
+        "phoneticVerificationTip": "がめんを とじ、こうしきの あんないで うんえいもとと じょうけんを たしかめます。わからなければ いえの ひとに そうだんします。",
+        "hint": "時間が減っていても、その場で決める必要はありません。",
+        "phoneticHint": "じかんが へっていても、その ばで きめる ひつようは ありません。",
+        "recommendedReasonTags": [],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "pause",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "時間がなくなる前にすぐ押す",
+            "phoneticText": "じかんが なくなる まえに すぐ おす",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "画面を閉じて、運営元と条件を確かめる",
+            "phoneticText": "がめんを とじて、うんえいもとと じょうけんを たしかめる",
+            "semantic": "pause"
+          },
+          {
+            "id": "c3",
+            "text": "本当だと決めて友だちに送る",
+            "phoneticText": "ほんとうだと きめて ともだちに おくる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c2",
+        "attentionPoint": "無料、限定、残り時間が並び、運営元や条件が分かりません。",
+        "phoneticAttentionPoint": "むりょう、げんてい、のこりじかんが ならび、うんえいもとや じょうけんが わかりません。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "無料、限定、残り時間が並び、運営元や条件が分かりません。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "caa-advertising-conditions",
+          "caa-game-charges"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c2"
+      },
+      "rationale": "無料という言葉や残り時間だけでは、本当に受け取れるか判断できません。まず画面を閉じて立ち止まると、確認する時間を作れます。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-001",
+        "mode": "explanationSnipe",
+        "title": "紙ひこうきの実験記録",
+        "difficulty": "easy",
+        "instruction": "注意して読むところを1こ選びましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "一人が同じ紙ひこうきを2回飛ばすと、2回目の方が遠くへ飛びました。"
+          },
+          {
+            "id": "s2",
+            "text": "この結果から、どんな紙ひこうきも2回目は必ず遠くへ飛ぶと説明しています。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "2回だけの結果では、どんな紙ひこうきにも当てはまるとは言えません。飛ばし方や風などの条件もそろえて比べる必要があります。",
+        "verificationTip": "同じ条件で何回試したのか、ほかの紙ひこうきでも同じ結果なのか、実験の記録を確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "tooStrongClaim"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "practice",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "少数の結果から全体へ言い切っていないかを確かめる。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "少数の結果から全体へ言い切っていないかを確かめる。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s2"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "2回だけの結果では、どんな紙ひこうきにも当てはまるとは言えません。飛ばし方や風などの条件もそろえて比べる必要があります。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-002",
+        "mode": "explanationSnipe",
+        "title": "色カードの数え方",
+        "difficulty": "normal",
+        "instruction": "注意して読むところを1こ選びましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "赤いカードが4枚、青いカードが6枚ありました。"
+          },
+          {
+            "id": "s2",
+            "text": "説明には、合わせて12枚あると書かれています。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "本文の枚数を足すと4足す6で10枚です。ここは情報が足りないのではなく、本文の数字と合計が合っていない箇所です。",
+        "verificationTip": "元の4枚と6枚をもう一度見て、指や紙を使って合計を確かめます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "suspiciousNumber"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "本文だけで確かめられる数の誤りと情報不足を区別する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "本文だけで確かめられる数の誤りと情報不足を区別する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s2"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "本文の枚数を足すと4足す6で10枚です。ここは情報が足りないのではなく、本文の数字と合計が合っていない箇所です。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-003",
+        "mode": "explanationSnipe",
+        "title": "いつの観察ノート？",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "写真には大きなつぼみが写っています。"
+          },
+          {
+            "id": "s2",
+            "text": "去年の観察ノートですが、今日の様子として友だちに見せようとしています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "写真そのものが本物でも、去年の写真では今日の様子を伝えられません。撮影した日と紹介している日をそろえて確認します。",
+        "verificationTip": "ノートに書かれた日付を見て、今日の写真や観察記録があるか調べます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "hardToVerify"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "撮影日と今日の観察記録を確かめる",
+            "semantic": "verifySource"
+          },
+          {
+            "id": "c2",
+            "text": "確かめずに、書かれたとおりにする",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "元の情報を見ずに、みんなに知らせる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c1",
+        "attentionPoint": "内容の真偽に加えて日付と文脈を確認する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "内容の真偽に加えて日付と文脈を確認する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c1"
+      },
+      "rationale": "写真そのものが本物でも、去年の写真では今日の様子を伝えられません。撮影した日と紹介している日をそろえて確認します。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-004",
+        "mode": "explanationSnipe",
+        "title": "工作教室の持ち物",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "公民館の案内に「土曜日の工作教室には、のりを持ってきてください」とあります。"
+          },
+          {
+            "id": "s2",
+            "text": "問い合わせ先と、変更があるときの案内ページも書かれています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "この文には、無理な言い切りや確認先のない主張は見当たりません。予定が絶対に変わらないと保証しているわけではありません。",
+        "verificationTip": "参加する前に、公民館の案内ページで持ち物や日付が変わっていないか確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "hardToVerify"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c2",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "問題のある表現は見当たらない",
+            "semantic": "noIssueFound"
+          }
+        ],
+        "correctChoiceId": "c3",
+        "attentionPoint": "確認先が示された案内を必要以上に疑わずに読む。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "確認先が示された案内を必要以上に疑わずに読む。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c3"
+      },
+      "rationale": "この文には、無理な言い切りや確認先のない主張は見当たりません。予定が絶対に変わらないと保証しているわけではありません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-005",
+        "mode": "explanationSnipe",
+        "title": "どちらがよく飛ぶ？",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "新しい紙ひこうきが5メートル飛びました。"
+          },
+          {
+            "id": "s2",
+            "text": "前の紙ひこうきが何メートル飛んだかは、書かれていません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "新しい方の記録だけでは、前より遠くへ飛ぶか比べられません。新しい記録が間違いだと決まったのではなく、比べる情報が足りません。",
+        "verificationTip": "前の紙ひこうきの記録を探し、同じ場所や飛ばし方で測った結果かも確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "noSource"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "前よりよく飛ぶかは判断できない",
+            "semantic": "insufficientInformation"
+          },
+          {
+            "id": "c3",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          }
+        ],
+        "correctChoiceId": "c2",
+        "attentionPoint": "比較する相手の情報が足りないことに気づく。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "比較する相手の情報が足りないことに気づく。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c2"
+      },
+      "rationale": "新しい方の記録だけでは、前より遠くへ飛ぶか比べられません。新しい記録が間違いだと決まったのではなく、比べる情報が足りません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-006",
+        "mode": "newsPoison",
+        "title": "見出しと本文のちがい",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "町のニュースの見出しは「プールが毎日無料に」となっています。"
+          },
+          {
+            "id": "s2",
+            "text": "本文には、子どもが無料で入れるのは来週の日曜日だけと書かれています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "見出しと本文で無料の日が違っています。見出しだけを見て予定を決めず、本文と施設の案内で対象の日と条件を確かめます。",
+        "verificationTip": "プールの公式の利用案内を開き、無料になる日、年齢、時間帯を確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "tooStrongClaim"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "本文と施設の利用案内を確かめる",
+            "semantic": "verifySource"
+          },
+          {
+            "id": "c2",
+            "text": "確かめずに、書かれたとおりにする",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "元の情報を見ずに、みんなに知らせる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c1",
+        "attentionPoint": "短い見出しを本文と一次の案内で確かめる。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "短い見出しを本文と一次の案内で確かめる。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c1"
+      },
+      "rationale": "見出しと本文で無料の日が違っています。見出しだけを見て予定を決めず、本文と施設の案内で対象の日と条件を確かめます。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-007",
+        "mode": "newsPoison",
+        "title": "本が増えたという記事",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "学校図書室の担当の先生は、新しい本が20冊入ったと知らせました。"
+          },
+          {
+            "id": "s2",
+            "text": "記事には本の一覧があり、図書室で確かめられると書かれています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "この文には、担当の人と確認できる一覧が示されています。ここに書かれた表現に問題が見当たらないという判断で、すべての情報を無条件に信じる意味ではありません。",
+        "verificationTip": "気になるときは、図書室にある一覧や担当の先生の案内を確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "noSource"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c2",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "問題のある表現は見当たらない",
+            "semantic": "noIssueFound"
+          }
+        ],
+        "correctChoiceId": "c3",
+        "attentionPoint": "確認できる報告と根拠のない評判を区別する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "確認できる報告と根拠のない評判を区別する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c3"
+      },
+      "rationale": "この文には、担当の人と確認できる一覧が示されています。ここに書かれた表現に問題が見当たらないという判断で、すべての情報を無条件に信じる意味ではありません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-008",
+        "mode": "scamAdChecker",
+        "title": "あと少しで締め切り？",
+        "difficulty": "easy",
+        "instruction": "この表示を見たとき、まずどうするとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "工作セットの広告を開くたびに、締め切りまであと5分と表示されます。"
+          },
+          {
+            "id": "s2",
+            "text": "次の日に開いても、同じようにあと5分と表示されました。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "毎回同じ残り時間が出る表示は、急いで決めさせていないか注意する手がかりです。この表示だけで広告全体が嘘だと確定はできません。",
+        "verificationTip": "申し込む前に、販売元の案内で本当の締め切りと、料金や返品の条件を家の人と確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "urgency"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "pause",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "表示を見てすぐに申し込む",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "申し込みを止め、本当の締め切りを確認する",
+            "semantic": "pause"
+          },
+          {
+            "id": "c3",
+            "text": "調べずにその広告をみんなに送る",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c2",
+        "attentionPoint": "急がせる表示を見たら判断を一度止める。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "急がせる表示を見たら判断を一度止める。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "caa-advertising-conditions"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c2"
+      },
+      "rationale": "毎回同じ残り時間が出る表示は、急いで決めさせていないか注意する手がかりです。この表示だけで広告全体が嘘だと確定はできません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-009",
+        "mode": "scamAdChecker",
+        "title": "無料の遊びと追加アイテム",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "ゲームの広告には、基本の遊びは無料と書かれています。"
+          },
+          {
+            "id": "s2",
+            "text": "追加のアイテムには料金がかかると、説明されています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "基本の遊びが無料でも、すべての機能が無料とは限りません。この文は追加料金を説明しているので、無料という言葉だけで嘘とは決めません。",
+        "verificationTip": "家の人と公式の料金案内を見て、無料で使える範囲と、お金がかかる操作を確かめます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "hardToVerify"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "無料で遊べる範囲を家の人と確かめる",
+            "semantic": "verifySource"
+          },
+          {
+            "id": "c2",
+            "text": "確かめずに、書かれたとおりにする",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "元の情報を見ずに、みんなに知らせる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c1",
+        "attentionPoint": "無料の範囲と追加料金を分けて確認する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "無料の範囲と追加料金を分けて確認する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "caa-advertising-conditions",
+          "caa-game-charges"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c1"
+      },
+      "rationale": "基本の遊びが無料でも、すべての機能が無料とは限りません。この文は追加料金を説明しているので、無料という言葉だけで嘘とは決めません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-010",
+        "mode": "scamAdChecker",
+        "title": "人気と書かれた工作セット",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "工作セットの広告に、たくさんの人に人気と書かれています。"
+          },
+          {
+            "id": "s2",
+            "text": "何人が使ったのか、どんな調査をしたのかは書かれていません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "人気という説明の根拠が書かれていません。人気がないと決めることも、本当に人気だと決めることも、この広告だけではできません。",
+        "verificationTip": "どの期間に何人を調べたのか、販売元が調査の方法や数を示しているか家の人と確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "noSource"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c2",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "本当に人気かはこの情報だけでは判断できない",
+            "semantic": "insufficientInformation"
+          }
+        ],
+        "correctChoiceId": "c3",
+        "attentionPoint": "根拠がない主張は肯定も否定も急がない。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "根拠がない主張は肯定も否定も急がない。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "caa-advertising-conditions"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c3"
+      },
+      "rationale": "人気という説明の根拠が書かれていません。人気がないと決めることも、本当に人気だと決めることも、この広告だけではできません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-011",
+        "mode": "profileHunter",
+        "title": "有名な人のようなアイコン",
+        "difficulty": "easy",
+        "instruction": "注意して読むところを1こ選びましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "写真教室を紹介するアカウントは、よく知られた撮影者に似たアイコンを使っています。"
+          },
+          {
+            "id": "s2",
+            "text": "だから本人が紹介しているに違いないと、友だちは言いました。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "似たアイコンだけでは、同じ人だと確認できません。本人ではないと決まったわけでもないので、別の確認先を見る必要があります。",
+        "verificationTip": "その撮影者がふだん使っている公式の紹介ページから、同じアカウントが案内されているか確かめます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "fakeAuthority"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "practice",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "見た目の似ていることだけで本人と判断しない。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "見た目の似ていることだけで本人と判断しない。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "dig-lateral-reading"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s2"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "似たアイコンだけでは、同じ人だと確認できません。本人ではないと決まったわけでもないので、別の確認先を見る必要があります。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-012",
+        "mode": "profileHunter",
+        "title": "チームの新しい連絡係",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "クラブの連絡係を名乗る、初めて見るアカウントから参加予定を聞かれました。"
+          },
+          {
+            "id": "s2",
+            "text": "クラブの予定表には、新しい連絡先はまだ載っていません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "名乗っていることだけでは本当の連絡係か分かりません。届いた相手への返事ではなく、いつも使っている連絡先から確かめます。",
+        "verificationTip": "普段のクラブの連絡先や担当の先生に、新しいアカウントが正式なものか確認してもらいます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "fakeAuthority"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "いつものクラブの連絡先で本人か確かめる",
+            "semantic": "verifySource"
+          },
+          {
+            "id": "c2",
+            "text": "確かめずに、書かれたとおりにする",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "元の情報を見ずに、みんなに知らせる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c1",
+        "attentionPoint": "相手が指定した連絡先以外から本人か確認する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "相手が指定した連絡先以外から本人か確認する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "dig-lateral-reading"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c1"
+      },
+      "rationale": "名乗っていることだけでは本当の連絡係か分かりません。届いた相手への返事ではなく、いつも使っている連絡先から確かめます。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-013",
+        "mode": "profileHunter",
+        "title": "紹介文だけで分かること",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "工作の動画を出している人が、紹介文に工作教室の先生と書いています。"
+          },
+          {
+            "id": "s2",
+            "text": "どこの教室か、確かめられるページは書いてありません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "紹介文だけでは、本当に教えている人かどうかを確認できません。先生ではないと決めつけるのではなく、確かめる情報が足りないと考えます。",
+        "verificationTip": "教室の公式の講師紹介など、本人の紹介文とは別に確かめられる案内があるか調べます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "hardToVerify"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c2",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "先生かどうかはこの紹介文だけでは判断できない",
+            "semantic": "insufficientInformation"
+          }
+        ],
+        "correctChoiceId": "c3",
+        "attentionPoint": "肩書きの未確認と虚偽を区別する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "肩書きの未確認と虚偽を区別する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "dig-lateral-reading"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c3"
+      },
+      "rationale": "紹介文だけでは、本当に教えている人かどうかを確認できません。先生ではないと決めつけるのではなく、確かめる情報が足りないと考えます。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-014",
+        "mode": "profileHunter",
+        "title": "図書委員のおすすめ本",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "学校の掲示板に、図書委員がおすすめの本を紹介しています。"
+          },
+          {
+            "id": "s2",
+            "text": "投稿者は委員会の名簿で確認でき、本の場所も書かれています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "誰が紹介しているかを確認でき、すべての人が好きになるとも言っていません。おすすめという感想だけで、嘘や危険な情報と判断する必要はありません。",
+        "verificationTip": "気になったら学校の名簿や図書室の案内を見て、実際に本を読んでみます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "hardToVerify"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "問題のある表現は見当たらない",
+            "semantic": "noIssueFound"
+          },
+          {
+            "id": "c3",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          }
+        ],
+        "correctChoiceId": "c2",
+        "attentionPoint": "確かめられる紹介と個人の感想を適切に受け取る。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "確かめられる紹介と個人の感想を適切に受け取る。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "dig-lateral-reading"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c2"
+      },
+      "rationale": "誰が紹介しているかを確認でき、すべての人が好きになるとも言っていません。おすすめという感想だけで、嘘や危険な情報と判断する必要はありません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-015",
+        "mode": "conspiracyTrap",
+        "title": "証拠がないから本当？",
+        "difficulty": "easy",
+        "instruction": "注意して読むところを1こ選びましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "放課後の校庭で、ひみつの光る石が見つかったという話があります。"
+          },
+          {
+            "id": "s2",
+            "text": "写真も記録もないことこそ、本当の秘密である証拠だと書かれています。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "確かめられる記録がないことは、その話が本当である証拠にはなりません。ない理由を想像することと、実際に確かめることは別です。",
+        "verificationTip": "いつ、どこで、誰が見たのか、元の記録を確かめます。見つからなければ、本当と決めず判断を保留します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "secretInfo"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "practice",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "証拠がないことを証拠に変える言い方に気づく。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "証拠がないことを証拠に変える言い方に気づく。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s2"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "確かめられる記録がないことは、その話が本当である証拠にはなりません。ない理由を想像することと、実際に確かめることは別です。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-016",
+        "mode": "conspiracyTrap",
+        "title": "質問する人も仲間？",
+        "difficulty": "easy",
+        "instruction": "注意して読むところを1こ選びましょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "町のパン屋に夜だけ見える看板があるという話が広まっています。"
+          },
+          {
+            "id": "s2",
+            "text": "写真を見せてと言う人は、秘密を隠す仲間に違いないと書かれています。"
+          }
+        ],
+        "correctSegmentIds": [
+          "s2"
+        ],
+        "explanation": "確かめようと質問したことだけで、その人を秘密の仲間と決めることはできません。人を悪者にする言葉ではなく、話の根拠を確かめます。",
+        "verificationTip": "看板を見た日時や、元の写真があるかを確認します。質問への答えがないときは、話を本当と決めません。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "enemyFraming"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "practice",
+        "learningFocus": "evidence",
+        "responseType": "selectSegments",
+        "answerChoices": [],
+        "correctChoiceId": null,
+        "attentionPoint": "確認を求める人を敵と扱う論法に気づく。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "確認を求める人を敵と扱う論法に気づく。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [
+          "s2"
+        ],
+        "selectedChoiceId": null
+      },
+      "rationale": "確かめようと質問したことだけで、その人を秘密の仲間と決めることはできません。人を悪者にする言葉ではなく、話の根拠を確かめます。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-017",
+        "mode": "conspiracyTrap",
+        "title": "二つの青いかばん",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "同じ日に、図書館に来た二人が青いかばんを持っていました。"
+          },
+          {
+            "id": "s2",
+            "text": "二人が知り合いなのか、一緒に来たのかは分かりません。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "同じ色の持ち物だけでは、二人のつながりは分かりません。つながりがあるとも、ないとも、この情報だけでは決められません。",
+        "verificationTip": "必要がある場合は、誰がどんな記録でつながりを説明しているのかを確かめます。持ち物だけのうわさは広めません。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "forcedConnection"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "evidence",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c2",
+            "text": "同じグループかはこの情報だけでは判断できない",
+            "semantic": "insufficientInformation"
+          },
+          {
+            "id": "c3",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          }
+        ],
+        "correctChoiceId": "c2",
+        "attentionPoint": "偶然に似ていることと確かめられた関係を区別する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "偶然に似ていることと確かめられた関係を区別する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c2"
+      },
+      "rationale": "同じ色の持ち物だけでは、二人のつながりは分かりません。つながりがあるとも、ないとも、この情報だけでは決められません。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-018",
+        "mode": "conspiracyTrap",
+        "title": "広める前にひと休み",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "校内の木の葉が減ったのは、だれかの秘密の作戦だという話が届きました。"
+          },
+          {
+            "id": "s2",
+            "text": "根拠は書かれていませんが、今すぐみんなに教えてと続いています。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "急いで広めるよう言われても、根拠のない話をそのまま転送する必要はありません。誰かが悪いと決める前に、元の情報を確かめます。",
+        "verificationTip": "転送をいったん止め、先生や学校の案内に、木の手入れなどの説明が出ていないか確認します。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "urgency"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "action",
+        "learningFocus": "pause",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "転送を止めて元の情報を確かめる",
+            "semantic": "pause"
+          },
+          {
+            "id": "c2",
+            "text": "確かめずに、書かれたとおりにする",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "元の情報を見ずに、みんなに知らせる",
+            "semantic": "other"
+          }
+        ],
+        "correctChoiceId": "c1",
+        "attentionPoint": "強い呼びかけがあっても確認前の拡散を止める。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "強い呼びかけがあっても確認前の拡散を止める。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c1"
+      },
+      "rationale": "急いで広めるよう言われても、根拠のない話をそのまま転送する必要はありません。誰かが悪いと決める前に、元の情報を確かめます。"
+    },
+    {
+      "question": {
+        "id": "benchmark-child-019",
+        "mode": "conspiracyTrap",
+        "title": "消えた絵の説明",
+        "difficulty": "normal",
+        "instruction": "この場面では、どう考えるとよいでしょう。",
+        "segments": [
+          {
+            "id": "s1",
+            "text": "掲示板の絵がなくなった理由を、係の先生が説明しています。"
+          },
+          {
+            "id": "s2",
+            "text": "教室へ移した日と場所が書かれており、見に行って確認できます。"
+          }
+        ],
+        "correctSegmentIds": [],
+        "explanation": "理由と日時、確かめられる場所が示されています。この文には特に問題のある言い方は見当たりません。誰かの秘密だと想像する前に説明を確かめられます。",
+        "verificationTip": "気になるときは、書かれた教室や掲示板の案内を確認します。行ってよい時間は先生に聞きます。",
+        "hint": "書かれている条件と、確かめられる情報に注目しましょう。",
+        "recommendedReasonTags": [
+          "hardToVerify"
+        ],
+        "accessTier": "free",
+        "contentFlavor": "standard",
+        "audience": "child",
+        "learningStage": "challenge",
+        "learningFocus": "verify",
+        "responseType": "singleChoice",
+        "answerChoices": [
+          {
+            "id": "c1",
+            "text": "この話は必ずうそだと決める",
+            "semantic": "suspicious"
+          },
+          {
+            "id": "c2",
+            "text": "この話は絶対に正しいと決める",
+            "semantic": "other"
+          },
+          {
+            "id": "c3",
+            "text": "問題のある表現は見当たらない",
+            "semantic": "noIssueFound"
+          }
+        ],
+        "correctChoiceId": "c3",
+        "attentionPoint": "検証できる説明を秘密の物語と区別する。",
+        "contentRevision": 1
+      },
+      "editorialBrief": {
+        "learningObjective": "検証できる説明を秘密の物語と区別する。",
+        "factBasis": "fictionalScenario",
+        "evidenceNotes": "登場する人物・施設・出来事は教材用の架空設定。本文の条件から正解を判断する。参照資料は確認行動の教育方針を示すもので、この出来事が実際に起きた証拠やアプリの学習効果ではない。",
+        "sourceIds": [
+          "mext-information-literacy"
+        ]
+      },
+      "labelStatus": "editorial_provisional",
+      "expectedAnswer": {
+        "selectedSegmentIds": [],
+        "selectedChoiceId": "c3"
+      },
+      "rationale": "理由と日時、確かめられる場所が示されています。この文には特に問題のある言い方は見当たりません。誰かの秘密だと想像する前に説明を確かめられます。"
+    }
+  ]
+}

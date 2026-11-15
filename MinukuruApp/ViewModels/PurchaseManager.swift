@@ -17,10 +17,12 @@ final class PurchaseManager: ObservableObject {
 
     @Published private(set) var premiumProduct: Product?
     @Published private(set) var hasPremiumAccess = false
+    @Published private(set) var premiumEntitlementJWS: String?
     @Published private(set) var isFetchingProducts = false
     @Published private(set) var isRefreshingEntitlements = false
     @Published private(set) var isPurchasing = false
     @Published private(set) var isRestoring = false
+    @Published private(set) var hasCheckedEntitlements = false
     @Published private(set) var purchaseMessage: String?
     @Published private(set) var purchaseDebugDetail: String?
     @Published private(set) var productFetchState: ProductFetchState = .idle
@@ -72,6 +74,10 @@ final class PurchaseManager: ObservableObject {
 
     var isLoading: Bool {
         isFetchingProducts || isRefreshingEntitlements || isPurchasing || isRestoring
+    }
+
+    var isConfirmedFreeForAds: Bool {
+        hasCheckedEntitlements && !hasPremiumAccess && !isRestoring && !isPurchasing && !isRefreshingEntitlements
     }
 
     deinit {
@@ -147,6 +153,7 @@ final class PurchaseManager: ObservableObject {
             switch result {
             case .success(let verification):
                 let transaction = try Self.checkVerified(verification)
+                premiumEntitlementJWS = verification.jwsRepresentation
                 await transaction.finish()
                 hasPremiumAccess = true
                 Task { @MainActor [weak self] in
@@ -264,42 +271,63 @@ final class PurchaseManager: ObservableObject {
     private func refreshEntitlements() async {
         beginActivity(.entitlementRefresh)
         defer { endActivity(.entitlementRefresh) }
+        hasCheckedEntitlements = false
 
         var hasPremium = false
+        var entitlementJWS: String?
+        var hasUnverifiedPremium = false
 
         do {
-            hasPremium = try await withTimeout(
+            let entitlement = try await withTimeout(
                 entitlementRefreshTimeout,
                 timedOutError: .entitlementRefreshTimedOut
             ) {
                 var hasPremium = false
+                var entitlementJWS: String?
+                var hasUnverifiedPremium = false
 
                 for await result in Transaction.currentEntitlements {
-                    guard let transaction = try? Self.checkVerified(result) else { continue }
-                    if transaction.productID == MonetizationConfig.premiumProductID {
+                    switch result {
+                    case .verified(let transaction) where transaction.productID == MonetizationConfig.premiumProductID:
                         hasPremium = true
+                        entitlementJWS = result.jwsRepresentation
+                    case .unverified(let transaction, _) where transaction.productID == MonetizationConfig.premiumProductID:
+                        // 未検証の取引では購入済みにせず、広告も出さない。
+                        hasUnverifiedPremium = true
+                    default:
+                        break
                     }
                 }
 
-                return hasPremium
+                return (hasPremium, entitlementJWS, hasUnverifiedPremium)
             }
+            hasPremium = entitlement.0
+            entitlementJWS = entitlement.1
+            hasUnverifiedPremium = entitlement.2
         } catch StoreError.entitlementRefreshTimedOut {
+            hasCheckedEntitlements = false
             storeDiagnostics.append("権利確認タイムアウト: \(entitlementRefreshTimeout / 1_000_000_000)s")
             purchaseDebugDetail = purchaseDebugDetail ?? "Entitlement refresh timed out after \(entitlementRefreshTimeout / 1_000_000_000)s."
             return
         } catch {
+            hasCheckedEntitlements = false
             storeDiagnostics.append("権利確認エラー: \(describe(error))")
             purchaseDebugDetail = purchaseDebugDetail ?? describe(error)
             return
         }
 
+        premiumEntitlementJWS = hasPremium ? entitlementJWS : nil
         hasPremiumAccess = hasPremium
+        hasCheckedEntitlements = !hasUnverifiedPremium
     }
 
     private func observeTransactionUpdates() -> Task<Void, Never> {
         Task {
             for await result in Transaction.updates {
                 if let transaction = try? Self.checkVerified(result) {
+                    if transaction.productID == MonetizationConfig.premiumProductID {
+                        premiumEntitlementJWS = result.jwsRepresentation
+                    }
                     await transaction.finish()
                 }
                 await refreshEntitlements()

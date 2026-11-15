@@ -13,9 +13,16 @@ Deno.serve(async (request) => {
   try {
     const url = new URL(request.url);
     const requestedChannel = url.searchParams.get("channel");
-    const channel = requestedChannel === "free" || requestedChannel === "premium" || requestedChannel === "full"
-      ? requestedChannel
-      : "full";
+    if (requestedChannel !== "free") {
+      return Response.json(
+        { error: "This legacy endpoint now serves free content only. Update the app for premium content." },
+        {
+          status: 410,
+          headers: { ...corsHeaders, "Cache-Control": "no-store" },
+        },
+      );
+    }
+    const channel = "free";
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -24,10 +31,10 @@ Deno.serve(async (request) => {
       auth: { persistSession: false },
     });
 
-    const metadataCall = channel === "full"
-      ? supabase.rpc("get_published_manifest_metadata")
-      : supabase.rpc("get_published_manifest_metadata", { target_channel: channel });
-    const { data: metadata, error: metadataError } = await metadataCall;
+    const { data: metadata, error: metadataError } = await supabase.rpc(
+      "get_published_manifest_metadata",
+      { target_channel: channel },
+    );
 
     if (metadataError) {
       throw metadataError;

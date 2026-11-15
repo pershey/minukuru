@@ -50,6 +50,17 @@
                ReferencedContainer = "container:Minukuru.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E35093CD5CA70D768BD13C3C"
+               BuildableName = "MinukuruUITests.xctest"
+               BlueprintName = "MinukuruUITests"
+               ReferencedContainer = "container:Minukuru.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>
