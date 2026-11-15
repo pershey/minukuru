@@ -271,9 +271,11 @@ final class PurchaseManager: ObservableObject {
     private func refreshEntitlements() async {
         beginActivity(.entitlementRefresh)
         defer { endActivity(.entitlementRefresh) }
+        hasCheckedEntitlements = false
 
         var hasPremium = false
         var entitlementJWS: String?
+        var hasUnverifiedPremium = false
 
         do {
             let entitlement = try await withTimeout(
@@ -282,24 +284,33 @@ final class PurchaseManager: ObservableObject {
             ) {
                 var hasPremium = false
                 var entitlementJWS: String?
+                var hasUnverifiedPremium = false
 
                 for await result in Transaction.currentEntitlements {
-                    guard let transaction = try? Self.checkVerified(result) else { continue }
-                    if transaction.productID == MonetizationConfig.premiumProductID {
+                    switch result {
+                    case .verified(let transaction) where transaction.productID == MonetizationConfig.premiumProductID:
                         hasPremium = true
                         entitlementJWS = result.jwsRepresentation
+                    case .unverified(let transaction, _) where transaction.productID == MonetizationConfig.premiumProductID:
+                        // 未検証の取引では購入済みにせず、広告も出さない。
+                        hasUnverifiedPremium = true
+                    default:
+                        break
                     }
                 }
 
-                return (hasPremium, entitlementJWS)
+                return (hasPremium, entitlementJWS, hasUnverifiedPremium)
             }
             hasPremium = entitlement.0
             entitlementJWS = entitlement.1
+            hasUnverifiedPremium = entitlement.2
         } catch StoreError.entitlementRefreshTimedOut {
+            hasCheckedEntitlements = false
             storeDiagnostics.append("権利確認タイムアウト: \(entitlementRefreshTimeout / 1_000_000_000)s")
             purchaseDebugDetail = purchaseDebugDetail ?? "Entitlement refresh timed out after \(entitlementRefreshTimeout / 1_000_000_000)s."
             return
         } catch {
+            hasCheckedEntitlements = false
             storeDiagnostics.append("権利確認エラー: \(describe(error))")
             purchaseDebugDetail = purchaseDebugDetail ?? describe(error)
             return
@@ -307,7 +318,7 @@ final class PurchaseManager: ObservableObject {
 
         premiumEntitlementJWS = hasPremium ? entitlementJWS : nil
         hasPremiumAccess = hasPremium
-        hasCheckedEntitlements = true
+        hasCheckedEntitlements = !hasUnverifiedPremium
     }
 
     private func observeTransactionUpdates() -> Task<Void, Never> {
